@@ -22,7 +22,7 @@ st.markdown("""
 <style>
 /* Background halaman */
 [data-testid="stAppViewContainer"] {
-    background: linear-gradient(to right, #C2A68C, #B87C4C;
+    background: linear-gradient(to right, #f0f0f0, #ffffff);
 }
 
 /* Animasi title utama */
@@ -69,7 +69,7 @@ st.markdown(""" <style>
 div[data-testid="stButton"] > button {
     width: 100%;
     min-height: 50px;
-    padding: 16px 0;
+    padding: 15px 0;
     border-radius: 20px;
     font-size: 16px;
     font-weight: bold;
