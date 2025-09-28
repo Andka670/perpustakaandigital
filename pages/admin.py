@@ -19,7 +19,7 @@ st.markdown("""
 
     /* Perlebar container utama */
     .block-container {
-        max-width: 100% !important;   /* Hampir full layar */
+        max-width: 75% !important;   /* Hampir full layar */
         padding-left: 5% !important;
         padding-right: 5% !important;
         background: rgba(255, 255, 255, 0.12);
