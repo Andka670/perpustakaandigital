@@ -338,7 +338,7 @@ elif st.session_state.page == "profil":
                 supabase.table("peminjaman")
                 .select("id_user")
                 .eq("id_user", user["id_user"])
-                .eq("status", "Dipinjam")
+                .eq("status", "dipinjam")
                 .execute()
                 .data
             )
