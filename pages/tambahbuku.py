@@ -6,7 +6,7 @@ from datetime import datetime
 # Supabase Config
 # ----------------------------
 SUPABASE_URL = "https://bcalrkqeeoaalfpjrwvx.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjYWxya3FlZW9hYWxmcGpyd3Z4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMDc5NTUsImV4cCI6MjA3Mzc4Mzk1NX0.Pg0EUKGfDYk7-apJNjHoqVSub_atlE54ahVKuWtQc0o"
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # ----------------------------
@@ -25,12 +25,12 @@ st.markdown("""
     padding-bottom: 50px;
 }
 
+/* Styling tombol navigasi */
 div[data-testid="stButton"] > button {
-    min-height: 50px;
-    padding: 25px 25px;
-    border-radius: 25px;
-    font-size: 16px;
-    font-weight: bold;
+    height: 55px;
+    border-radius: 20px;
+    font-size: 15px;
+    font-weight: 600;
     background-color: #4CAF50;
     color: white;
     border: none;
@@ -43,11 +43,18 @@ div[data-testid="stButton"] > button {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+div[data-testid="stButton"] > button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+div[data-testid="stButton"] > button:active {
+    transform: scale(0.95);
+}
 
-div[data-testid="stButton"] > button:hover {background-color: #45a049; transform: scale(1.05);}
-div[data-testid="stButton"] > button:active {transform: scale(0.95);}
+/* Hilangkan sidebar */
 section[data-testid="stSidebar"] {display: none !important;}
 
+/* Animasi judul */
 .animated-title {
     font-size: 40px;
     font-weight: bold;
@@ -65,21 +72,21 @@ section[data-testid="stSidebar"] {display: none !important;}
 """, unsafe_allow_html=True)
 
 # ----------------------------
-# Navigasi seperti settings.py
+# Navigasi mirip settings.py
 # ----------------------------
-left_col, right_col = st.columns([1,6])
-
-with left_col:
-    if st.button("ℹ️ Info Akun", use_container_width=True):
-        st.switch_page("pages/admin.py")
-
 menu_options = {
+    "ℹ️ Info Akun": "pages/admin.py",
     "📚 Tambah/Ubah Buku": "pages/tambahbuku.py",
     "📋 Data Buku&User": "pages/daftarpeminjaman.py",
     "🖊️ Peminjaman Offline": "pages/peminjamanoffline.py",
     "🔄 Pengembalian": "pages/pengembalian.py",
     "⚙️ Settings": "pages/settings.py"
 }
+
+left_col, right_col = st.columns([1, 6])
+with left_col:
+    if st.button("🏠 Dashboard", use_container_width=True):
+        st.switch_page("pages/admin.py")
 
 with right_col:
     cols = st.columns(len(menu_options))
@@ -102,14 +109,14 @@ with st.form("form_tambah_buku"):
     penulis = st.text_input("Penulis")
     tahun = st.number_input("Tahun Terbit", min_value=1900, max_value=2100, step=1)
     stok = st.number_input("Stok Buku", min_value=1, step=1)
-    
+
     genre_options = ["Fiksi", "Non-Fiksi", "Sains", "Teknologi", "Sejarah", "Biografi", "Fantasi", "Lainnya"]
     genre = st.selectbox("Genre", genre_options)
-    
+
     deskripsi = st.text_area("Deskripsi")
     file_cover = st.file_uploader("Upload Cover (jpg/png)", type=["jpg", "png"])
     file_pdf = st.file_uploader("Upload PDF (buku)", type=["pdf"])
-    
+
     submitted = st.form_submit_button("Tambah Buku")
 
 if submitted:
@@ -131,7 +138,7 @@ if submitted:
             else:
                 same_title = supabase.table("buku").select("*").eq("judul", judul).execute().data
                 if same_title:
-                    st.warning(f"⚠️ Judul '{judul}' sudah ada dengan kombinasi berbeda. Tidak bisa menambahkan stok.")
+                    st.warning(f"⚠️ Judul '{judul}' sudah ada dengan kombinasi berbeda.")
                 else:
                     cover_url = None
                     pdf_url = None
@@ -166,7 +173,6 @@ if submitted:
                         "pdf_url": pdf_url
                     }).execute()
                     st.success("✅ Buku baru berhasil ditambahkan!")
-
         except Exception as e:
             st.error(f"❌ Terjadi kesalahan: {e}")
 
@@ -189,7 +195,6 @@ if st.button("Cari Buku"):
 
 if "edit" in st.session_state:
     book_edit = st.session_state.edit
-
     edit_judul = st.text_input("Judul Baru", value=book_edit["judul"], key="edit_judul")
     edit_penulis = st.text_input("Penulis Baru", value=book_edit["penulis"], key="edit_penulis")
     edit_tahun = st.number_input("Tahun Terbit Baru", value=book_edit["tahun"], key="edit_tahun")
@@ -204,7 +209,7 @@ if "edit" in st.session_state:
         if edit_judul != book_edit["judul"]:
             existing_title = supabase.table("buku").select("*").eq("judul", edit_judul).execute().data
             if existing_title:
-                st.warning(f"⚠️ Judul '{edit_judul}' sudah ada! Pilih judul lain.")
+                st.warning(f"⚠️ Judul '{edit_judul}' sudah ada!")
                 update_book = False
 
         if update_book:
@@ -215,8 +220,7 @@ if "edit" in st.session_state:
             if cover_file_edit:
                 cover_name = f"{timestamp}_{cover_file_edit.name}"
                 supabase.storage.from_("uploads").upload(
-                    f"covers/{cover_name}", 
-                    cover_file_edit.read(),
+                    f"covers/{cover_name}", cover_file_edit.read(),
                     {"content-type": f"image/{cover_file_edit.type.split('/')[-1]}"}
                 )
                 cover_url = f"covers/{cover_name}"
@@ -224,8 +228,7 @@ if "edit" in st.session_state:
             if pdf_file_edit:
                 pdf_name = f"{timestamp}_{pdf_file_edit.name}"
                 supabase.storage.from_("uploads").upload(
-                    f"pdfs/{pdf_name}", 
-                    pdf_file_edit.read(),
+                    f"pdfs/{pdf_name}", pdf_file_edit.read(),
                     {"content-type": "application/pdf"}
                 )
                 pdf_url = f"pdfs/{pdf_name}"
