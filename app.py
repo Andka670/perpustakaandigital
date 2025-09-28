@@ -333,6 +333,29 @@ elif st.session_state.page == "profil":
                 st.error(f"❌ Gagal mengubah password: {e}")
 
     st.markdown("---")
+    st.subheader("🗑️ Hapus Akun")
+    if st.button("❌ Hapus Akun Saya"):
+        try:
+            # Cek apakah user masih punya buku dipinjam
+            pinjam_aktif = (
+                supabase.table("peminjaman")
+                .select("id_peminjaman")
+                .eq("id_user", user["id_user"])
+                .eq("status", "Dipinjam")
+                .execute()
+                .data
+            )
+            if pinjam_aktif:
+                st.error("⚠️ Akun tidak bisa dihapus, masih ada buku yang sedang dipinjam!")
+            else:
+                supabase.table("akun").delete().eq("id_user", user["id_user"]).execute()
+                st.success("✅ Akun berhasil dihapus. Kamu akan dialihkan ke halaman login.")
+                st.session_state.clear()
+                st.switch_page("pages/login.py")
+        except Exception as e:
+            st.error(f"❌ Gagal menghapus akun: {e}")
+
+    st.markdown("---")
     if st.button("🚪 Logout"):
         st.session_state.clear()
         st.switch_page("pages/login.py")
