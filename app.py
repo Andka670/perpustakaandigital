@@ -67,9 +67,9 @@ with st.sidebar:
 # ----------------------------
 st.markdown(""" <style>
 div[data-testid="stButton"] > button {
-    width: 400px;
+    width: 100%;
     min-height: 50px;
-    padding: 20px 0;
+    padding: 15px 0;
     border-radius: 20px;
     font-size: 16px;
     font-weight: bold;
