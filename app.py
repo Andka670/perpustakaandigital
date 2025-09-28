@@ -16,7 +16,7 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
 st.set_page_config(page_title="Perpustakaan Digital", page_icon="📚", layout="wide")
 
 # =====================================================
-# CSS Style (Background, Title, Input, Button, Card, dll)
+# CSS Style (Background, Title, Subtitle, Input, Button, Card, dll)
 # =====================================================
 st.markdown("""
 <style>
@@ -34,6 +34,11 @@ st.markdown("""
 .main-title {
     text-align:center; color:brown; font-size:48px;
     font-weight:bold; animation:titleFadeIn 1.2s ease-in-out;
+}
+
+/* Subtitle */
+h1, h2, h3, h4 {
+    color: brown !important;
 }
 
 /* Input Animasi */
