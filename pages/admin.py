@@ -33,7 +33,7 @@ st.markdown("""
     /* Tombol navigasi */
     div[data-testid="stButton"] > button {
         min-height: 50px;
-        padding: 25px 90px;
+        padding: 25px 60px;
         border-radius: 25px;
         font-size: 16px;
         font-weight: bold;
