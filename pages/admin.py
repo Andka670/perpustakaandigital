@@ -21,7 +21,7 @@ st.markdown("""
     .block-container {
         max-width: 85% !important;   /* Hampir full layar */
         padding-left: 3% !important;
-        padding-right: 3% !important;
+        padding-right: 5% !important;
         background: rgba(255, 255, 255, 0.12);
         backdrop-filter: blur(12px);
         border-radius: 18px;
@@ -33,7 +33,7 @@ st.markdown("""
     /* Tombol navigasi */
     div[data-testid="stButton"] > button {
         min-height: 50px;
-        padding: 80px 80px;
+        padding: 25px 80px;
         border-radius: 25px;
         font-size: 16px;
         font-weight: bold;
