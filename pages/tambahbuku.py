@@ -16,7 +16,17 @@ st.markdown("""
 <style>
 section[data-testid="stSidebar"] {display: none !important;}
 div[data-testid="collapsedControl"] {display: none !important;}
-.block-container {max-width:79% !important; padding:70px 10px; background: rgba(255,255,255,0.12); backdrop-filter:blur(12px); border-radius:18px; box-shadow:0 8px 32px rgba(0,0,0,0.3);}
+.block-container {
+    max-width: 79% !important;
+    padding-left: 5% !important;
+    padding-right: 5% !important;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(12px);
+    border-radius: 18px;
+    padding-top: 90px;
+    padding-bottom: 50px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
 div[data-testid="stButton"] > button {height:75px; width:100% !important; border-radius:12px; font-size:16px; font-weight:bold; background-color:#4CAF50; color:white; border:none; transition:all 0.3s ease; box-shadow:0 4px 6px rgba(0,0,0,0.2); white-space:nowrap;}
 div[data-testid="stButton"] > button:hover {background-color:#45a049; transform:scale(1.05); box-shadow:0 6px 12px rgba(0,0,0,0.3);}
 div[data-testid="stButton"] > button:active {transform:scale(0.95); box-shadow:0 2px 4px rgba(0,0,0,0.2);}
