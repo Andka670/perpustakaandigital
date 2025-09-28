@@ -19,7 +19,7 @@ st.markdown("""
 
     /* Perlebar container utama */
     .block-container {
-        max-width: 85% !important;   /* Hampir full layar */
+        max-width: 79% !important;   /* Hampir full layar */
         padding-left: 5% !important;
         padding-right: 5% !important;
         background: rgba(255, 255, 255, 0.12);
@@ -32,9 +32,9 @@ st.markdown("""
 
     /* Tombol navigasi */
     div[data-testid="stButton"] > button {
-        min-height: 90px;
-        padding: 30px 90px;
-        border-radius: 40px;
+        min-height: 50px;
+        padding: 25px 30px;
+        border-radius: 25px;
         font-size: 16px;
         font-weight: bold;
         background-color: #4CAF50;
