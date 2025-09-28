@@ -23,54 +23,65 @@ st.markdown("""
 # CSS Styling
 # ----------------------------
 st.markdown("""
-    <style>
-    .block-container {
-        max-width: 79% !important;
-        padding-left: 5% !important;
-        padding-right: 5% !important;
-        background: rgba(255, 255, 255, 0.12);
-        backdrop-filter: blur(12px);
-        border-radius: 18px;
-        padding-top: 90px;
-        padding-bottom: 50px;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-    }
-    div[data-testid="stButton"] > button {
-        min-height: 50px;
-        padding: 25px 25px;
-        border-radius: 25px;
-        font-size: 16px;
-        font-weight: bold;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-        white-space: nowrap !important;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    div[data-testid="stButton"] > button:hover {
-        background-color: #45a049;
-        transform: scale(1.05);
-    }
-    .animated-title {
-        font-size: 40px;
-        font-weight: bold;
-        color: black;
-        text-align: center;
-        display: inline-block;
-        animation: moveTitle 3s infinite alternate ease-in-out;
-    }
-    @keyframes moveTitle {
-        0%   { transform: translateX(-20px); color: #333; }
-        50%  { transform: translateX(20px);  color: #4CAF50; }
-        100% { transform: translateX(-20px); color: #333; }
-    }
-    </style>
+<style>
+/* Hilangkan sidebar */
+section[data-testid="stSidebar"] {display: none !important;}
+div[data-testid="collapsedControl"] {display: none !important;}
+
+/* Perlebar container utama */
+.block-container {
+    max-width: 79% !important;
+    padding-left: 5% !important;
+    padding-right: 5% !important;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(12px);
+    border-radius: 18px;
+    padding-top: 90px;
+    padding-bottom: 50px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+/* Tombol navigasi */
+div[data-testid="stButton"] > button {
+    min-height: 75px;
+    width: 100% !important;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+div[data-testid="stButton"] > button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+div[data-testid="stButton"] > button:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Animasi teks judul */
+.animated-title {
+    font-size: 40px;
+    font-weight: bold;
+    color: black;
+    text-align: center;
+    display: inline-block;
+    animation: moveTitle 3s infinite alternate ease-in-out;
+}
+@keyframes moveTitle {
+    0%   { transform: translateX(-20px); color: #333; }
+    50%  { transform: translateX(20px);  color: #4CAF50; }
+    100% { transform: translateX(-20px); color: #333; }
+}
+</style>
 """, unsafe_allow_html=True)
 
 # ----------------------------
