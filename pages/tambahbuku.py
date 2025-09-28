@@ -30,7 +30,7 @@ div[data-testid="stButton"] > button:active {transform:scale(0.95); box-shadow:0
 # ----------------------------
 menu_options = {
     "ℹ️ Info Akun": "pages/admin.py",
-    "📚 Tambah/Ubah Buku": "pages/tambahbuku.py",
+    "📚 Tambah/n/Ubah Buku": "pages/tambahbuku.py",
     "📋 Data Buku&User": "pages/daftarpeminjaman.py",
     "🖊️ Peminjaman Offline": "pages/peminjamanoffline.py",
     "🔄 Pengembalian": "pages/pengembalian.py",
