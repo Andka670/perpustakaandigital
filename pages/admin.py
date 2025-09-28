@@ -21,7 +21,7 @@ st.markdown("""
     .block-container {
         max-width: 85% !important;   /* Hampir full layar */
         padding-left: 3% !important;
-        padding-right: 5% !important;
+        padding-right: 10% !important;
         background: rgba(255, 255, 255, 0.12);
         backdrop-filter: blur(12px);
         border-radius: 18px;
