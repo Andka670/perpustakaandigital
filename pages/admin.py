@@ -34,7 +34,7 @@ st.markdown("""
     div[data-testid="stButton"] > button {
         min-height: 50px;
         padding: 25px 25px;
-        border-radius: 25px;
+        border-radius: 40px;
         font-size: 16px;
         font-weight: bold;
         background-color: #4CAF50;
