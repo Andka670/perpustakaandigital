@@ -272,7 +272,6 @@ elif st.session_state.page == "peminjamansaya":
     if not pinjam_data:
         st.info("ℹ️ Kamu belum pernah meminjam buku.")
     else:
-        # Tabel peminjaman dengan denda
         table_data = []
         for p in pinjam_data:
             buku = p.get("buku", {})
@@ -288,7 +287,6 @@ elif st.session_state.page == "peminjamansaya":
             })
         df = pd.DataFrame(table_data)
 
-        # Highlight baris dengan denda > 0
         def highlight_denda(row):
             return ['background-color: #f8d7da' if row["Denda (Rp)"] > 0 else '' for _ in row]
 
@@ -307,7 +305,6 @@ elif st.session_state.page == "profil":
     st.markdown("---")
     st.subheader("🔑 Ubah Password")
 
-    # Bungkus form dengan div animasi
     st.markdown("<div class='input-animate'>", unsafe_allow_html=True)
     with st.form("ubah_password_form"):
         old_pw = st.text_input("Password Lama", type="password")
@@ -336,10 +333,10 @@ elif st.session_state.page == "profil":
     st.subheader("🗑️ Hapus Akun")
     if st.button("❌ Hapus Akun Saya"):
         try:
-            # Cek apakah user masih punya buku dipinjam
+            # Cek apakah user masih punya buku dipinjam (pakai id_user, bukan id_peminjaman)
             pinjam_aktif = (
                 supabase.table("peminjaman")
-                .select("id_peminjaman")
+                .select("id_user")
                 .eq("id_user", user["id_user"])
                 .eq("status", "Dipinjam")
                 .execute()
