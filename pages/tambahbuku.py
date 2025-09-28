@@ -6,7 +6,7 @@ from datetime import datetime
 # Supabase Config
 # ----------------------------
 SUPABASE_URL = "https://bcalrkqeeoaalfpjrwvx.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjYWxya3FlZW9hYWxmcGpyd3Z4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMDc5NTUsImV4cCI6MjA3Mzc4Mzk1NX0.Pg0EUKGfDYk7-apJNjHoqVSub_atlE54ahVKuWtQc0o"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # ----------------------------
@@ -44,9 +44,9 @@ div[data-testid="stButton"] > button {
     text-overflow: ellipsis;
 }
 
-section[data-testid="stSidebar"] {display: none !important;}
 div[data-testid="stButton"] > button:hover {background-color: #45a049; transform: scale(1.05);}
 div[data-testid="stButton"] > button:active {transform: scale(0.95);}
+section[data-testid="stSidebar"] {display: none !important;}
 
 .animated-title {
     font-size: 40px;
@@ -65,21 +65,28 @@ div[data-testid="stButton"] > button:active {transform: scale(0.95);}
 """, unsafe_allow_html=True)
 
 # ----------------------------
-# Navigasi horizontal
+# Navigasi seperti settings.py
 # ----------------------------
+left_col, right_col = st.columns([1,6])
+
+with left_col:
+    if st.button("ℹ️ Info Akun", use_container_width=True):
+        st.switch_page("pages/admin.py")
+
 menu_options = {
-    "ℹ️ Info Akun": "pages/admin.py",
     "📚 Tambah/Ubah Buku": "pages/tambahbuku.py",
     "📋 Data Buku&User": "pages/daftarpeminjaman.py",
     "🖊️ Peminjaman Offline": "pages/peminjamanoffline.py",
     "🔄 Pengembalian": "pages/pengembalian.py",
     "⚙️ Settings": "pages/settings.py"
 }
-cols = st.columns(len(menu_options))
-for i, (name, page_path) in enumerate(menu_options.items()):
-    with cols[i]:
-        if st.button(name, use_container_width=True):
-            st.switch_page(page_path)
+
+with right_col:
+    cols = st.columns(len(menu_options))
+    for i, (name, page_path) in enumerate(menu_options.items()):
+        with cols[i]:
+            if st.button(name, use_container_width=True):
+                st.switch_page(page_path)
 
 # ----------------------------
 # Judul halaman
@@ -110,7 +117,6 @@ if submitted:
         st.warning("⚠️ Mohon lengkapi semua kolom yang wajib.")
     else:
         try:
-            # Cek apakah ada buku dengan kombinasi judul, penulis, tahun, genre
             existing = supabase.table("buku").select("*")\
                 .eq("judul", judul)\
                 .eq("penulis", penulis)\
@@ -118,18 +124,15 @@ if submitted:
                 .eq("genre", genre).execute().data
 
             if existing:
-                # Jika ada, tambahkan stok
                 book_id = existing[0]["id_buku"]
                 new_stok = existing[0]["stok"] + int(stok)
                 supabase.table("buku").update({"stok": new_stok}).eq("id_buku", book_id).execute()
                 st.success(f"✅ Stok buku '{judul}' berhasil diperbarui menjadi {new_stok}")
             else:
-                # Cek apakah judul sudah ada tapi kombinasi berbeda
                 same_title = supabase.table("buku").select("*").eq("judul", judul).execute().data
                 if same_title:
                     st.warning(f"⚠️ Judul '{judul}' sudah ada dengan kombinasi berbeda. Tidak bisa menambahkan stok.")
                 else:
-                    # Tambah buku baru
                     cover_url = None
                     pdf_url = None
                     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
@@ -184,7 +187,6 @@ if st.button("Cari Buku"):
     except Exception as e:
         st.error(f"❌ Terjadi kesalahan: {e}")
 
-# Form edit muncul hanya jika buku ditemukan
 if "edit" in st.session_state:
     book_edit = st.session_state.edit
 
@@ -199,7 +201,6 @@ if "edit" in st.session_state:
 
     if st.button("Update Detail Buku"):
         update_book = True
-        # Cek judul baru agar tidak sama dengan buku lain
         if edit_judul != book_edit["judul"]:
             existing_title = supabase.table("buku").select("*").eq("judul", edit_judul).execute().data
             if existing_title:
