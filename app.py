@@ -16,7 +16,7 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
 st.set_page_config(page_title="Perpustakaan Digital", page_icon="📚", layout="wide")
 
 # =====================================================
-# CSS Style (Background, Title, Subtitle, Input, Button, Card, dll)
+# CSS Style
 # =====================================================
 st.markdown("""
 <style>
@@ -116,6 +116,34 @@ div[data-baseweb="select"]:hover {
 @keyframes fadeIn {
     from{opacity:0; transform:translateY(-8px);}
     to{opacity:1; transform:translateY(0);}
+}
+
+/* Profil text */
+.profil-text {
+    color: brown !important;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* Label input password */
+div[data-baseweb="input"] input {
+    color: brown !important;
+}
+
+/* Tabel custom */
+.styled-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+.styled-table th {
+    background-color: #f9f4f0;
+    color: brown;
+    padding: 8px;
+}
+.styled-table td {
+    color: brown;
+    padding: 8px;
+    border-top: 1px solid #ddd;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -262,22 +290,19 @@ elif st.session_state.page == "peminjamansaya":
             })
 
         df = pd.DataFrame(table_data)
-
-        def highlight_denda(row):
-            return ['background-color: #f8d7da' if row["Denda (Rp)"] > 0 else '' for _ in row]
-
-        st.dataframe(df.style.apply(highlight_denda, axis=1))
+        html_table = df.to_html(index=False, classes="styled-table")
+        st.markdown(html_table, unsafe_allow_html=True)
 
 # =====================================================
 # Halaman Profil
 # =====================================================
 elif st.session_state.page == "profil":
     st.title("⚙️ Profil")
-    st.write(f"👤 Username: **{user['username']}**")
-    st.write(f"🆔 ID User: **{user['id_user']}**")
+    st.markdown(f"<p class='profil-text'>👤 Username: {user['username']}</p>", unsafe_allow_html=True)
+    st.markdown(f"<p class='profil-text'>🆔 ID User: {user['id_user']}</p>", unsafe_allow_html=True)
 
     if user.get("nama_lengkap"):
-        st.write(f"📛 Nama Lengkap: **{user['nama_lengkap']}**")
+        st.markdown(f"<p class='profil-text'>📛 Nama Lengkap: {user['nama_lengkap']}</p>", unsafe_allow_html=True)
 
     st.markdown("---")
     st.subheader("🔑 Ubah Password")
