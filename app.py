@@ -361,8 +361,18 @@ elif st.session_state.page == "peminjamansaya":
             })
 
         df = pd.DataFrame(table_data)
-        html_table = df.to_html(index=False, classes="styled-table")
-        st.markdown(html_table, unsafe_allow_html=True)
+
+        # Fungsi styling
+        def color_denda(row):
+            if row["Denda (Rp)"] > 0:
+                if row["Status"].lower() == "dipinjam":
+                    return ["color: red" if col == "Denda (Rp)" else "" for col in df.columns]
+                elif row["Status"].lower() == "sudah dikembalikan":
+                    return ["color: green" if col == "Denda (Rp)" else "" for col in df.columns]
+            return [""] * len(df.columns)
+
+        styled_df = df.style.apply(color_denda, axis=1)
+        st.dataframe(styled_df, use_container_width=True)
 
 # =====================================================
 # Halaman Profil
