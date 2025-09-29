@@ -16,11 +16,9 @@ supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 # ----------------------------
 st.markdown("""
 <style>
-/* Hilangkan sidebar */
 section[data-testid="stSidebar"] {display: none !important;}
 div[data-testid="collapsedControl"] {display: none !important;}
 
-/* Perlebar container utama */
 .block-container {
     max-width: 79% !important;
     padding-left: 5% !important;
@@ -32,34 +30,6 @@ div[data-testid="collapsedControl"] {display: none !important;}
     padding-bottom: 50px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
 }
-
-/* Tombol navigasi */
-div[data-testid="stButton"] > button {
-    min-height: 75px;
-    width: 100% !important;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: bold;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-}
-div[data-testid="stButton"] > button:hover {
-    background-color: #45a049;
-    transform: scale(1.05);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-}
-div[data-testid="stButton"] > button:active {
-    transform: scale(0.95);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-/* Animasi teks judul */
 .animated-title {
     font-size: 40px;
     font-weight: bold;
@@ -127,15 +97,22 @@ try:
     ).execute().data
 
     if peminjaman_data:
+        # --- Filter ---
         user_list = sorted(list({p["id_user"] for p in peminjaman_data}))
         buku_list = sorted(list({p["id_buku"] for p in peminjaman_data}))
+        pinjam_list = sorted(list({p["id_peminjaman"] for p in peminjaman_data}))
+
         selected_user = st.selectbox("Filter by ID User", ["Semua"] + user_list)
         selected_buku = st.selectbox("Filter by ID Buku", ["Semua"] + buku_list)
+        selected_pinjam = st.selectbox("Filter by ID Peminjaman", ["Semua"] + pinjam_list)
+
         filtered_data = peminjaman_data
         if selected_user != "Semua":
             filtered_data = [p for p in filtered_data if p["id_user"] == selected_user]
         if selected_buku != "Semua":
             filtered_data = [p for p in filtered_data if p["id_buku"] == selected_buku]
+        if selected_pinjam != "Semua":
+            filtered_data = [p for p in filtered_data if p["id_peminjaman"] == selected_pinjam]
 
         denda_per_hari = 5000
 
@@ -191,7 +168,6 @@ try:
             df_dikembalikan = pd.DataFrame(table_dikembalikan)
             st.dataframe(df_dikembalikan.style.apply(highlight_denda, axis=1), use_container_width=True)
 
-            # Convert ke Excel
             towrite = BytesIO()
             df_dikembalikan.to_excel(towrite, index=False, engine='openpyxl')
             towrite.seek(0)
