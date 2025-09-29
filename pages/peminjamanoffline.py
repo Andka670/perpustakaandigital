@@ -148,7 +148,7 @@ if submit:
                 # Hitung denda perhari jika tanggal_kembali sudah lewat
                 today = date.today()
                 hari_terlambat = (today - tanggal_kembali).days
-                denda_awal = 10000 * hari_terlambat if hari_terlambat > 0 else 0
+                denda_awal = 5000 * hari_terlambat if hari_terlambat > 0 else 0
 
                 # Insert ke peminjaman
                 data = {
@@ -174,7 +174,7 @@ if submit:
                     f"- Alamat: `{alamat}`\n"
                     f"- Buku: `{buku_judul}`\n"
                     f"- Status: dipinjam\n"
-                    f"- Denda awal: Rp {denda_awal:,}\n"
+                    f"- Denda: Rp {denda_awal:,}\n"
                     f"- Sisa Stok: {new_stok}"
                 )
             except Exception as e:
