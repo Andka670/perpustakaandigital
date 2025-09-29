@@ -16,11 +16,9 @@ supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 # ----------------------------
 st.markdown("""
 <style>
-/* Hilangkan sidebar */
 section[data-testid="stSidebar"] {display: none !important;}
 div[data-testid="collapsedControl"] {display: none !important;}
 
-/* Perlebar container utama */
 .block-container {
     max-width: 79% !important;
     padding-left: 5% !important;
@@ -33,7 +31,6 @@ div[data-testid="collapsedControl"] {display: none !important;}
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
 }
 
-/* Tombol navigasi */
 div[data-testid="stButton"] > button {
     min-height: 75px;
     width: 100% !important;
@@ -59,7 +56,6 @@ div[data-testid="stButton"] > button:active {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-/* Animasi teks judul */
 .animated-title {
     font-size: 40px;
     font-weight: bold;
@@ -104,24 +100,20 @@ st.markdown('<hr>', unsafe_allow_html=True)
 # ----------------------------
 try:
     peminjaman_data = supabase.table("peminjaman").select("*").execute().data
-    if peminjaman_data:
-        user_list = sorted(list({p["id_user"] for p in peminjaman_data}))
-        buku_list = sorted(list({p["id_buku"] for p in peminjaman_data}))
-        selected_user = st.selectbox("Filter by ID User", ["Semua"] + user_list)
-        selected_buku = st.selectbox("Filter by ID Buku", ["Semua"] + buku_list)
-        filtered_data = peminjaman_data
-        if selected_user != "Semua":
-            filtered_data = [p for p in filtered_data if p["id_user"] == selected_user]
-        if selected_buku != "Semua":
-            filtered_data = [p for p in filtered_data if p["id_buku"] == selected_buku]
+    user_data = supabase.table("users").select("id_user, username").execute().data
+    buku_data = supabase.table("buku").select("id_buku, judul").execute().data
 
+    user_dict = {u["id_user"]: u["username"] for u in user_data}
+    buku_dict = {b["id_buku"]: b["judul"] for b in buku_data}
+
+    if peminjaman_data:
         denda_per_hari = 5000
 
         # ----------------------------
         # Tabel peminjaman: dipinjam
         # ----------------------------
         st.subheader("📌 Daftar Peminjaman Sedang Dipinjam")
-        dipinjam_data = [p for p in filtered_data if p["status"] == "dipinjam"]
+        dipinjam_data = [p for p in peminjaman_data if p["status"] == "dipinjam"]
         table_dipinjam = []
         for p in dipinjam_data:
             denda = 0
@@ -129,12 +121,11 @@ try:
             if datetime.now() > tanggal_kembali:
                 terlambat = (datetime.now() - tanggal_kembali).days
                 denda = terlambat * denda_per_hari
-                supabase.table("peminjaman").update({"denda": denda}).eq("id_user", p["id_user"]).eq("id_buku", p["id_buku"]).execute()
+                supabase.table("peminjaman").update({"denda": denda}).eq("id_peminjaman", p["id_peminjaman"]).execute()
             table_dipinjam.append({
-                "ID User": p["id_user"],
-                "ID Buku": p["id_buku"],
-                "Nomor HP": p.get("nomor","-"),
-                "Alamat": p.get("alamat","-"),
+                "ID Peminjaman": p["id_peminjaman"],
+                "Username": user_dict.get(p["id_user"], "-"),
+                "Judul Buku": buku_dict.get(p["id_buku"], "-"),
                 "Tanggal Pinjam": p["tanggal_pinjam"],
                 "Tanggal Kembali": p["tanggal_kembali"],
                 "Status": p["status"],
@@ -146,17 +137,16 @@ try:
             st.info("📭 Tidak ada peminjaman yang sedang berlangsung.")
 
         # ----------------------------
-        # Tabel peminjaman: sudah dikembalikan + download Excel
+        # Tabel peminjaman: sudah dikembalikan
         # ----------------------------
         st.subheader("📌 Daftar Peminjaman Sudah Dikembalikan")
-        dikembalikan_data = [p for p in filtered_data if p["status"] == "sudah dikembalikan"]
+        dikembalikan_data = [p for p in peminjaman_data if p["status"] == "sudah dikembalikan"]
         table_dikembalikan = []
         for p in dikembalikan_data:
             table_dikembalikan.append({
-                "ID User": p["id_user"],
-                "ID Buku": p["id_buku"],
-                "Nomor HP": p.get("nomor","-"),
-                "Alamat": p.get("alamat","-"),
+                "ID Peminjaman": p["id_peminjaman"],
+                "Username": user_dict.get(p["id_user"], "-"),
+                "Judul Buku": buku_dict.get(p["id_buku"], "-"),
                 "Tanggal Pinjam": p["tanggal_pinjam"],
                 "Tanggal Kembali": p["tanggal_kembali"],
                 "Status": p["status"],
@@ -164,10 +154,11 @@ try:
             })
         if table_dikembalikan:
             st.table(table_dikembalikan)
+
             # Convert ke Excel
             df = pd.DataFrame(table_dikembalikan)
             towrite = BytesIO()
-            df.to_excel(towrite, index=False, engine='openpyxl')
+            df.to_excel(towrite, index=False, engine="openpyxl")
             towrite.seek(0)
             st.download_button(
                 label="⬇️ Download Excel Peminjaman Dikembalikan",
@@ -177,7 +168,6 @@ try:
             )
         else:
             st.info("📭 Tidak ada peminjaman yang sudah dikembalikan.")
-
     else:
         st.info("📭 Belum ada data peminjaman.")
 except Exception as e:
