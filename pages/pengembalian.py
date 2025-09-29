@@ -98,38 +98,58 @@ st.markdown("<h1 class='animated-title'>🔄 Pengembalian Buku</h1>", unsafe_all
 st.markdown('<hr>', unsafe_allow_html=True)
 
 # ----------------------------
-# Data Peminjaman yang sedang dipinjam (ambil + join akun & buku)
+# Data Peminjaman (status = dipinjam)
 # ----------------------------
 peminjaman_data = supabase.table("peminjaman").select(
-    "id_user, id_buku, status, akun(username), buku(judul)"
+    "id_peminjaman, id_user, id_buku, status, akun(username), buku(judul)"
 ).eq("status", "dipinjam").execute().data
 
 if peminjaman_data:
     # Buat daftar user
     user_options = {p['id_user']: p['akun']['username'] for p in peminjaman_data}
-    selected_user = st.selectbox("Pilih User", options=list(user_options.keys()),
-                                 format_func=lambda x: f"{user_options[x]} (ID: {x})")
+    selected_user = st.selectbox(
+        "Pilih User",
+        options=list(user_options.keys()),
+        format_func=lambda x: f"{user_options[x]} (ID: {x})"
+    )
 
-    # Filter buku milik user terpilih
+    # Filter buku yang dipinjam user terpilih
     buku_user = [p for p in peminjaman_data if p['id_user'] == selected_user]
-    buku_options = {p['id_buku']: p['buku']['judul'] for p in buku_user}
-    selected_buku = st.selectbox("Pilih Buku", options=list(buku_options.keys()),
-                                 format_func=lambda x: buku_options[x])
+
+    # Mapping dropdown berdasarkan id_peminjaman
+    buku_options = {
+        p['id_peminjaman']: f"{p['buku']['judul']} (Peminjaman ID: {p['id_peminjaman']})"
+        for p in buku_user
+    }
+
+    selected_peminjaman_id = st.selectbox(
+        "Pilih Buku",
+        options=list(buku_options.keys()),
+        format_func=lambda x: buku_options[x]
+    )
 
     if st.button("Kembalikan Buku"):
         try:
-            # Update status peminjaman menjadi sudah dikembalikan
-            supabase.table("peminjaman").update(
-                {"status": "sudah dikembalikan"}
-            ).eq("id_user", selected_user).eq("id_buku", selected_buku).execute()
+            # Ambil data peminjaman terpilih
+            peminjaman_selected = next((p for p in buku_user if p['id_peminjaman'] == selected_peminjaman_id), None)
+            if peminjaman_selected:
+                selected_buku = peminjaman_selected['id_buku']
 
-            # Tambah stok buku
-            buku_data = supabase.table("buku").select("stok").eq("id_buku", selected_buku).execute().data
-            if buku_data:
-                new_stok = buku_data[0]["stok"] + 1
-                supabase.table("buku").update({"stok": new_stok}).eq("id_buku", selected_buku).execute()
+                # Update status hanya untuk id_peminjaman ini
+                supabase.table("peminjaman").update(
+                    {"status": "sudah dikembalikan"}
+                ).eq("id_peminjaman", selected_peminjaman_id).execute()
 
-            st.success(f"✅ Buku **{buku_options[selected_buku]}** dikembalikan oleh User **{user_options[selected_user]}**!\n📚 Stok buku bertambah menjadi {new_stok}")
+                # Tambah stok buku
+                buku_data = supabase.table("buku").select("stok").eq("id_buku", selected_buku).execute().data
+                if buku_data:
+                    new_stok = buku_data[0]["stok"] + 1
+                    supabase.table("buku").update({"stok": new_stok}).eq("id_buku", selected_buku).execute()
+
+                st.success(
+                    f"✅ Buku **{peminjaman_selected['buku']['judul']}** dikembalikan oleh "
+                    f"User **{user_options[selected_user]}**!\n📚 Stok buku bertambah menjadi {new_stok}"
+                )
         except Exception as e:
             st.error(f"❌ Gagal mengembalikan buku: {e}")
 else:
