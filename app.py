@@ -120,10 +120,11 @@ section[data-testid="stSidebar"] {
     overflow:hidden;
     text-overflow:ellipsis;
     min-height:50px;
+    color: brown !important;
 }
 .book-meta {
     font-size:13px;
-    color:black;
+    color: brown !important;
     margin-bottom:10px;
 }
 /* Tombol Baca Buku */
