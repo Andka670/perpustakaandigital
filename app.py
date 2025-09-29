@@ -20,11 +20,12 @@ st.set_page_config(page_title="Perpustakaan Digital", page_icon="📚", layout="
 # =====================================================
 st.markdown("""
 <style>
-/* Background gradasi */
+/* Background gradasi putih */
 .stApp {
-    background: linear-gradient(135deg, #fffdd0, #fdf5e6, #faf3dd); 
-    background-attachment: fixed; /* biar gradasi full page */
+    background: linear-gradient(135deg, #ffffff, #f8f9fa, #eeeeee);
+    background-attachment: fixed;
 }
+
 
 /* Title Animasi */
 @keyframes titleFadeIn {
