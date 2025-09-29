@@ -284,7 +284,8 @@ if st.session_state.page == "daftarbuku":
                 with cols[i]:
                     st.markdown("<div class='book-card'>", unsafe_allow_html=True)
 
-                    if buku.get("cover_url"):
+                    # ✅ cover hanya muncul kalau ada
+                    if buku.get("cover_url") and buku["cover_url"].strip():
                         try:
                             signed_cover = supabase.storage.from_("uploads").create_signed_url(
                                 buku["cover_url"], 3600
@@ -301,11 +302,12 @@ if st.session_state.page == "daftarbuku":
                         unsafe_allow_html=True
                     )
                     st.markdown(
-                        f"<div class='book-meta'>✍️ {buku['penulis']} | 📅 {buku['tahun']} | 🏷️ {buku.get('genre','-')}</div>",
+                        f"<div class='book-meta'>✍️ {buku['penulis']} | 📅 {buku['tahun']} | 🏷️ {buku.get('genre','-')} | 📦 Stok: {buku.get('stok','-')}</div>",
                         unsafe_allow_html=True
                     )
 
-                    if buku.get("pdf_url"):
+                    # ✅ tombol baca hanya muncul kalau ada pdf
+                    if buku.get("pdf_url") and buku["pdf_url"].strip():
                         try:
                             signed_pdf = supabase.storage.from_("uploads").create_signed_url(
                                 buku["pdf_url"], 3600
