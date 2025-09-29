@@ -16,11 +16,9 @@ supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 # ----------------------------
 st.markdown("""
 <style>
-/* Hilangkan sidebar */
 section[data-testid="stSidebar"] {display: none !important;}
 div[data-testid="collapsedControl"] {display: none !important;}
 
-/* Perlebar container utama */
 .block-container {
     max-width: 79% !important;
     padding-left: 5% !important;
@@ -33,7 +31,6 @@ div[data-testid="collapsedControl"] {display: none !important;}
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
 }
 
-/* Teks tabel rata kiri */
 [data-testid="stDataFrame"] table td {
     text-align: left !important;
 }
@@ -67,11 +64,15 @@ st.markdown("<h1 class='animated-title'>📋 Daftar User dan Buku</h1>", unsafe_
 st.markdown('<hr>', unsafe_allow_html=True)
 
 # ----------------------------
-# Fungsi highlight denda
+# Fungsi highlight denda berdasar status
 # ----------------------------
-def highlight_denda(val):
-    color = "red" if isinstance(val, (int, float)) and val > 0 else "black"
-    return f"color: {color}"
+def highlight_denda(row):
+    if row["Status"] == "dipinjam" and row["Denda (Rp)"] > 0:
+        return ["color: red" if col == "Denda (Rp)" else "" for col in row.index]
+    elif row["Status"] == "sudah dikembalikan" and row["Denda (Rp)"] > 0:
+        return ["color: green" if col == "Denda (Rp)" else "" for col in row.index]
+    else:
+        return ["" for _ in row.index]
 
 # ----------------------------
 # Ambil data peminjaman
@@ -122,7 +123,7 @@ try:
             })
         if table_dipinjam:
             df_dipinjam = pd.DataFrame(table_dipinjam)
-            st.dataframe(df_dipinjam.style.applymap(highlight_denda, subset=["Denda (Rp)"]), use_container_width=True)
+            st.dataframe(df_dipinjam.style.apply(highlight_denda, axis=1), use_container_width=True)
         else:
             st.info("📭 Tidak ada peminjaman yang sedang berlangsung.")
 
@@ -146,7 +147,7 @@ try:
             })
         if table_dikembalikan:
             df_dikembalikan = pd.DataFrame(table_dikembalikan)
-            st.dataframe(df_dikembalikan.style.applymap(highlight_denda, subset=["Denda (Rp)"]), use_container_width=True)
+            st.dataframe(df_dikembalikan.style.apply(highlight_denda, axis=1), use_container_width=True)
 
             # Convert ke Excel
             towrite = BytesIO()
