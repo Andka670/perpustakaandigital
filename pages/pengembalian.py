@@ -70,6 +70,12 @@ div[data-testid="stButton"] > button:active {
     50%  { transform: translateX(20px);  color: #4CAF50; }
     100% { transform: translateX(-20px); color: #333; }
 }
+
+/* Peringatan Denda */
+.denda-warning {
+    color: red;
+    font-weight: bold;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -101,7 +107,7 @@ st.markdown('<hr>', unsafe_allow_html=True)
 # Data Peminjaman (status = dipinjam)
 # ----------------------------
 peminjaman_data = supabase.table("peminjaman").select(
-    "id_peminjaman, id_user, id_buku, status, akun(username), buku(judul)"
+    "id_peminjaman, id_user, id_buku, status, denda, akun(username), buku(judul)"
 ).eq("status", "dipinjam").execute().data
 
 if peminjaman_data:
@@ -128,10 +134,16 @@ if peminjaman_data:
         format_func=lambda x: buku_options[x]
     )
 
+    # Cek denda jika ada
+    peminjaman_selected = next((p for p in buku_user if p['id_peminjaman'] == selected_peminjaman_id), None)
+    if peminjaman_selected and peminjaman_selected.get("denda", 0) > 0:
+        st.markdown(
+            f"<p class='denda-warning'>⚠️ Buku ini memiliki denda sebesar Rp {peminjaman_selected['denda']:,}!</p>",
+            unsafe_allow_html=True
+        )
+
     if st.button("Kembalikan Buku"):
         try:
-            # Ambil data peminjaman terpilih
-            peminjaman_selected = next((p for p in buku_user if p['id_peminjaman'] == selected_peminjaman_id), None)
             if peminjaman_selected:
                 selected_buku = peminjaman_selected['id_buku']
 
