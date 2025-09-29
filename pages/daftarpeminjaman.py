@@ -67,6 +67,13 @@ st.markdown("<h1 class='animated-title'>📋 Daftar User dan Buku</h1>", unsafe_
 st.markdown('<hr>', unsafe_allow_html=True)
 
 # ----------------------------
+# Fungsi highlight denda
+# ----------------------------
+def highlight_denda(val):
+    color = "red" if isinstance(val, (int, float)) and val > 0 else "black"
+    return f"color: {color}"
+
+# ----------------------------
 # Ambil data peminjaman
 # ----------------------------
 try:
@@ -114,7 +121,8 @@ try:
                 "Denda (Rp)": denda
             })
         if table_dipinjam:
-            st.dataframe(pd.DataFrame(table_dipinjam), use_container_width=True)
+            df_dipinjam = pd.DataFrame(table_dipinjam)
+            st.dataframe(df_dipinjam.style.applymap(highlight_denda, subset=["Denda (Rp)"]), use_container_width=True)
         else:
             st.info("📭 Tidak ada peminjaman yang sedang berlangsung.")
 
@@ -137,12 +145,12 @@ try:
                 "Denda (Rp)": p.get("denda", 0)
             })
         if table_dikembalikan:
-            df = pd.DataFrame(table_dikembalikan)
-            st.dataframe(df, use_container_width=True)
+            df_dikembalikan = pd.DataFrame(table_dikembalikan)
+            st.dataframe(df_dikembalikan.style.applymap(highlight_denda, subset=["Denda (Rp)"]), use_container_width=True)
 
             # Convert ke Excel
             towrite = BytesIO()
-            df.to_excel(towrite, index=False, engine='openpyxl')
+            df_dikembalikan.to_excel(towrite, index=False, engine='openpyxl')
             towrite.seek(0)
             st.download_button(
                 label="⬇️ Download Excel Peminjaman Dikembalikan",
