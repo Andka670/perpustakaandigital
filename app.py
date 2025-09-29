@@ -252,41 +252,41 @@ if st.session_state.page == "daftarbuku":
         st.error(f"❌ Gagal mengambil data buku: {e}")
 
     if buku_data:
-        st.markdown("### 🔍 Cari Buku")
-        col1, col2 = st.columns(2)
+        # Filter hanya buku yang punya cover
+        buku_data = [b for b in buku_data if b.get("cover_url") and b["cover_url"].strip()]
 
-        with col1:
-            judul_options = ["Semua"] + sorted({b["judul"] for b in buku_data if b.get("judul")})
-            pilih_judul = st.selectbox("Pilih Judul Buku", judul_options, key="filter_judul")
+        if not buku_data:
+            st.info("ℹ️ Tidak ada buku dengan cover yang tersedia.")
+        else:
+            st.markdown("### 🔍 Cari Buku")
+            col1, col2 = st.columns(2)
 
-        with col2:
-            genre_options = ["Semua"] + sorted({b.get("genre", "-") for b in buku_data})
-            pilih_genre = st.selectbox("Pilih Genre", genre_options, key="filter_genre")
+            with col1:
+                judul_options = ["Semua"] + sorted({b["judul"] for b in buku_data if b.get("judul")})
+                pilih_judul = st.selectbox("Pilih Judul Buku", judul_options, key="filter_judul")
 
-        buku_data = [
-            b for b in buku_data
-            if (pilih_judul == "Semua" or b.get("judul") == pilih_judul)
-            and (pilih_genre == "Semua" or b.get("genre") == pilih_genre)
-        ]
+            with col2:
+                genre_options = ["Semua"] + sorted({b.get("genre", "-") for b in buku_data})
+                pilih_genre = st.selectbox("Pilih Genre", genre_options, key="filter_genre")
 
-        st.markdown("<hr>", unsafe_allow_html=True)
+            buku_data = [
+                b for b in buku_data
+                if (pilih_judul == "Semua" or b.get("judul") == pilih_judul)
+                and (pilih_genre == "Semua" or b.get("genre") == pilih_genre)
+            ]
 
-        num_cols = 3
-        rows = [buku_data[i:i + num_cols] for i in range(0, len(buku_data), num_cols)]
+            st.markdown("<hr>", unsafe_allow_html=True)
 
-        for row in rows:
-            cols = st.columns(num_cols, gap="medium")
-            for i, buku in enumerate(row):
-                # ✅ Skip buku kalau cover_url & pdf_url kosong dua-duanya
-                if not ((buku.get("cover_url") and buku["cover_url"].strip()) or
-                        (buku.get("pdf_url") and buku["pdf_url"].strip())):
-                    continue
+            num_cols = 3
+            rows = [buku_data[i:i + num_cols] for i in range(0, len(buku_data), num_cols)]
 
-                with cols[i]:
-                    st.markdown("<div class='book-card'>", unsafe_allow_html=True)
+            for row in rows:
+                cols = st.columns(num_cols, gap="medium")
+                for i, buku in enumerate(row):
+                    with cols[i]:
+                        st.markdown("<div class='book-card'>", unsafe_allow_html=True)
 
-                    # cover
-                    if buku.get("cover_url") and buku["cover_url"].strip():
+                        # cover
                         try:
                             signed_cover = supabase.storage.from_("uploads").create_signed_url(
                                 buku["cover_url"], 3600
@@ -298,30 +298,30 @@ if st.session_state.page == "daftarbuku":
                         except:
                             pass
 
-                    # judul & meta
-                    st.markdown(
-                        f"<div class='book-title'>{buku['judul']}</div>",
-                        unsafe_allow_html=True
-                    )
-                    st.markdown(
-                        f"<div class='book-meta'>✍️ {buku['penulis']} | 📅 {buku['tahun']} | 🏷️ {buku.get('genre','-')} | 📦 Stok: {buku.get('stok','-')}</div>",
-                        unsafe_allow_html=True
-                    )
+                        # judul & meta
+                        st.markdown(
+                            f"<div class='book-title'>{buku['judul']}</div>",
+                            unsafe_allow_html=True
+                        )
+                        st.markdown(
+                            f"<div class='book-meta'>✍️ {buku['penulis']} | 📅 {buku['tahun']} | 🏷️ {buku.get('genre','-')} | 📦 Stok: {buku.get('stok','-')}</div>",
+                            unsafe_allow_html=True
+                        )
 
-                    # tombol baca
-                    if buku.get("pdf_url") and buku["pdf_url"].strip():
-                        try:
-                            signed_pdf = supabase.storage.from_("uploads").create_signed_url(
-                                buku["pdf_url"], 3600
-                            )["signedURL"]
-                            st.markdown(
-                                f"<a class='read-btn' href='{signed_pdf}' target='_blank'>📕 Baca Buku</a>",
-                                unsafe_allow_html=True
-                            )
-                        except:
-                            pass
+                        # tombol baca
+                        if buku.get("pdf_url") and buku["pdf_url"].strip():
+                            try:
+                                signed_pdf = supabase.storage.from_("uploads").create_signed_url(
+                                    buku["pdf_url"], 3600
+                                )["signedURL"]
+                                st.markdown(
+                                    f"<a class='read-btn' href='{signed_pdf}' target='_blank'>📕 Baca Buku</a>",
+                                    unsafe_allow_html=True
+                                )
+                            except:
+                                pass
 
-                    st.markdown("</div>", unsafe_allow_html=True)
+                        st.markdown("</div>", unsafe_allow_html=True)
 
 # =====================================================
 # Halaman Peminjaman Saya
