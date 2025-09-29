@@ -33,45 +33,12 @@ div[data-testid="collapsedControl"] {display: none !important;}
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
 }
 
-/* Tombol navigasi */
-div[data-testid="stButton"] > button {
-    min-height: 75px;
-    width: 100% !important;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: bold;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+/* Teks tabel rata kiri */
+[data-testid="stDataFrame"] table td {
+    text-align: left !important;
 }
-div[data-testid="stButton"] > button:hover {
-    background-color: #45a049;
-    transform: scale(1.05);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-}
-div[data-testid="stButton"] > button:active {
-    transform: scale(0.95);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-/* Animasi teks judul */
-.animated-title {
-    font-size: 40px;
-    font-weight: bold;
-    color: black;
-    text-align: center;
-    display: inline-block;
-    animation: moveTitle 3s infinite alternate ease-in-out;
-}
-@keyframes moveTitle {
-    0%   { transform: translateX(-20px); color: #333; }
-    50%  { transform: translateX(20px);  color: #4CAF50; }
-    100% { transform: translateX(-20px); color: #333; }
+[data-testid="stDataFrame"] table th {
+    text-align: left !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -147,7 +114,7 @@ try:
                 "Denda (Rp)": denda
             })
         if table_dipinjam:
-            st.table(table_dipinjam)
+            st.dataframe(pd.DataFrame(table_dipinjam), use_container_width=True)
         else:
             st.info("📭 Tidak ada peminjaman yang sedang berlangsung.")
 
@@ -170,9 +137,10 @@ try:
                 "Denda (Rp)": p.get("denda", 0)
             })
         if table_dikembalikan:
-            st.table(table_dikembalikan)
-            # Convert ke Excel
             df = pd.DataFrame(table_dikembalikan)
+            st.dataframe(df, use_container_width=True)
+
+            # Convert ke Excel
             towrite = BytesIO()
             df.to_excel(towrite, index=False, engine='openpyxl')
             towrite.seek(0)
@@ -208,7 +176,7 @@ try:
                 "Genre": b["genre"],
                 "Deskripsi": b["deskripsi"]
             })
-        st.table(buku_table)
+        st.dataframe(pd.DataFrame(buku_table), use_container_width=True)
     else:
         st.info("📭 Belum ada data buku.")
 except Exception as e:
