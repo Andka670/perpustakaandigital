@@ -25,7 +25,179 @@ st.set_page_config(
 st.markdown(
     """
 <style>
-/* (CSS tetap sama persis, tidak diubah) */
+/* Title Animasi */
+@keyframes titleFadeIn {
+    0% {opacity:0; transform:translateY(-20px) scale(0.9);}
+    50% {opacity:0.5; transform:translateY(0) scale(1.05);}
+    100% {opacity:1; transform:translateY(0) scale(1);}
+}
+@keyframes gradientText {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+.main-title {
+    text-align:center;
+    font-size:52px;
+    font-weight:bold;
+    background: linear-gradient(270deg, #ff6a00, #ee0979, #2575fc, #6a11cb);
+    background-size: 600% 600%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: titleFadeIn 1.2s ease-in-out, gradientText 6s ease infinite;
+    text-shadow: 0px 0px 8px rgba(165,42,42,0.5);
+}
+/* Subtitle */
+h1, h2, h3, h4 {
+    color: brown !important;
+}
+/* Input Animasi */
+@keyframes inputFadeIn {
+    0% {opacity:0; transform:translateY(10px) scale(0.95);}
+    100% {opacity:1; transform:translateY(0) scale(1);}
+}
+.input-animate {
+    animation:inputFadeIn 0.8s ease-in-out;
+}
+/* Tombol */
+div[data-testid="stButton"] > button {
+    width:100%;
+    min-height:50px;
+    padding:15px 0;
+    border-radius:20px;
+    font-size:16px;
+    font-weight:bold;
+    background-color:brown;
+    color:white;
+    border:none;
+    margin-right:5px;
+    transition:all 0.3s ease;
+}
+div[data-testid="stButton"] > button:hover {
+    background-color:#45a049;
+    transform:scale(1.05);
+}
+div[data-testid="stButton"] > button:active {
+    transform:scale(0.95);
+}
+/* Hilangkan sidebar bawaan */
+section[data-testid="stSidebar"] {
+    display:none !important;
+}
+/* Card Buku */
+.book-card {
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    height:100%;
+    padding:12px;
+    border-radius:14px;
+    background:brown;
+    box-shadow:0 3px 8px rgba(0,0,0,0.1);
+    animation:fadeIn 0.6s ease-in-out;
+}
+.cover-box {
+    width:100%;
+    aspect-ratio:3/4;
+    overflow:hidden;
+    border-radius:12px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.2);
+    margin-bottom:10px;
+}
+.cover-box img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+.book-title {
+    font-weight:bold;
+    font-size:16px;
+    margin:8px 0;
+    flex-grow:1;
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    min-height:50px;
+}
+.book-meta {
+    font-size:13px;
+    color:black;
+    margin-bottom:10px;
+}
+/* Tombol Baca Buku */
+.read-btn {
+    display:inline-block;
+    width:100%;
+    min-height:45px;
+    padding:12px 0;
+    background:linear-gradient(270deg, #2575fc, #6a11cb);
+    background-size:200% 200%;
+    color:white !important;
+    text-decoration:none;
+    border-radius:12px;
+    font-weight:bold;
+    text-align:center;
+    margin-top:auto;
+    transition:all 0.4s ease-in-out;
+    animation:gradientShift 4s ease infinite;
+}
+.read-btn:hover {
+    background-position:right center;
+    transform:scale(1.05) rotate(-1deg);
+    box-shadow:0 6px 16px rgba(0,0,0,0.25);
+}
+.read-btn:active {
+    transform:scale(0.95);
+}
+@keyframes gradientShift {
+    0%{background-position:left center;}
+    50%{background-position:right center;}
+    100%{background-position:left center;}
+}
+/* Selectbox */
+div[data-baseweb="select"] {
+    border-radius:12px;
+    border:2px solid #6a11cb;
+    background:white;
+    transition:all 0.3s ease-in-out;
+    animation:fadeIn 0.6s ease-in-out;
+}
+div[data-baseweb="select"]:hover {
+    border-color:#2575fc;
+    box-shadow:0 0 10px rgba(37,117,252,0.4);
+    transform:scale(1.02);
+}
+@keyframes fadeIn {
+    from{opacity:0; transform:translateY(-8px);}
+    to{opacity:1; transform:translateY(0);}
+}
+/* Profil text */
+.profil-text {
+    color: brown !important;
+    font-weight: bold;
+    font-size: 18px;
+}
+/* Label input password */
+div[data-baseweb="input"] input {
+    color: brown !important;
+}
+/* Tabel custom */
+.styled-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+.styled-table th {
+    background-color: #f9f4f0;
+    color: brown;
+    padding: 8px;
+}
+.styled-table td {
+    color: brown;
+    padding: 8px;
+    border-top: 1px solid #ddd;
+}
 </style>
 """,
     unsafe_allow_html=True,
@@ -105,10 +277,10 @@ if st.session_state.page == "daftarbuku":
         for row in rows:
             cols = st.columns(num_cols, gap="medium")
             for i, buku in enumerate(row):
-                # ✅ hanya tampilkan card kalau ada cover_url atau pdf_url
-                if not ((buku.get("cover_url") and buku["cover_url"].strip()) or 
+                # ✅ Skip buku kalau cover_url & pdf_url kosong dua-duanya
+                if not ((buku.get("cover_url") and buku["cover_url"].strip()) or
                         (buku.get("pdf_url") and buku["pdf_url"].strip())):
-                    continue  
+                    continue
 
                 with cols[i]:
                     st.markdown("<div class='book-card'>", unsafe_allow_html=True)
