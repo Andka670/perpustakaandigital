@@ -22,7 +22,7 @@ st.markdown("""
 <style>
 /* Background warna cream */
 .stApp {
-    background-color: #fffdd0; /* kode warna cream */
+    background-color: #C7A07A; /* kode warna cream */
 }
 /* Title Animasi */
 @keyframes titleFadeIn {
