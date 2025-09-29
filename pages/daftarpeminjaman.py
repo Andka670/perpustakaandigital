@@ -100,38 +100,47 @@ st.markdown("<h1 class='animated-title'>📋 Daftar User dan Buku</h1>", unsafe_
 st.markdown('<hr>', unsafe_allow_html=True)
 
 # ----------------------------
-# Ambil data peminjaman + join akun + buku
+# Ambil data peminjaman
 # ----------------------------
 try:
     peminjaman_data = supabase.table("peminjaman").select(
-        "id_peminjaman, id_user, id_buku, status, tanggal_pinjam, tanggal_kembali, denda, "
-        "akun(username, nomor, alamat), "
+        "id_peminjaman, id_user, id_buku, status, tanggal_pinjam, tanggal_kembali, denda, nomor, alamat, "
+        "akun(username), "
         "buku(judul)"
     ).execute().data
 
     if peminjaman_data:
+        user_list = sorted(list({p["id_user"] for p in peminjaman_data}))
+        buku_list = sorted(list({p["id_buku"] for p in peminjaman_data}))
+        selected_user = st.selectbox("Filter by ID User", ["Semua"] + user_list)
+        selected_buku = st.selectbox("Filter by ID Buku", ["Semua"] + buku_list)
+        filtered_data = peminjaman_data
+        if selected_user != "Semua":
+            filtered_data = [p for p in filtered_data if p["id_user"] == selected_user]
+        if selected_buku != "Semua":
+            filtered_data = [p for p in filtered_data if p["id_buku"] == selected_buku]
+
         denda_per_hari = 5000
 
         # ----------------------------
         # Tabel peminjaman: dipinjam
         # ----------------------------
         st.subheader("📌 Daftar Peminjaman Sedang Dipinjam")
-        dipinjam_data = [p for p in peminjaman_data if p["status"] == "dipinjam"]
+        dipinjam_data = [p for p in filtered_data if p["status"] == "dipinjam"]
         table_dipinjam = []
         for p in dipinjam_data:
             denda = 0
-            if p["tanggal_kembali"]:
-                tanggal_kembali = datetime.strptime(p["tanggal_kembali"], "%Y-%m-%d")
-                if datetime.now() > tanggal_kembali:
-                    terlambat = (datetime.now() - tanggal_kembali).days
-                    denda = terlambat * denda_per_hari
-                    supabase.table("peminjaman").update({"denda": denda}).eq("id_peminjaman", p["id_peminjaman"]).execute()
+            tanggal_kembali = datetime.strptime(p["tanggal_kembali"], "%Y-%m-%d")
+            if datetime.now() > tanggal_kembali:
+                terlambat = (datetime.now() - tanggal_kembali).days
+                denda = terlambat * denda_per_hari
+                supabase.table("peminjaman").update({"denda": denda}).eq("id_peminjaman", p["id_peminjaman"]).execute()
             table_dipinjam.append({
                 "ID Peminjaman": p["id_peminjaman"],
-                "User": p["akun"]["username"],
-                "Judul Buku": p["buku"]["judul"],
-                "Nomor HP": p["akun"].get("nomor","-"),
-                "Alamat": p["akun"].get("alamat","-"),
+                "User": p["akun"]["username"] if p.get("akun") else "-",
+                "Nomor": p.get("nomor", "-"),
+                "Alamat": p.get("alamat", "-"),
+                "Judul Buku": p["buku"]["judul"] if p.get("buku") else "-",
                 "Tanggal Pinjam": p["tanggal_pinjam"],
                 "Tanggal Kembali": p["tanggal_kembali"],
                 "Status": p["status"],
@@ -146,15 +155,15 @@ try:
         # Tabel peminjaman: sudah dikembalikan + download Excel
         # ----------------------------
         st.subheader("📌 Daftar Peminjaman Sudah Dikembalikan")
-        dikembalikan_data = [p for p in peminjaman_data if p["status"] == "sudah dikembalikan"]
+        dikembalikan_data = [p for p in filtered_data if p["status"] == "sudah dikembalikan"]
         table_dikembalikan = []
         for p in dikembalikan_data:
             table_dikembalikan.append({
                 "ID Peminjaman": p["id_peminjaman"],
-                "User": p["akun"]["username"],
-                "Judul Buku": p["buku"]["judul"],
-                "Nomor HP": p["akun"].get("nomor","-"),
-                "Alamat": p["akun"].get("alamat","-"),
+                "User": p["akun"]["username"] if p.get("akun") else "-",
+                "Nomor": p.get("nomor", "-"),
+                "Alamat": p.get("alamat", "-"),
+                "Judul Buku": p["buku"]["judul"] if p.get("buku") else "-",
                 "Tanggal Pinjam": p["tanggal_pinjam"],
                 "Tanggal Kembali": p["tanggal_kembali"],
                 "Status": p["status"],
