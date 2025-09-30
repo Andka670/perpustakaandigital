@@ -42,7 +42,10 @@ for i, (name, page_path) in enumerate(menu_options.items()):
     with cols[i]:
         if st.button(name, key=f"nav_{i}", use_container_width=True):
             st.switch_page(page_path)
-
+st.markdown(
+    "<div class='main-title'>Admin Perpustakaan</div><br>",
+    unsafe_allow_html=True
+)
 # ----------------------------
 # Judul
 # ----------------------------
