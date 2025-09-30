@@ -71,7 +71,10 @@ div[data-testid="stButton"] > button:active {
     100% { transform: translateX(-20px); color: #333; }
 }
 </style> """, unsafe_allow_html=True)
-
+st.markdown(
+    "<div class='main-title'>Admin Perpustakaan</div><br>",
+    unsafe_allow_html=True
+)
 # ----------------------------
 # Navigasi horizontal
 # ----------------------------
