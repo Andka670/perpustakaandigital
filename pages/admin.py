@@ -55,7 +55,17 @@ div[data-testid="stButton"] > button:active {
     transform: scale(0.95);
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
-
+.main-title {
+    text-align:center;
+    font-size:52px;
+    font-weight:bold;
+    background: linear-gradient(270deg, #ff6a00, #ee0979, #2575fc, #6a11cb);
+    background-size: 600% 600%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: titleFadeIn 1.2s ease-in-out, gradientText 6s ease infinite;
+    text-shadow: 0px 0px 8px rgba(165,42,42,0.5);
+}
 /* Animasi teks judul */
 .animated-title {
     font-size: 40px;
