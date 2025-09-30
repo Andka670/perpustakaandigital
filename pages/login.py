@@ -155,7 +155,7 @@ password = st.text_input("", placeholder="Masukkan password", type="password")
 # ----------------------------
 # Tombol Lupa Password
 # ----------------------------
-col1, col2, col3 = st.columns([18,5,1])
+col1, col2, col3 = st.columns([17,5,1])
 with col2:
     st.page_link("pages/ubahpw.py", label="Lupa Password?", use_container_width=True)
 
