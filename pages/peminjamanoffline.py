@@ -78,7 +78,10 @@ div[data-baseweb="select"], div[data-baseweb="input"] {
 }
 </style>
 """, unsafe_allow_html=True)
-
+st.markdown(
+    "<div class='main-title'>Admin Perpustakaan</div><br>",
+    unsafe_allow_html=True
+)
 # ----------------------------
 # Navigasi Atas
 # ----------------------------
