@@ -55,6 +55,18 @@ div[data-testid="stButton"] > button:active {
     transform: scale(0.95);
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
+/* Title Animasi */
+@keyframes titleFadeIn {
+    0% {opacity:0; transform:translateY(-20px) scale(0.9);}
+    50% {opacity:0.5; transform:translateY(0) scale(1.05);}
+    100% {opacity:1; transform:translateY(0) scale(1);}
+}
+@keyframes gradientText {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+.main-title {
 .main-title {
     text-align:center;
     font-size:52px;
