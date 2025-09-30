@@ -66,7 +66,7 @@ div[data-testid="stButton"] > button:active {
     50% {background-position: 100% 50%;}
     100% {background-position: 0% 50%;}
 }
-.main-title {
+
 .main-title {
     text-align:center;
     font-size:52px;
