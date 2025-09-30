@@ -170,10 +170,21 @@ if "edit" in st.session_state:
     edit_stok = st.number_input("Stok Baru", value=book_edit["stok"], key="edit_stok")
     edit_genre = st.selectbox("Genre Baru", genre_options, index=genre_options.index(book_edit["genre"]), key="edit_genre")
     edit_deskripsi = st.text_area("Deskripsi Baru", value=book_edit["deskripsi"], key="edit_deskripsi")
+    
+    # Tambahan cover_url dan pdf_url
+    edit_cover_url = st.text_input("Cover URL", value=book_edit.get("cover_url", ""), key="edit_cover_url")
+    edit_pdf_url = st.text_input("PDF URL", value=book_edit.get("pdf_url", ""), key="edit_pdf_url")
+
     if st.button("Update Detail Buku"):
         supabase.table("buku").update({
-            "judul": edit_judul, "penulis": edit_penulis, "tahun": int(edit_tahun),
-            "stok": int(edit_stok), "genre": edit_genre, "deskripsi": edit_deskripsi
+            "judul": edit_judul,
+            "penulis": edit_penulis,
+            "tahun": int(edit_tahun),
+            "stok": int(edit_stok),
+            "genre": edit_genre,
+            "deskripsi": edit_deskripsi,
+            "cover_url": edit_cover_url,
+            "pdf_url": edit_pdf_url
         }).eq("id_buku", book_edit["id_buku"]).execute()
         st.success(f"✅ Buku '{edit_judul}' berhasil diperbarui!")
         del st.session_state.edit
