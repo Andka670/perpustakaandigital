@@ -115,23 +115,41 @@ if submitted:
         st.warning("⚠️ Mohon lengkapi semua kolom yang wajib.")
     else:
         try:
-            cover_url, pdf_url = None, None
+            cover_url = None
+            pdf_url = None
+
+            # Upload cover
             if file_cover is not None:
                 file_bytes = file_cover.read()
-                file_name = f"cover/{datetime.now().strftime('%Y%m%d%H%M%S')}_{file_cover.name}"
-                supabase.storage.from_("buku").upload(file_name, file_bytes)
-                cover_url = supabase.storage.from_("buku").get_public_url(file_name)
+                file_name = f"covers/{datetime.now().strftime('%Y%m%d%H%M%S')}_{file_cover.name}"
+                supabase.storage.from_("uploads").upload(
+                    file_name,
+                    file_bytes,
+                    {"content-type": file_cover.type}
+                )
+                cover_url = supabase.storage.from_("uploads").get_public_url(file_name)
 
+            # Upload PDF
             if file_pdf is not None:
                 file_bytes = file_pdf.read()
-                file_name = f"pdf/{datetime.now().strftime('%Y%m%d%H%M%S')}_{file_pdf.name}"
-                supabase.storage.from_("buku").upload(file_name, file_bytes)
-                pdf_url = supabase.storage.from_("buku").get_public_url(file_name)
+                file_name = f"pdfs/{datetime.now().strftime('%Y%m%d%H%M%S')}_{file_pdf.name}"
+                supabase.storage.from_("uploads").upload(
+                    file_name,
+                    file_bytes,
+                    {"content-type": "application/pdf"}
+                )
+                pdf_url = supabase.storage.from_("uploads").get_public_url(file_name)
 
+            # Simpan data buku
             supabase.table("buku").insert({
-                "judul": judul, "penulis": penulis, "tahun": int(tahun), "stok": int(stok),
-                "genre": genre, "deskripsi": deskripsi,
-                "cover_url": cover_url, "pdf_url": pdf_url
+                "judul": judul,
+                "penulis": penulis,
+                "tahun": int(tahun),
+                "stok": int(stok),
+                "genre": genre,
+                "deskripsi": deskripsi,
+                "cover_url": cover_url,
+                "pdf_url": pdf_url
             }).execute()
             st.success("✅ Buku baru berhasil ditambahkan!")
         except Exception as e:
@@ -190,6 +208,7 @@ if "edit" in st.session_state:
     )
     edit_deskripsi = st.text_area("Deskripsi Baru", value=book_edit["deskripsi"], key="edit_deskripsi")
 
+    # Upload cover/pdf baru
     new_cover = st.file_uploader("Upload Cover Baru (jpg/png)", type=["jpg", "png"], key="edit_cover")
     new_pdf = st.file_uploader("Upload PDF Baru", type=["pdf"], key="edit_pdf")
 
@@ -203,20 +222,31 @@ if "edit" in st.session_state:
             "deskripsi": edit_deskripsi
         }
 
+        # Cover baru
         if new_cover is not None:
             file_bytes = new_cover.read()
-            file_name = f"cover/{datetime.now().strftime('%Y%m%d%H%M%S')}_{new_cover.name}"
-            supabase.storage.from_("buku").upload(file_name, file_bytes)
-            cover_url = supabase.storage.from_("buku").get_public_url(file_name)
+            file_name = f"covers/{datetime.now().strftime('%Y%m%d%H%M%S')}_{new_cover.name}"
+            supabase.storage.from_("uploads").upload(
+                file_name,
+                file_bytes,
+                {"content-type": new_cover.type}
+            )
+            cover_url = supabase.storage.from_("uploads").get_public_url(file_name)
             update_data["cover_url"] = cover_url
 
+        # PDF baru
         if new_pdf is not None:
             file_bytes = new_pdf.read()
-            file_name = f"pdf/{datetime.now().strftime('%Y%m%d%H%M%S')}_{new_pdf.name}"
-            supabase.storage.from_("buku").upload(file_name, file_bytes)
-            pdf_url = supabase.storage.from_("buku").get_public_url(file_name)
+            file_name = f"pdfs/{datetime.now().strftime('%Y%m%d%H%M%S')}_{new_pdf.name}"
+            supabase.storage.from_("uploads").upload(
+                file_name,
+                file_bytes,
+                {"content-type": "application/pdf"}
+            )
+            pdf_url = supabase.storage.from_("uploads").get_public_url(file_name)
             update_data["pdf_url"] = pdf_url
 
+        # Update database
         supabase.table("buku").update(update_data).eq("id_buku", book_edit["id_buku"]).execute()
         st.success(f"✅ Buku '{edit_judul}' berhasil diperbarui!")
         del st.session_state.edit
