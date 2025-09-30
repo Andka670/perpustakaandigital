@@ -48,7 +48,10 @@ div[data-testid="stButton"] > button:active {transform:scale(0.95); box-shadow:0
 @keyframes moveTitle {0% {transform:translateX(-20px); color:#333;} 50% {transform:translateX(20px); color:#4CAF50;} 100% {transform:translateX(-20px); color:#333;}}
 </style>
 """, unsafe_allow_html=True)
-
+st.markdown(
+    "<div class='main-title'>Admin Perpustakaan</div><br>",
+    unsafe_allow_html=True
+)
 # ----------------------------
 # Navigasi horizontal
 # ----------------------------
@@ -65,10 +68,7 @@ for i, (name, page_path) in enumerate(menu_options.items()):
     with cols[i]:
         if st.button(name, key=f"nav_{i}", use_container_width=True):
             st.switch_page(page_path)
-st.markdown(
-    "<div class='main-title'>Admin Perpustakaan</div><br>",
-    unsafe_allow_html=True
-)
+
 # ----------------------------
 # Judul
 # ----------------------------
