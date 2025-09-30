@@ -18,18 +18,18 @@ st.markdown("""
 section[data-testid="stSidebar"] {display: none !important;}
 div[data-testid="collapsedControl"] {display: none !important;}
 
-/* Container */
+/* Perlebar container utama */
 .block-container {
-    max-width: 80% !important;
-    padding: 2% 5% !important;
+    max-width: 79% !important;
+    padding-left: 5% !important;
+    padding-right: 5% !important;
     background: rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(12px);
     border-radius: 18px;
-    padding-top: 50px;
+    padding-top: 90px;
     padding-bottom: 50px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
 }
-
 /* Tombol navigasi */
 div[data-testid="stButton"] > button {
     min-height: 75px;
