@@ -30,9 +30,9 @@ div[data-testid="collapsedControl"] {display: none !important;}
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
 }
 
-/* Tombol */
+/* Tombol navigasi */
 div[data-testid="stButton"] > button {
-    min-height: 60px;
+    min-height: 75px;
     width: 100% !important;
     border-radius: 12px;
     font-size: 16px;
@@ -55,7 +55,6 @@ div[data-testid="stButton"] > button:active {
     transform: scale(0.95);
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
-
 /* Animasi teks judul */
 .animated-title {
     font-size: 40px;
