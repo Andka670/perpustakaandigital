@@ -55,7 +55,29 @@ div[data-testid="stButton"] > button:active {
     transform: scale(0.95);
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
+/* Title Animasi */
+@keyframes titleFadeIn {
+    0% {opacity:0; transform:translateY(-20px) scale(0.9);}
+    50% {opacity:0.5; transform:translateY(0) scale(1.05);}
+    100% {opacity:1; transform:translateY(0) scale(1);}
+}
+@keyframes gradientText {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
 
+.main-title {
+    text-align:center;
+    font-size:52px;
+    font-weight:bold;
+    background: linear-gradient(270deg, #ff6a00, #ee0979, #2575fc, #6a11cb);
+    background-size: 600% 600%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: titleFadeIn 1.2s ease-in-out, gradientText 6s ease infinite;
+    text-shadow: 0px 0px 8px rgba(165,42,42,0.5);
+}
 /* Animasi teks judul */
 .animated-title {
     font-size: 40px;
