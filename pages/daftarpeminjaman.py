@@ -97,7 +97,10 @@ div[data-testid="stButton"] > button:active {
 }
 </style>
 """, unsafe_allow_html=True)
-
+st.markdown(
+    "<div class='main-title'>Admin Perpustakaan</div><br>",
+    unsafe_allow_html=True
+)
 # ----------------------------
 # Menu navigasi horizontal
 # ----------------------------
