@@ -94,10 +94,12 @@ div[data-testid="stButton"] > button:active {
 }
 </style>
 """, unsafe_allow_html=True)
+
 st.markdown(
     "<div class='main-title'>Admin Perpustakaan</div><br>",
     unsafe_allow_html=True
 )
+
 # ----------------------------
 # Menu navigasi horizontal (ukuran sama)
 # ----------------------------
@@ -136,13 +138,19 @@ def get_akun():
 akun_list = get_akun()
 
 # ----------------------------
-# Selectbox pilih akun
+# Selectbox pilih akun (ID + Username)
 # ----------------------------
 if akun_list:
-    akun_options = {str(a['id_user']): a for a in akun_list}
-    selected_id = st.selectbox("👤 Pilih akun (berdasarkan ID User):", list(akun_options.keys()))
-    selected_akun = akun_options[selected_id]
+    # Sort by username supaya rapi
+    akun_list_sorted = sorted(akun_list, key=lambda x: x.get("username", ""))
 
+    # Buat opsi gabungan "id_user - username"
+    akun_options = {f"{a['id_user']} - {a['username']}": a for a in akun_list_sorted}
+
+    selected_key = st.selectbox("👤 Pilih akun:", list(akun_options.keys()))
+    selected_akun = akun_options[selected_key]
+
+    # Tampilkan detail akun
     st.write("### 📌 Keterangan Akun")
     st.markdown(f"""
     - **ID User:** {selected_akun.get('id_user', '')}  
