@@ -159,3 +159,11 @@ if akun_list:
     """)
 else:
     st.warning("⚠️ Tidak ada akun ditemukan di database.")
+# =====================================================
+# Footer
+# =====================================================
+st.markdown("<br><br><hr>", unsafe_allow_html=True)
+st.markdown(
+    "<center style='color:brown;'>© 2025 Perpustakaan Digital Payakarta</center>",
+    unsafe_allow_html=True
+)
