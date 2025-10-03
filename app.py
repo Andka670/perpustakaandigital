@@ -280,14 +280,14 @@ elif st.session_state.page == "profil":
             except Exception as e:
                 st.error(f"❌ Gagal mengubah password: {e}")
 
-    # Tombol Hapus Akun
+        # Tombol Hapus Akun
     st.subheader("❌ Hapus Akun")
     if st.button("🗑️ Hapus Akun Saya"):
         try:
             # Ambil semua peminjaman user
             user_loans = supabase.table("peminjaman").select("*").eq("id_user", user["id_user"]).execute().data
             masih_dipinjam = any(l["status"]=="dipinjam" for l in user_loans)
-        
+            
             if masih_dipinjam:
                 st.warning("⚠️ Kamu masih memiliki buku yang sedang dipinjam. Akun tidak bisa dihapus.")
             else:
@@ -296,13 +296,13 @@ elif st.session_state.page == "profil":
                 # Hapus akun user
                 supabase.table("akun").delete().eq("id_user", user["id_user"]).execute()
                 st.success("✅ Akun dan semua peminjamanmu telah dihapus. Kamu akan logout otomatis.")
-                st.session_state.clear()
                 
-                # Rerun app agar langsung logout
-                from streamlit.runtime.scriptrunner import rerun
-                rerun()
+                # Clear session dan pindah ke login
+                st.session_state.clear()
+                st.switch_page("pages/login.py")
         except Exception as e:
             st.error(f"❌ Gagal menghapus akun: {e}")
+
 
     
     st.markdown("---")
