@@ -271,3 +271,11 @@ if "edit" in st.session_state:
         supabase.table("buku").update(update_data).eq("id_buku", book_edit["id_buku"]).execute()
         st.success(f"✅ Buku '{edit_judul}' berhasil diperbarui!")
         del st.session_state.edit
+# =====================================================
+# Footer
+# =====================================================
+st.markdown("<br><br><hr>", unsafe_allow_html=True)
+st.markdown(
+    "<center style='color:green;'>© 2025 Perpustakaan Digital Payakarta</center>",
+    unsafe_allow_html=True
+)
