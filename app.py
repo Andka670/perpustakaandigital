@@ -529,6 +529,16 @@ elif st.session_state.page == "profil":
         f"<p class='profil-text'>🆔 ID User: {user['id_user']}</p>",
         unsafe_allow_html=True
     )
+        st.markdown("---")
+    st.subheader("🎨 Tema Tampilan")
+
+    if "tema" not in st.session_state:
+        st.session_state.tema = "Siang"
+
+    tema = st.radio("Pilih Tema", ["Siang", "Malam"], index=0 if st.session_state.tema=="Siang" else 1)
+
+    if tema != st.session_state.tema:
+        st.session_state.tema = tema
     # CSS Tema Malam
     if st.session_state.tema == "Malam":
         st.markdown("""
