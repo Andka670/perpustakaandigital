@@ -191,3 +191,11 @@ if peminjaman_data:
             st.error(f"❌ Gagal mengembalikan buku: {e}")
 else:
     st.info("ℹ️ Tidak ada buku yang sedang dipinjam.")
+# =====================================================
+# Footer
+# =====================================================
+st.markdown("<br><br><hr>", unsafe_allow_html=True)
+st.markdown(
+    "<center style='color:green;'>© 2025 Perpustakaan Digital Payakarta</center>",
+    unsafe_allow_html=True
+)
