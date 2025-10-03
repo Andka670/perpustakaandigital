@@ -40,8 +40,8 @@ st.markdown(
 body::before, body::after {
     content: "";
     position: fixed;
-    top: -200px;
-    right: -200px;
+    top: -50px;
+    right: -50px;
     width: 3px;
     height: 80px;
     background: linear-gradient(-45deg, white, transparent);
