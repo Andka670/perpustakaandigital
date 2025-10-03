@@ -414,7 +414,7 @@ elif st.session_state.page == "profil":
             height: 100%;
             margin: 0;
             overflow: hidden;
-        }
+        )
 
         /* Matahari */
         .sun {
