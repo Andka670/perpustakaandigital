@@ -279,38 +279,6 @@ elif st.session_state.page == "profil":
                     st.success("✅ Password berhasil diperbarui!")
             except Exception as e:
                 st.error(f"❌ Gagal mengubah password: {e}")
-    st.subheader("❌ Hapus Akun")
-
-# Ambil daftar user
-try:
-    users = supabase.table("akun").select("*").execute().data
-    user_map = {u["id_user"]: u["username"] for u in users}
-
-    if users:
-        selected_user = st.selectbox("Pilih User untuk Dihapus", ["--Pilih--"] + list(user_map.values()))
-        
-        if selected_user != "--Pilih--":
-            # Cari id_user
-            id_user = [k for k, v in user_map.items() if v == selected_user][0]
-            
-            if st.button("Hapus Akun"):
-                # Ambil semua peminjaman user
-                user_loans = supabase.table("peminjaman").select("*").eq("id_user", id_user).execute().data
-                
-                masih_dipinjam = any(l["status"] == "dipinjam" for l in user_loans)
-                
-                if masih_dipinjam:
-                    st.warning("⚠️ User masih memiliki buku yang sedang dipinjam. Akun tidak bisa dihapus.")
-                else:
-                    # Hapus semua peminjaman user
-                    supabase.table("peminjaman").delete().eq("id_user", id_user).execute()
-                    # Hapus user
-                    supabase.table("akun").delete().eq("id_user", id_user).execute()
-                    st.success(f"✅ Akun '{selected_user}' dan semua peminjamannya telah dihapus.")
-    else:
-        st.info("📭 Belum ada user.")
-except Exception as e:
-    st.error(f"❌ Gagal mengambil data akun: {e}")
 
     st.markdown("---")
     if st.button("🚪 Logout"):
