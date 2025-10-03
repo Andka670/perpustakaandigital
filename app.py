@@ -124,12 +124,12 @@ section[data-testid="stSidebar"] {
 }
 .book-meta {
     font-size:13px;
-    color: white !important;
+    color: brown !important;
     margin-bottom:10px;
 }
 .book-desc {
     font-size:13px;
-    color: white;
+    color: brown;
     margin-bottom:8px;
 }
 /* Tombol Baca Buku */
