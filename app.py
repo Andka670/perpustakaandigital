@@ -25,9 +25,7 @@ st.set_page_config(
 st.markdown(
     """
 <style>
-/* ================================
-   Background langit biru
-================================ */
+/* Background langit */
 html, body, [data-testid="stAppViewContainer"], .stApp {
     background: linear-gradient(to bottom, #87ceeb, #ffffff);
     height: 100%;
@@ -47,45 +45,49 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
     box-shadow: 0 0 80px 20px rgba(255, 223, 0, 0.7);
     animation: shine 6s ease-in-out infinite alternate;
 }
-
-/* Animasi cahaya matahari */
 @keyframes shine {
     0% { transform: scale(1); opacity: 0.9; }
     100% { transform: scale(1.1); opacity: 1; }
 }
 
+/* Pelangi */
+.rainbow {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 600px;
+    height: 300px;
+    margin-left: -300px;
+    border-radius: 300px 300px 0 0;
+    background: conic-gradient(red, orange, yellow, green, blue, indigo, violet, red);
+    opacity: 0.6;
+    animation: fadeIn 10s ease-in-out infinite alternate;
+}
+@keyframes fadeIn {
+    0% { opacity: 0; transform: scale(0.9); }
+    100% { opacity: 0.6; transform: scale(1); }
+}
+
 /* Awan */
 .cloud {
     position: absolute;
-    background: #fff;
     background: radial-gradient(circle at 30% 30%, #fff 70%, #f0f0f0 100%);
     border-radius: 50%;
     opacity: 0.9;
     animation: moveClouds 60s linear infinite;
 }
-
-/* Bentuk awan gabungan bulatan */
 .cloud::before, .cloud::after {
     content: "";
     position: absolute;
     background: inherit;
     border-radius: 50%;
 }
-.cloud::before {
-    width: 80px; height: 80px;
-    top: -20px; left: -40px;
-}
-.cloud::after {
-    width: 60px; height: 60px;
-    top: -10px; right: -30px;
-}
-
-/* Ukuran awan */
-.cloud.large { width: 200px; height: 100px; }
+.cloud::before { width: 80px; height: 80px; top: -20px; left: -40px; }
+.cloud::after  { width: 60px; height: 60px; top: -10px; right: -30px; }
+.cloud.large  { width: 200px; height: 100px; }
 .cloud.medium { width: 150px; height: 75px; }
-.cloud.small { width: 100px; height: 50px; }
+.cloud.small  { width: 100px; height: 50px; }
 
-/* Animasi awan berjalan */
 @keyframes moveClouds {
     0% { left: -300px; }
     100% { left: 110%; }
@@ -97,11 +99,8 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
     width: 40px;
     height: 40px;
     background: transparent;
-    border-radius: 50%;
-    animation: fly 20s linear infinite;
+    animation: fly 25s linear infinite;
 }
-
-/* Bentuk burung pakai sayap */
 .bird::before, .bird::after {
     content: "";
     position: absolute;
@@ -111,20 +110,33 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
     border-radius: 50%;
     top: 15px;
 }
-.bird::before {
-    left: -25px;
-    transform: rotate(-20deg);
-}
-.bird::after {
-    right: -25px;
-    transform: rotate(20deg);
+.bird::before { left: -25px; transform: rotate(-20deg); }
+.bird::after  { right: -25px; transform: rotate(20deg); }
+
+@keyframes fly {
+    0% { left: -100px; }
+    50% { left: 50%; }
+    100% { left: 110%; }
 }
 
-/* Animasi burung terbang */
-@keyframes fly {
-    0% { left: -100px; top: 150px; }
-    50% { left: 50%; top: 100px; }
-    100% { left: 110%; top: 180px; }
+/* Efek hujan */
+.rain {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+.raindrop {
+    position: absolute;
+    width: 2px;
+    height: 15px;
+    background: rgba(0,0,255,0.4);
+    bottom: 100%;
+    animation: fall linear infinite;
+}
+@keyframes fall {
+    0%   { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(110vh); opacity: 0; }
 }
 
 /* Title Animasi */
@@ -294,18 +306,30 @@ div[data-baseweb="input"] input {
     border-top: 1px solid #ddd;
 }
 </style>
-<!-- Matahari -->
 <div class="sun"></div>
+<div class="rainbow"></div>
 
 <!-- Awan -->
-<div class="cloud large" style="top:100px; left:-200px; animation-delay:0s;"></div>
-<div class="cloud medium" style="top:200px; left:-400px; animation-delay:20s;"></div>
-<div class="cloud small" style="top:300px; left:-600px; animation-delay:40s;"></div>
+<div class="cloud large" style="top:80px; animation-delay:0s;"></div>
+<div class="cloud medium" style="top:150px; animation-delay:20s;"></div>
+<div class="cloud small" style="top:250px; animation-delay:40s;"></div>
+<div class="cloud medium" style="top:320px; animation-delay:10s;"></div>
+<div class="cloud small" style="top:400px; animation-delay:30s;"></div>
 
 <!-- Burung -->
-<div class="bird" style="top:200px; left:-100px; animation-delay:0s;"></div>
-<div class="bird" style="top:250px; left:-200px; animation-delay:5s;"></div>
-<div class="bird" style="top:180px; left:-300px; animation-delay:10s;"></div>
+<div class="bird" style="top:100px; animation-delay:0s;"></div>
+<div class="bird" style="top:200px; animation-delay:5s;"></div>
+<div class="bird" style="top:300px; animation-delay:10s;"></div>
+<div class="bird" style="top:150px; animation-delay:15s;"></div>
+
+<!-- Hujan -->
+<div class="rain">
+  <div class="raindrop" style="left:10%; animation-duration:1s; animation-delay:0s;"></div>
+  <div class="raindrop" style="left:30%; animation-duration:1.2s; animation-delay:0.2s;"></div>
+  <div class="raindrop" style="left:50%; animation-duration:0.9s; animation-delay:0.4s;"></div>
+  <div class="raindrop" style="left:70%; animation-duration:1.3s; animation-delay:0.1s;"></div>
+  <div class="raindrop" style="left:90%; animation-duration:1s; animation-delay:0.3s;"></div>
+</div>
 """,
     unsafe_allow_html=True,
 )
