@@ -174,27 +174,33 @@ try:
         selected_user = st.selectbox("Pilih User untuk Dihapus", select_options)
         
         if selected_user != "--Pilih--":
-            # Ambil id_user dari string selectbox
+            # Ambil id_user dan username dari string selectbox
             id_user = int(selected_user.split("]")[0][1:])
+            username = user_map[id_user]
             
             if st.button("Hapus Akun"):
-                # Ambil semua peminjaman user
-                user_loans = supabase.table("peminjaman").select("*").eq("id_user", id_user).execute().data
-                
-                masih_dipinjam = any(l["status"] == "dipinjam" for l in user_loans)
-                
-                if masih_dipinjam:
-                    st.warning("⚠️ User masih memiliki buku yang sedang dipinjam. Akun tidak bisa dihapus.")
+                # Cek jika username adalah admin
+                if username.lower() == "admin":
+                    st.warning("⚠️ Akun 'admin' tidak bisa dihapus.")
                 else:
-                    # Hapus semua peminjaman user
-                    supabase.table("peminjaman").delete().eq("id_user", id_user).execute()
-                    # Hapus user
-                    supabase.table("akun").delete().eq("id_user", id_user).execute()
-                    st.success(f"✅ Akun '{user_map[id_user]}' dan semua peminjamannya telah dihapus.")
+                    # Ambil semua peminjaman user
+                    user_loans = supabase.table("peminjaman").select("*").eq("id_user", id_user).execute().data
+                    
+                    masih_dipinjam = any(l["status"] == "dipinjam" for l in user_loans)
+                    
+                    if masih_dipinjam:
+                        st.warning("⚠️ User masih memiliki buku yang sedang dipinjam. Akun tidak bisa dihapus.")
+                    else:
+                        # Hapus semua peminjaman user
+                        supabase.table("peminjaman").delete().eq("id_user", id_user).execute()
+                        # Hapus user
+                        supabase.table("akun").delete().eq("id_user", id_user).execute()
+                        st.success(f"✅ Akun '{username}' dan semua peminjamannya telah dihapus.")
     else:
         st.info("📭 Belum ada user.")
 except Exception as e:
     st.error(f"❌ Gagal mengambil data akun: {e}")
+
 
 # =====================================================
 # Footer
