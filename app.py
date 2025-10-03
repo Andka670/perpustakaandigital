@@ -327,6 +327,74 @@ elif st.session_state.page == "profil":
     st.write(f"🆔 ID User: {user['id_user']}")
     if user.get("nama_lengkap"):
         st.write(f"📛 Nama Lengkap: {user['nama_lengkap']}")
+        st.markdown("---")
+    st.subheader("🎨 Tema Tampilan")
+
+    if "tema" not in st.session_state:
+        st.session_state.tema = "Siang"
+
+    tema = st.radio("Pilih Tema", ["Siang", "Malam"], index=0 if st.session_state.tema=="Siang" else 1)
+
+    if tema != st.session_state.tema:
+        st.session_state.tema = tema
+        # CSS Tema Malam
+    if st.session_state.tema == "Malam":
+        st.markdown("""
+        <style>
+        html, body, [data-testid="stAppViewContainer"], .stApp {
+            background: linear-gradient(to bottom, #0d1b2a, #000000);
+            color: white !important;
+        }
+        /* Bulan */
+        .moon {
+            position: absolute;
+            top: 60px;
+            left: 70%;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, #fdfd96 60%, #f4e04d 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 60px 10px rgba(255, 255, 200, 0.6);
+            animation: glow 5s ease-in-out infinite alternate;
+        }
+        @keyframes glow {
+            0% { opacity: 0.8; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.05); }
+        }
+        /* Bintang */
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite ease-in-out;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+        /* Warna teks dan kartu */
+        .profil-text, h1, h2, h3, h4, label, .book-title, .book-meta, .book-desc {
+            color: white !important;
+        }
+        div[data-testid="stButton"] > button {
+            background-color: #333;
+            color: white;
+        }
+        .book-card {
+            background: #1a1a1a;
+            color: white;
+        }
+        </style>
+        <div class="moon"></div>
+        <!-- bintang random -->
+        <div class="star" style="top:20px; left:30%;"></div>
+        <div class="star" style="top:100px; left:50%;"></div>
+        <div class="star" style="top:200px; left:70%;"></div>
+        <div class="star" style="top:150px; left:20%;"></div>
+        <div class="star" style="top:300px; left:60%;"></div>
+        """, unsafe_allow_html=True)
 
     st.subheader("🔑 Ubah Password")
     with st.form("ubah_password_form"):
