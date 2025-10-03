@@ -27,9 +27,10 @@ st.markdown(
 <style>
 /* ====== Background Animasi Komet ====== */
 .stApp {
-    background: radial-gradient(circle at bottom, #0d1b2a, #000000);
+    background: #000; /* hitam pekat */
     overflow: hidden;
     position: relative;
+    color: white; /* biar teks tetap terlihat */
 }
 
 /* Komet */
@@ -43,14 +44,27 @@ st.markdown(
     height: 80px;
     background: linear-gradient(-45deg, white, transparent);
     animation: shootingStar 3s linear infinite;
-    opacity: 0.8;
+    opacity: 0.9;
+    z-index: 0;
 }
 
-/* Bikin komet kedua dengan delay */
+/* Komet kedua */
 .stApp::after {
-    animation-delay: 1.8s;
+    animation-delay: 1.5s;
     top: -150px;
     right: -100px;
+}
+
+/* Animasi komet */
+@keyframes shootingStar {
+    0% {
+        transform: translateX(0) translateY(0) rotate(45deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(-800px) translateY(800px) rotate(45deg);
+        opacity: 0;
+    }
 }
 
 /* Keyframes komet */
