@@ -412,8 +412,7 @@ elif st.session_state.page == "profil":
             background: linear-gradient(to bottom, #87ceeb, #ffffff);
             height: 100%;
             margin: 0;
-            overflow: hidden;
-        }
+            overflow: hidden;}
 
         /* Matahari */
         .sun {
