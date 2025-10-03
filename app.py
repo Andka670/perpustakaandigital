@@ -25,12 +25,13 @@ st.set_page_config(
 st.markdown(
     """
 <style>
-/* ====== Background Animasi Komet Emas ====== */
-.stApp {
-    background: #000; /* langit malam */
-    overflow: hidden;
-    position: relative;
-    color: white; /* teks tetap kebaca */
+/* =======================
+   Background Malam + Komet Emas
+   ======================= */
+html, body, [data-testid="stAppViewContainer"], .stApp {
+    background: #000 !important;   /* hitam pekat */
+    color: white !important;       /* biar teks tetap kebaca */
+    overflow: hidden !important;
 }
 
 /* Komet emas */
@@ -49,14 +50,14 @@ st.markdown(
     border-radius: 50%;
 }
 
-/* Komet kedua */
+/* Komet kedua (biar ada variasi) */
 .stApp::after {
     animation-delay: 1.5s;
     top: -150px;
     right: -100px;
 }
 
-/* Animasi komet */
+/* Animasi lintasan komet */
 @keyframes shootingStar {
     0% {
         transform: translateX(0) translateY(0) rotate(45deg);
@@ -67,7 +68,6 @@ st.markdown(
         opacity: 0;
     }
 }
-
 
 /* Title Animasi */
 @keyframes titleFadeIn {
