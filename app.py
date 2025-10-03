@@ -20,115 +20,134 @@ st.set_page_config(
 )
 
 # =====================================================
-# CSS Style
+# CSS Style: (menambahkan awan animasi + pelangi)
 # =====================================================
 st.markdown(
     """
 <style>
-/* =======================
-   Background Malam + Komet Emas
-   ======================= */
+/* === Override Streamlit background containers sehingga efek terlihat === */
 html, body, [data-testid="stAppViewContainer"], .stApp {
-    background: #000 !important;   /* hitam pekat */
-    color: white !important;       /* biar teks tetap kebaca */
-    overflow: hidden !important;
+    background: linear-gradient(to bottom, #f7fbff 0%, #fffaf0 55%); /* lembut, cream/sky */
+    overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
 }
 
-/* Komet emas */
-.stApp::before,
-.stApp::after {
+/* ====== Awan animasi ====== */
+/* container awan */
+.cloud {
+    position: absolute;
+    top: 8%;
+    left: -20%;
+    width: 60vw;
+    height: 18vh;
+    background: linear-gradient(#ffffff, #f1f5f9);
+    border-radius: 50%;
+    filter: blur(6px);
+    opacity: 0.9;
+    transform: scale(1.1);
+    animation: floatClouds 40s linear infinite;
+    z-index: 0;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+/* duplicating multiple clouds via pseudo elements */
+.cloud:before,
+.cloud:after {
     content: "";
     position: absolute;
-    top: -200px;
-    right: -200px;
-    width: 3px;
-    height: 80px;
-    background: linear-gradient(-45deg, gold, transparent);
-    animation: shootingStar 3s linear infinite;
-    opacity: 0.9;
-    z-index: 0;
+    background: linear-gradient(#ffffff, #f1f5f9);
+    width: 45%;
+    height: 70%;
+    top: -20%;
+    left: 10%;
     border-radius: 50%;
+    filter: blur(6px);
+    opacity: 0.95;
+}
+.cloud:after {
+    width: 55%;
+    height: 55%;
+    top: 0%;
+    left: 40%;
 }
 
-/* Komet kedua (biar ada variasi) */
-.stApp::after {
-    animation-delay: 1.5s;
-    top: -150px;
-    right: -100px;
+/* additional cloud layers with different speed & position */
+.cloud.layer2 {
+    top: 20%;
+    left: -40%;
+    width: 40vw;
+    height: 12vh;
+    opacity: 0.85;
+    animation: floatClouds 55s linear infinite;
+}
+.cloud.layer3 {
+    top: 35%;
+    left: -60%;
+    width: 70vw;
+    height: 20vh;
+    opacity: 0.75;
+    animation: floatClouds 70s linear infinite;
 }
 
-/* Animasi lintasan komet */
-@keyframes shootingStar {
+/* keyframe: move clouds horizontally */
+@keyframes floatClouds {
     0% {
-        transform: translateX(0) translateY(0) rotate(45deg);
-        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+    50% {
+        transform: translateX(120vw) scale(1.02);
     }
     100% {
-        transform: translateX(-800px) translateY(800px) rotate(45deg);
-        opacity: 0;
+        transform: translateX(240vw) scale(1);
     }
 }
 
-/* Title Animasi */
-@keyframes titleFadeIn {
-    0% {opacity:0; transform:translateY(-20px) scale(0.9);}
-    50% {opacity:0.5; transform:translateY(0) scale(1.05);}
-    100% {opacity:1; transform:translateY(0) scale(1);}
+/* ====== Rainbow (pelangi) ====== */
+/* arc container */
+.rainbow {
+    position: fixed;
+    left: 50%;
+    bottom: -6vh;
+    transform: translateX(-50%);
+    width: 120vw;
+    height: 40vh;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.15; /* lembut */
+    mix-blend-mode: screen;
+    animation: rainbowPulse 8s ease-in-out infinite;
 }
-@keyframes gradientText {
-    0% {background-position: 0% 50%;}
-    50% {background-position: 100% 50%;}
-    100% {background-position: 0% 50%;}
+
+/* create rainbow rings using radial-gradients layered */
+.rainbow::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 200%;
+    border-radius: 50%;
+    background:
+        radial-gradient(closest-side, rgba(255,0,102,0.9) 0%, transparent 40%),
+        radial-gradient(closest-side, rgba(255,94,0,0.9) 0%, transparent 44%),
+        radial-gradient(closest-side, rgba(255,214,0,0.9) 0%, transparent 48%),
+        radial-gradient(closest-side, rgba(0,180,81,0.9) 0%, transparent 52%),
+        radial-gradient(closest-side, rgba(0,112,255,0.9) 0%, transparent 56%),
+        radial-gradient(closest-side, rgba(124,0,255,0.9) 0%, transparent 60%);
+    background-blend-mode: screen;
+    opacity: 0.95;
+    filter: blur(18px);
 }
-.main-title {
-    text-align:center;
-    font-size:52px;
-    font-weight:bold;
-    background: linear-gradient(270deg, #ff6a00, #ee0979, #2575fc, #6a11cb);
-    background-size: 600% 600%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: titleFadeIn 1.2s ease-in-out, gradientText 6s ease infinite;
-    text-shadow: 0px 0px 8px rgba(165,42,42,0.5);
+
+/* slight pulsing animation for rainbow */
+@keyframes rainbowPulse {
+    0% { transform: translateX(-50%) translateY(0) scale(1); opacity: 0.12; }
+    50% { transform: translateX(-50%) translateY(-2%) scale(1.02); opacity: 0.18; }
+    100% { transform: translateX(-50%) translateY(0) scale(1); opacity: 0.12; }
 }
-/* Subtitle */
-h1, h2, h3, h4 {
-    color: brown !important;
-}
-/* Input Animasi */
-@keyframes inputFadeIn {
-    0% {opacity:0; transform:translateY(10px) scale(0.95);}
-    100% {opacity:1; transform:translateY(0) scale(1);}
-}
-.input-animate {
-    animation:inputFadeIn 0.8s ease-in-out;
-}
-/* Tombol */
-div[data-testid="stButton"] > button {
-    width:100%;
-    min-height:50px;
-    padding:15px 0;
-    border-radius:20px;
-    font-size:16px;
-    font-weight:bold;
-    background-color:brown;
-    color:white;
-    border:none;
-    margin-right:5px;
-    transition:all 0.3s ease;
-}
-div[data-testid="stButton"] > button:hover {
-    background-color:#45a049;
-    transform:scale(1.05);
-}
-div[data-testid="stButton"] > button:active {
-    transform:scale(0.95);
-}
-/* Hilangkan sidebar bawaan */
-section[data-testid="stSidebar"] {
-    display:none !important;
-}
-/* Card Buku */
+
+/* ====== Card / content styling (jaga agar teks cokelat terbaca) ====== */
 .book-card {
     display:flex;
     flex-direction:column;
@@ -136,16 +155,18 @@ section[data-testid="stSidebar"] {
     height:100%;
     padding:12px;
     border-radius:14px;
-    background:brown;
-    box-shadow:0 3px 8px rgba(0,0,0,0.1);
+    background: rgba(255, 250, 240, 0.95); /* cream semi-opaque supaya terlihat di atas awan/pelangi */
+    box-shadow:0 3px 8px rgba(0,0,0,0.08);
     animation:fadeIn 0.6s ease-in-out;
+    z-index: 2;
 }
+
 .cover-box {
     width:100%;
     aspect-ratio:3/4;
     overflow:hidden;
     border-radius:12px;
-    box-shadow:0 2px 6px rgba(0,0,0,0.2);
+    box-shadow:0 2px 6px rgba(0,0,0,0.12);
     margin-bottom:10px;
 }
 .cover-box img {
@@ -153,6 +174,8 @@ section[data-testid="stSidebar"] {
     height:100%;
     object-fit:cover;
 }
+
+/* teks judul & meta berwarna cokelat */
 .book-title {
     font-weight:bold;
     font-size:16px;
@@ -164,25 +187,26 @@ section[data-testid="stSidebar"] {
     overflow:hidden;
     text-overflow:ellipsis;
     min-height:50px;
-    color: brown !important;
+    color: #5C3A21 !important; /* cokelat hangat */
 }
 .book-meta {
     font-size:13px;
-    color: brown !important;
+    color: #5C3A21 !important; /* cokelat hangat */
     margin-bottom:10px;
 }
 .book-desc {
     font-size:13px;
-    color: brown;
+    color: #5C3A21; /* cokelat */
     margin-bottom:8px;
 }
-/* Tombol Baca Buku */
+
+/* tombol baca */
 .read-btn {
     display:inline-block;
     width:100%;
     min-height:45px;
     padding:12px 0;
-    background:linear-gradient(270deg, #2575fc, #6a11cb);
+    background:linear-gradient(270deg, #6a3a00, #b88229);
     background-size:200% 200%;
     color:white !important;
     text-decoration:none;
@@ -191,51 +215,45 @@ section[data-testid="stSidebar"] {
     text-align:center;
     margin-top:auto;
     transition:all 0.4s ease-in-out;
-    animation:gradientShift 4s ease infinite;
+    animation:gradientShift 6s ease infinite;
 }
 .read-btn:hover {
-    background-position:right center;
-    transform:scale(1.05) rotate(-1deg);
-    box-shadow:0 6px 16px rgba(0,0,0,0.25);
-}
-.read-btn:active {
-    transform:scale(0.95);
+    transform:translateY(-3px);
+    box-shadow:0 8px 18px rgba(0,0,0,0.12);
 }
 @keyframes gradientShift {
-    0%{background-position:left center;}
-    50%{background-position:right center;}
-    100%{background-position:left center;}
+    0%{background-position:left;}
+    50%{background-position:right;}
+    100%{background-position:left;}
 }
+
+/* page title dan profile text */
+.main-title { text-align:center; font-size:52px; font-weight:bold; color:#3d2b1f; }
+.profil-text { color: #5C3A21 !important; font-weight:bold; font-size:18px; }
+
+/* other utilities */
 @keyframes fadeIn {
     from{opacity:0; transform:translateY(-8px);}
     to{opacity:1; transform:translateY(0);}
 }
-/* Profil text */
-.profil-text {
-    color: brown !important;
-    font-weight: bold;
-    font-size: 18px;
-}
-/* Label input password */
-div[data-baseweb="input"] input {
-    color: brown !important;
-}
-/* Tabel custom */
-.styled-table {
-    border-collapse: collapse;
-    width: 100%;
-}
-.styled-table th {
-    background-color: #f9f4f0;
-    color: brown;
-    padding: 8px;
-}
-.styled-table td {
-    color: brown;
-    padding: 8px;
-    border-top: 1px solid #ddd;
+
+/* ensure UI elements appear above decorative layers */
+[data-testid="stHeader"], .block-container, .stMarkdown, .stButton {
+    position: relative;
+    z-index: 3;
 }
 </style>
+""",
+    unsafe_allow_html=True,
+)
+
+# Inject actual cloud and rainbow DOM nodes so pseudo/CSS can animate them
+st.markdown(
+    """
+<div class="cloud"></div>
+<div class="cloud layer2"></div>
+<div class="cloud layer3"></div>
+<div class="rainbow"></div>
 """,
     unsafe_allow_html=True,
 )
@@ -341,11 +359,11 @@ if st.session_state.page == "daftarbuku":
 
                         # judul & meta
                         st.markdown(
-                            f"<div class='book-title'>{buku['judul']}</div>",
+                            f"<div class='book-title'>{buku.get('judul','-')}</div>",
                             unsafe_allow_html=True
                         )
                         st.markdown(
-                            f"<div class='book-meta'>✍️ {buku['penulis']} | 📅 {buku['tahun']} | 🏷️ {buku.get('genre','-')} | 📦 Stok: {buku.get('stok','-')}</div>",
+                            f"<div class='book-meta'>✍️ {buku.get('penulis','-')} | 📅 {buku.get('tahun','-')} | 🏷️ {buku.get('genre','-')} | 📦 Stok: {buku.get('stok','-')}</div>",
                             unsafe_allow_html=True
                         )
 
@@ -401,9 +419,9 @@ elif st.session_state.page == "peminjamansaya":
                 "Penulis": buku.get("penulis", "-"),
                 "Tahun": buku.get("tahun", "-"),
                 "Genre": buku.get("genre", "-"),
-                "Tanggal Pinjam": p["tanggal_pinjam"],
+                "Tanggal Pinjam": p.get("tanggal_pinjam", "-"),
                 "Tanggal Kembali": p.get("tanggal_kembali", "-"),
-                "Status": p["status"],
+                "Status": p.get("status", "-"),
                 "Denda (Rp)": p.get("denda", 0)
             })
 
@@ -428,17 +446,17 @@ elif st.session_state.page == "profil":
     st.title("⚙️ Profil")
 
     st.markdown(
-        f"<p class='profil-text'>👤 Username: {user['username']}</p>",
+        f"<p class='profil-text'>👤 Username: {user.get('username','-')}</p>",
         unsafe_allow_html=True
     )
     st.markdown(
-        f"<p class='profil-text'>🆔 ID User: {user['id_user']}</p>",
+        f"<p class='profil-text'>🆔 ID User: {user.get('id_user','-')}</p>",
         unsafe_allow_html=True
     )
 
     if user.get("nama_lengkap"):
         st.markdown(
-            f"<p class='profil-text'>📛 Nama Lengkap: {user['nama_lengkap']}</p>",
+            f"<p class='profil-text'>📛 Nama Lengkap: {user.get('nama_lengkap')}</p>",
             unsafe_allow_html=True
         )
 
@@ -489,6 +507,6 @@ elif st.session_state.page == "profil":
 # =====================================================
 st.markdown("<br><br><hr>", unsafe_allow_html=True)
 st.markdown(
-    "<center style='color:brown;'>© 2025 Perpustakaan Digital Payakarta</center>",
+    "<center style='color:#5C3A21;'>© 2025 Perpustakaan Digital Payakarta</center>",
     unsafe_allow_html=True
 )
