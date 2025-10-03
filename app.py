@@ -408,11 +408,13 @@ elif st.session_state.page == "profil":
         st.markdown("""
         <style>
         /* Background langit */
-        html, body, [data-testid="stAppViewContainer"], .stApp {
+        html, body, [data-testid="stAppViewContainer"], 
+        .stApp {
             background: linear-gradient(to bottom, #87ceeb, #ffffff);
             height: 100%;
             margin: 0;
-            overflow: hidden;}
+            overflow: hidden;
+        }
 
         /* Matahari */
         .sun {
