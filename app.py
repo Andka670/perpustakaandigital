@@ -54,6 +54,43 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
     100% { transform: scale(1.1); opacity: 1; }
 }
 
+/* Awan */
+.cloud {
+    position: absolute;
+    background: #fff;
+    background: radial-gradient(circle at 30% 30%, #fff 70%, #f0f0f0 100%);
+    border-radius: 50%;
+    opacity: 0.9;
+    animation: moveClouds 60s linear infinite;
+}
+
+/* Bentuk awan gabungan bulatan */
+.cloud::before, .cloud::after {
+    content: "";
+    position: absolute;
+    background: inherit;
+    border-radius: 50%;
+}
+.cloud::before {
+    width: 80px; height: 80px;
+    top: -20px; left: -40px;
+}
+.cloud::after {
+    width: 60px; height: 60px;
+    top: -10px; right: -30px;
+}
+
+/* Ukuran awan */
+.cloud.large { width: 200px; height: 100px; }
+.cloud.medium { width: 150px; height: 75px; }
+.cloud.small { width: 100px; height: 50px; }
+
+/* Animasi awan berjalan */
+@keyframes moveClouds {
+    0% { left: -300px; }
+    100% { left: 110%; }
+}
+
 /* Burung */
 .bird {
     position: absolute;
@@ -64,7 +101,7 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
     animation: fly 20s linear infinite;
 }
 
-/* Bentuk burung pakai before & after */
+/* Bentuk burung pakai sayap */
 .bird::before, .bird::after {
     content: "";
     position: absolute;
@@ -74,7 +111,6 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
     border-radius: 50%;
     top: 15px;
 }
-
 .bird::before {
     left: -25px;
     transform: rotate(-20deg);
@@ -90,7 +126,6 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
     50% { left: 50%; top: 100px; }
     100% { left: 110%; top: 180px; }
 }
-
 
 /* Title Animasi */
 @keyframes titleFadeIn {
@@ -259,7 +294,15 @@ div[data-baseweb="input"] input {
     border-top: 1px solid #ddd;
 }
 </style>
+<!-- Matahari -->
 <div class="sun"></div>
+
+<!-- Awan -->
+<div class="cloud large" style="top:100px; left:-200px; animation-delay:0s;"></div>
+<div class="cloud medium" style="top:200px; left:-400px; animation-delay:20s;"></div>
+<div class="cloud small" style="top:300px; left:-600px; animation-delay:40s;"></div>
+
+<!-- Burung -->
 <div class="bird" style="top:200px; left:-100px; animation-delay:0s;"></div>
 <div class="bird" style="top:250px; left:-200px; animation-delay:5s;"></div>
 <div class="bird" style="top:180px; left:-300px; animation-delay:10s;"></div>
