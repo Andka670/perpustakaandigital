@@ -193,33 +193,7 @@ div[data-baseweb="input"] input {
     border-top: 1px solid #ddd;
 }
 </style>
-<div class="sun"></div>
-<div class="rainbow"></div>
 
-<!-- Awan -->
-<div class="cloud large" style="top:80px; animation-delay:0s;"></div>
-<div class="cloud medium" style="top:150px; animation-delay:20s;"></div>
-<div class="cloud small" style="top:250px; animation-delay:40s;"></div>
-<div class="cloud medium" style="top:320px; animation-delay:10s;"></div>
-<div class="cloud small" style="top:400px; animation-delay:30s;"></div>
-
-<!-- Burung -->
-<div class="bird" style="top:100px; animation-delay:0s;"></div>
-<div class="bird" style="top:200px; animation-delay:5s;"></div>
-<div class="bird" style="top:300px; animation-delay:10s;"></div>
-<div class="bird" style="top:150px; animation-delay:15s;"></div>
-
-<!-- Hujan -->
-<div class="rain">
-  <div class="raindrop" style="left:10%; animation-duration:1s; animation-delay:0s;"></div>
-  <div class="raindrop" style="left:30%; animation-duration:1.2s; animation-delay:0.2s;"></div>
-  <div class="raindrop" style="left:50%; animation-duration:0.9s; animation-delay:0.4s;"></div>
-  <div class="raindrop" style="left:70%; animation-duration:1.3s; animation-delay:0.1s;"></div>
-  <div class="raindrop" style="left:90%; animation-duration:1s; animation-delay:0.3s;"></div>
-</div>
-""",
-    unsafe_allow_html=True,
-)
 
 # =====================================================
 # Cek Login
