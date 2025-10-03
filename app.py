@@ -7,8 +7,7 @@ import pandas as pd
 # Supabase Config
 # =====================================================
 SUPABASE_URL = "https://bcalrkqeeoaalfpjrwvx.supabase.co"
-SUPABASE_ANON_KEY = ("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-)
+SUPABASE_ANON_KEY = ("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjYWxya3FlZW9hYWxmcGpyd3Z4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMDc5NTUsImV4cCI6MjA3Mzc4Mzk1NX0.Pg0EUKGfDYk7-apJNjHoqVSub_atlE54ahVKuWtQc0o")
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
 
 # =====================================================
@@ -23,12 +22,10 @@ st.set_page_config(
 # =====================================================
 # CSS Style
 # =====================================================
-def render_theme_css(theme: str):
-    if theme == "Siang":
-        st.markdown(
-            """
+st.markdown(
+    """
 <style>
-/* Background Siang */
+/* Background langit */
 html, body, [data-testid="stAppViewContainer"], .stApp {
     background: linear-gradient(to bottom, #87ceeb, #ffffff);
     height: 100%;
@@ -51,6 +48,24 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
 @keyframes shine {
     0% { transform: scale(1); opacity: 0.9; }
     100% { transform: scale(1.1); opacity: 1; }
+}
+
+/* Pelangi */
+.rainbow {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 600px;
+    height: 300px;
+    margin-left: -300px;
+    border-radius: 300px 300px 0 0;
+    background: conic-gradient(red, orange, yellow, green, blue, indigo, violet, red);
+    opacity: 0.6;
+    animation: fadeIn 10s ease-in-out infinite alternate;
+}
+@keyframes fadeIn {
+    0% { opacity: 0; transform: scale(0.9); }
+    100% { opacity: 0.6; transform: scale(1); }
 }
 
 /* Awan */
@@ -104,7 +119,7 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
     100% { left: 110%; }
 }
 
-/* Hujan */
+/* Efek hujan */
 .rain {
     position: absolute;
     width: 100%;
@@ -123,20 +138,190 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
     0%   { transform: translateY(0); opacity: 1; }
     100% { transform: translateY(110vh); opacity: 0; }
 }
-</style>
 
+/* Title Animasi */
+@keyframes titleFadeIn {
+    0% {opacity:0; transform:translateY(-20px) scale(0.9);}
+    50% {opacity:0.5; transform:translateY(0) scale(1.05);}
+    100% {opacity:1; transform:translateY(0) scale(1);}
+}
+@keyframes gradientText {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+.main-title {
+    text-align:center;
+    font-size:52px;
+    font-weight:bold;
+    background: linear-gradient(270deg, #ff6a00, #ee0979, #2575fc, #6a11cb);
+    background-size: 600% 600%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: titleFadeIn 1.2s ease-in-out, gradientText 6s ease infinite;
+    text-shadow: 0px 0px 8px rgba(165,42,42,0.5);
+}
+/* Subtitle */
+h1, h2, h3, h4 {
+    color: brown !important;
+}
+/* Input Animasi */
+@keyframes inputFadeIn {
+    0% {opacity:0; transform:translateY(10px) scale(0.95);}
+    100% {opacity:1; transform:translateY(0) scale(1);}
+}
+.input-animate {
+    animation:inputFadeIn 0.8s ease-in-out;
+}
+/* Tombol */
+div[data-testid="stButton"] > button {
+    width:100%;
+    min-height:50px;
+    padding:15px 0;
+    border-radius:20px;
+    font-size:16px;
+    font-weight:bold;
+    background-color:brown;
+    color:white;
+    border:none;
+    margin-right:5px;
+    transition:all 0.3s ease;
+}
+div[data-testid="stButton"] > button:hover {
+    background-color:#45a049;
+    transform:scale(1.05);
+}
+div[data-testid="stButton"] > button:active {
+    transform:scale(0.95);
+}
+/* Hilangkan sidebar bawaan */
+section[data-testid="stSidebar"] {
+    display:none !important;
+}
+/* Card Buku */
+.book-card {
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    height:100%;
+    padding:12px;
+    border-radius:14px;
+    background:brown;
+    box-shadow:0 3px 8px rgba(0,0,0,0.1);
+    animation:fadeIn 0.6s ease-in-out;
+}
+.cover-box {
+    width:100%;
+    aspect-ratio:3/4;
+    overflow:hidden;
+    border-radius:12px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.2);
+    margin-bottom:10px;
+}
+.cover-box img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+.book-title {
+    font-weight:bold;
+    font-size:16px;
+    margin:8px 0;
+    flex-grow:1;
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    min-height:50px;
+    color: brown !important;
+}
+.book-meta {
+    font-size:13px;
+    color: brown !important;
+    margin-bottom:10px;
+}
+.book-desc {
+    font-size:13px;
+    color: brown;
+    margin-bottom:8px;
+}
+/* Tombol Baca Buku */
+.read-btn {
+    display:inline-block;
+    width:100%;
+    min-height:45px;
+    padding:12px 0;
+    background:linear-gradient(270deg, #2575fc, #6a11cb);
+    background-size:200% 200%;
+    color:white !important;
+    text-decoration:none;
+    border-radius:12px;
+    font-weight:bold;
+    text-align:center;
+    margin-top:auto;
+    transition:all 0.4s ease-in-out;
+    animation:gradientShift 4s ease infinite;
+}
+.read-btn:hover {
+    background-position:right center;
+    transform:scale(1.05) rotate(-1deg);
+    box-shadow:0 6px 16px rgba(0,0,0,0.25);
+}
+.read-btn:active {
+    transform:scale(0.95);
+}
+@keyframes gradientShift {
+    0%{background-position:left center;}
+    50%{background-position:right center;}
+    100%{background-position:left center;}
+}
+@keyframes fadeIn {
+    from{opacity:0; transform:translateY(-8px);}
+    to{opacity:1; transform:translateY(0);}
+}
+/* Profil text */
+.profil-text {
+    color: brown !important;
+    font-weight: bold;
+    font-size: 18px;
+}
+/* Label input password */
+div[data-baseweb="input"] input {
+    color: brown !important;
+}
+/* Tabel custom */
+.styled-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+.styled-table th {
+    background-color: #f9f4f0;
+    color: brown;
+    padding: 8px;
+}
+.styled-table td {
+    color: brown;
+    padding: 8px;
+    border-top: 1px solid #ddd;
+}
+</style>
 <div class="sun"></div>
+<div class="rainbow"></div>
+
 <!-- Awan -->
 <div class="cloud large" style="top:80px; animation-delay:0s;"></div>
 <div class="cloud medium" style="top:150px; animation-delay:20s;"></div>
 <div class="cloud small" style="top:250px; animation-delay:40s;"></div>
 <div class="cloud medium" style="top:320px; animation-delay:10s;"></div>
 <div class="cloud small" style="top:400px; animation-delay:30s;"></div>
+
 <!-- Burung -->
 <div class="bird" style="top:100px; animation-delay:0s;"></div>
 <div class="bird" style="top:200px; animation-delay:5s;"></div>
 <div class="bird" style="top:300px; animation-delay:10s;"></div>
 <div class="bird" style="top:150px; animation-delay:15s;"></div>
+
 <!-- Hujan -->
 <div class="rain">
   <div class="raindrop" style="left:10%; animation-duration:1s; animation-delay:0s;"></div>
@@ -146,74 +331,8 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
   <div class="raindrop" style="left:90%; animation-duration:1s; animation-delay:0.3s;"></div>
 </div>
 """,
-            unsafe_allow_html=True,
-        )
-    else:  # Malam
-        st.markdown(
-            """
-<style>
-/* Background Malam */
-html, body, [data-testid="stAppViewContainer"], .stApp {
-    background: linear-gradient(to bottom, #0d0d1a, #1a1a33);
-    height: 100%;
-    margin: 0;
-    overflow: hidden;
-}
-
-/* Bulan */
-.moon {
-    position: absolute;
-    top: 60px;
-    left: 70%;
-    width: 100px;
-    height: 100px;
-    background: radial-gradient(circle, #fff 60%, #ddd 100%);
-    border-radius: 50%;
-    box-shadow: 0 0 60px 15px rgba(255,255,200,0.5);
-}
-
-/* Bintang */
-.star {
-    position: absolute;
-    width: 3px;
-    height: 3px;
-    background: white;
-    border-radius: 50%;
-    animation: twinkle 2s infinite ease-in-out alternate;
-}
-@keyframes twinkle {
-    from { opacity: 0.2; }
-    to { opacity: 1; }
-}
-
-/* Komet */
-.comet {
-    position: absolute;
-    width: 3px;
-    height: 3px;
-    background: gold;
-    border-radius: 50%;
-    box-shadow: -100px -30px 15px 5px rgba(255,215,0,0.7);
-    animation: cometFly 6s linear infinite;
-}
-@keyframes cometFly {
-    0% { top: 50px; left: -100px; opacity: 0; }
-    10% { opacity: 1; }
-    50% { top: 200px; left: 50%; opacity: 1; }
-    100% { top: 400px; left: 110%; opacity: 0; }
-}
-</style>
-
-<div class="moon"></div>
-<div class="star" style="top:80px; left:20%; animation-delay:0s;"></div>
-<div class="star" style="top:150px; left:40%; animation-delay:1s;"></div>
-<div class="star" style="top:200px; left:60%; animation-delay:2s;"></div>
-<div class="star" style="top:300px; left:30%; animation-delay:3s;"></div>
-<div class="star" style="top:350px; left:70%; animation-delay:4s;"></div>
-<div class="comet"></div>
-""",
-            unsafe_allow_html=True,
-        )
+    unsafe_allow_html=True,
+)
 
 # =====================================================
 # Cek Login
@@ -224,6 +343,14 @@ if not st.session_state.get("logged_in"):
 user = st.session_state["user"]
 
 # =====================================================
+# Title
+# =====================================================
+st.markdown(
+    "<div class='main-title'>Perpustakaan Digital</div><br>",
+    unsafe_allow_html=True
+)
+
+# =====================================================
 # Navigasi
 # =====================================================
 menu_options = {
@@ -231,6 +358,7 @@ menu_options = {
     "📋 Peminjaman Saya": "peminjamansaya",
     "⚙️ Profil": "profil"
 }
+
 if "page" not in st.session_state:
     st.session_state.page = "daftarbuku"
 
@@ -243,29 +371,182 @@ for i, (name, page_name) in enumerate(menu_options.items()):
 st.markdown("<hr>", unsafe_allow_html=True)
 
 # =====================================================
+# Halaman Daftar Buku
+# =====================================================
+if st.session_state.page == "daftarbuku":
+    st.title("📖 Daftar Buku Tersedia")
+
+    try:
+        buku_data = (
+            supabase.table("buku")
+            .select("id_buku, judul, penulis, tahun, genre, stok, cover_url, pdf_url, deskripsi")
+            .execute()
+            .data
+        )
+    except Exception as e:
+        buku_data = []
+        st.error(f"❌ Gagal mengambil data buku: {e}")
+
+    if buku_data:
+        buku_data = [b for b in buku_data if b.get("cover_url") and b["cover_url"].strip()]
+
+        if not buku_data:
+            st.info("ℹ️ Tidak ada buku dengan cover yang tersedia.")
+        else:
+            st.markdown("### 🔍 Cari Buku")
+            col1, col2 = st.columns(2)
+
+            with col1:
+                judul_options = ["Semua"] + sorted({b["judul"] for b in buku_data if b.get("judul")})
+                pilih_judul = st.selectbox("Pilih Judul Buku", judul_options, key="filter_judul")
+
+            with col2:
+                genre_options = ["Semua"] + sorted({b.get("genre", "-") for b in buku_data})
+                pilih_genre = st.selectbox("Pilih Genre", genre_options, key="filter_genre")
+
+            buku_data = [
+                b for b in buku_data
+                if (pilih_judul == "Semua" or b.get("judul") == pilih_judul)
+                and (pilih_genre == "Semua" or b.get("genre") == pilih_genre)
+            ]
+
+            st.markdown("<hr>", unsafe_allow_html=True)
+
+            num_cols = 3
+            rows = [buku_data[i:i + num_cols] for i in range(0, len(buku_data), num_cols)]
+
+            for row in rows:
+                cols = st.columns(num_cols, gap="medium")
+                for i, buku in enumerate(row):
+                    with cols[i]:
+                        st.markdown("<div class='book-card'>", unsafe_allow_html=True)
+
+                        # cover
+                        try:
+                            signed_cover = supabase.storage.from_("uploads").create_signed_url(
+                                buku["cover_url"], 3600
+                            )["signedURL"]
+                            st.markdown(
+                                f"<div class='cover-box'><img src='{signed_cover}'/></div>",
+                                unsafe_allow_html=True
+                            )
+                        except:
+                            pass
+
+                        # judul & meta
+                        st.markdown(
+                            f"<div class='book-title'>{buku['judul']}</div>",
+                            unsafe_allow_html=True
+                        )
+                        st.markdown(
+                            f"<div class='book-meta'>✍️ {buku['penulis']} | 📅 {buku['tahun']} | 🏷️ {buku.get('genre','-')} | 📦 Stok: {buku.get('stok','-')}</div>",
+                            unsafe_allow_html=True
+                        )
+
+                        # deskripsi
+                        if buku.get("deskripsi"):
+                            deskripsi_pendek = buku["deskripsi"][:150] + ("..." if len(buku["deskripsi"]) > 150 else "")
+                            st.markdown(f"<div class='book-desc'>{deskripsi_pendek}</div>", unsafe_allow_html=True)
+                            with st.expander("📖 Selengkapnya"):
+                                st.write(buku["deskripsi"])
+
+                        # tombol baca
+                        if buku.get("pdf_url") and buku["pdf_url"].strip():
+                            try:
+                                signed_pdf = supabase.storage.from_("uploads").create_signed_url(
+                                    buku["pdf_url"], 3600
+                                )["signedURL"]
+                                st.markdown(
+                                    f"<a class='read-btn' href='{signed_pdf}' target='_blank'>📕 Baca Buku</a>",
+                                    unsafe_allow_html=True
+                                )
+                            except:
+                                pass
+
+                        st.markdown("</div>", unsafe_allow_html=True)
+
+# =====================================================
+# Halaman Peminjaman Saya
+# =====================================================
+elif st.session_state.page == "peminjamansaya":
+    st.title("📋 Peminjaman Saya")
+
+    try:
+        pinjam_data = (
+            supabase.table("peminjaman")
+            .select("*, buku(judul, penulis, tahun, genre)")
+            .eq("id_user", user["id_user"])
+            .order("tanggal_pinjam", desc=True)
+            .execute()
+            .data
+        )
+    except Exception as e:
+        pinjam_data = []
+        st.error(f"❌ Gagal mengambil data peminjaman: {e}")
+
+    if not pinjam_data:
+        st.info("ℹ️ Kamu belum pernah meminjam buku.")
+    else:
+        table_data = []
+        for p in pinjam_data:
+            buku = p.get("buku", {})
+            table_data.append({
+                "Judul Buku": buku.get("judul", "(Tanpa Judul)"),
+                "Penulis": buku.get("penulis", "-"),
+                "Tahun": buku.get("tahun", "-"),
+                "Genre": buku.get("genre", "-"),
+                "Tanggal Pinjam": p["tanggal_pinjam"],
+                "Tanggal Kembali": p.get("tanggal_kembali", "-"),
+                "Status": p["status"],
+                "Denda (Rp)": p.get("denda", 0)
+            })
+
+        df = pd.DataFrame(table_data)
+
+        # Styling warna denda
+        def color_denda(row):
+            if row["Denda (Rp)"] > 0:
+                if row["Status"].lower() == "dipinjam":
+                    return ["color: red" if col == "Denda (Rp)" else "" for col in df.columns]
+                elif row["Status"].lower() == "sudah dikembalikan":
+                    return ["color: green" if col == "Denda (Rp)" else "" for col in df.columns]
+            return [""] * len(df.columns)
+
+        styled_df = df.style.apply(color_denda, axis=1)
+        st.dataframe(styled_df, use_container_width=True)
+
+# =====================================================
 # Halaman Profil
 # =====================================================
-if st.session_state.page == "profil":
+elif st.session_state.page == "profil":
     st.title("⚙️ Profil")
 
-    st.markdown(f"👤 Username: {user['username']}")
-    st.markdown(f"🆔 ID User: {user['id_user']}")
+    st.markdown(
+        f"<p class='profil-text'>👤 Username: {user['username']}</p>",
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        f"<p class='profil-text'>🆔 ID User: {user['id_user']}</p>",
+        unsafe_allow_html=True
+    )
 
     if user.get("nama_lengkap"):
-        st.markdown(f"📛 Nama Lengkap: {user['nama_lengkap']}")
-
-    # Pilih tema
-    st.subheader("🎨 Tema Profil")
-    theme_choice = st.radio("Pilih Tema:", ["Siang", "Malam"], key="theme_profile")
-    render_theme_css(theme_choice)
+        st.markdown(
+            f"<p class='profil-text'>📛 Nama Lengkap: {user['nama_lengkap']}</p>",
+            unsafe_allow_html=True
+        )
 
     st.markdown("---")
     st.subheader("🔑 Ubah Password")
+    st.markdown("<div class='input-animate'>", unsafe_allow_html=True)
+
     with st.form("ubah_password_form"):
         old_pw = st.text_input("Password Lama", type="password")
         new_pw = st.text_input("Password Baru", type="password")
         confirm_pw = st.text_input("Konfirmasi Password Baru", type="password")
         submit_pw = st.form_submit_button("💾 Simpan Password")
+
+    st.markdown("</div>", unsafe_allow_html=True)
 
     if submit_pw:
         if not old_pw or not new_pw or not confirm_pw:
@@ -274,16 +555,34 @@ if st.session_state.page == "profil":
             st.error("❌ Konfirmasi password tidak cocok!")
         else:
             try:
-                db_user = supabase.table("akun").select("password").eq("id_user", user["id_user"]).single().execute()
+                db_user = (
+                    supabase.table("akun")
+                    .select("password")
+                    .eq("id_user", user["id_user"])
+                    .single()
+                    .execute()
+                )
                 if not db_user.data or db_user.data["password"] != old_pw:
                     st.error("❌ Password lama salah!")
                 else:
-                    supabase.table("akun").update({"password": new_pw}).eq("id_user", user["id_user"]).execute()
+                    supabase.table("akun").update({"password": new_pw}).eq(
+                        "id_user", user["id_user"]
+                    ).execute()
                     st.success("✅ Password berhasil diperbarui!")
             except Exception as e:
                 st.error(f"❌ Gagal mengubah password: {e}")
 
     st.markdown("---")
+
     if st.button("🚪 Logout"):
         st.session_state.clear()
         st.switch_page("pages/login.py")
+
+# =====================================================
+# Footer
+# =====================================================
+st.markdown("<br><br><hr>", unsafe_allow_html=True)
+st.markdown(
+    "<center style='color:brown;'>© 2025 Perpustakaan Digital Payakarta</center>",
+    unsafe_allow_html=True
+)
