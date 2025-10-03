@@ -25,7 +25,35 @@ st.set_page_config(
 st.markdown(
     """
 <style>
-/* Background animasi komet */
+/* ====== Background Animasi Komet ====== */
+.stApp {
+    background: radial-gradient(circle at bottom, #0d1b2a, #000000);
+    overflow: hidden;
+    position: relative;
+}
+
+/* Komet */
+.stApp::before,
+.stApp::after {
+    content: "";
+    position: absolute;
+    top: -200px;
+    right: -200px;
+    width: 3px;
+    height: 80px;
+    background: linear-gradient(-45deg, white, transparent);
+    animation: shootingStar 3s linear infinite;
+    opacity: 0.8;
+}
+
+/* Bikin komet kedua dengan delay */
+.stApp::after {
+    animation-delay: 1.8s;
+    top: -150px;
+    right: -100px;
+}
+
+/* Keyframes komet */
 @keyframes shootingStar {
     0% {
         transform: translateX(0) translateY(0) rotate(45deg);
@@ -35,26 +63,6 @@ st.markdown(
         transform: translateX(-800px) translateY(800px) rotate(45deg);
         opacity: 0;
     }
-}
-
-body::before, body::after {
-    content: "";
-    position: fixed;
-    top: -50px;
-    right: -50px;
-    width: 3px;
-    height: 80px;
-    background: linear-gradient(-45deg, white, transparent);
-    animation: shootingStar 3s linear infinite;
-    opacity: 0.7;
-    z-index: -1;
-}
-
-/* Bikin lebih dari satu komet dengan delay beda */
-body::after {
-    animation-delay: 1.5s;
-    top: -150px;
-    right: -100px;
 }
 
 /* Title Animasi */
