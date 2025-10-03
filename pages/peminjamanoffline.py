@@ -204,3 +204,11 @@ if submit:
                 )
             except Exception as e:
                 st.error(f"❌ Gagal mencatat peminjaman: {e}")
+# =====================================================
+# Footer
+# =====================================================
+st.markdown("<br><br><hr>", unsafe_allow_html=True)
+st.markdown(
+    "<center style='color:green;'>© 2025 Perpustakaan Digital Payakarta</center>",
+    unsafe_allow_html=True
+)
