@@ -263,3 +263,11 @@ try:
         st.info("📭 Belum ada data buku.")
 except Exception as e:
     st.error(f"❌ Gagal mengambil data buku: {e}")
+# =====================================================
+# Footer
+# =====================================================
+st.markdown("<br><br><hr>", unsafe_allow_html=True)
+st.markdown(
+    "<center style='color:green;'>© 2025 Perpustakaan Digital Payakarta</center>",
+    unsafe_allow_html=True
+)
