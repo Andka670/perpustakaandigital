@@ -25,119 +25,6 @@ st.set_page_config(
 st.markdown(
     """
 <style>
-/* Background langit */
-html, body, [data-testid="stAppViewContainer"], .stApp {
-    background: linear-gradient(to bottom, #87ceeb, #ffffff);
-    height: 100%;
-    margin: 0;
-    overflow: hidden;
-}
-
-/* Matahari */
-.sun {
-    position: absolute;
-    top: 50px;
-    left: 70%;
-    width: 120px;
-    height: 120px;
-    background: radial-gradient(circle, #FFD700 60%, #FFA500 100%);
-    border-radius: 50%;
-    box-shadow: 0 0 80px 20px rgba(255, 223, 0, 0.7);
-    animation: shine 6s ease-in-out infinite alternate;
-}
-@keyframes shine {
-    0% { transform: scale(1); opacity: 0.9; }
-    100% { transform: scale(1.1); opacity: 1; }
-}
-
-/* Pelangi */
-.rainbow {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 600px;
-    height: 300px;
-    margin-left: -300px;
-    border-radius: 300px 300px 0 0;
-    background: conic-gradient(red, orange, yellow, green, blue, indigo, violet, red);
-    opacity: 0.6;
-    animation: fadeIn 10s ease-in-out infinite alternate;
-}
-@keyframes fadeIn {
-    0% { opacity: 0; transform: scale(0.9); }
-    100% { opacity: 0.6; transform: scale(1); }
-}
-
-/* Awan */
-.cloud {
-    position: absolute;
-    background: radial-gradient(circle at 30% 30%, #fff 70%, #f0f0f0 100%);
-    border-radius: 50%;
-    opacity: 0.9;
-    animation: moveClouds 60s linear infinite;
-}
-.cloud::before, .cloud::after {
-    content: "";
-    position: absolute;
-    background: inherit;
-    border-radius: 50%;
-}
-.cloud::before { width: 80px; height: 80px; top: -20px; left: -40px; }
-.cloud::after  { width: 60px; height: 60px; top: -10px; right: -30px; }
-.cloud.large  { width: 200px; height: 100px; }
-.cloud.medium { width: 150px; height: 75px; }
-.cloud.small  { width: 100px; height: 50px; }
-
-@keyframes moveClouds {
-    0% { left: -300px; }
-    100% { left: 110%; }
-}
-
-/* Burung */
-.bird {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    background: transparent;
-    animation: fly 25s linear infinite;
-}
-.bird::before, .bird::after {
-    content: "";
-    position: absolute;
-    width: 30px;
-    height: 10px;
-    border-top: 3px solid black;
-    border-radius: 50%;
-    top: 15px;
-}
-.bird::before { left: -25px; transform: rotate(-20deg); }
-.bird::after  { right: -25px; transform: rotate(20deg); }
-
-@keyframes fly {
-    0% { left: -100px; }
-    50% { left: 50%; }
-    100% { left: 110%; }
-}
-
-/* Efek hujan */
-.rain {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-}
-.raindrop {
-    position: absolute;
-    width: 2px;
-    height: 15px;
-    background: rgba(0,0,255,0.4);
-    bottom: 100%;
-    animation: fall linear infinite;
-}
-@keyframes fall {
-    0%   { transform: translateY(0); opacity: 1; }
-    100% { transform: translateY(110vh); opacity: 0; }
-}
 
 /* Title Animasi */
 @keyframes titleFadeIn {
@@ -576,18 +463,6 @@ elif st.session_state.page == "profil":
             0%, 100% { opacity: 0.2; }
             50% { opacity: 1; }
         }
-        /* Warna teks dan kartu */
-        .profil-text, h1, h2, h3, h4, label, .book-title, .book-meta, .book-desc {
-            color: white !important;
-        }
-        div[data-testid="stButton"] > button {
-            background-color: #333;
-            color: white;
-        }
-        .book-card {
-            background: #1a1a1a;
-            color: white;
-        }
         </style>
         <div class="moon"></div>
         <!-- bintang random -->
@@ -597,8 +472,62 @@ elif st.session_state.page == "profil":
         <div class="star" style="top:150px; left:20%;"></div>
         <div class="star" style="top:300px; left:60%;"></div>
         """, unsafe_allow_html=True)
+    if st.session_state.tema == "Siang":
+        st.markdown("""
+        <style>
+        /* Background langit */
+        html, body, [data-testid="stAppViewContainer"], .stApp {
+            background: linear-gradient(to bottom, #87ceeb, #ffffff);
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* Matahari */
+        .sun {
+            position: absolute;
+            top: 50px;
+            left: 70%;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, #FFD700 60%, #FFA500 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 80px 20px rgba(255, 223, 0, 0.7);
+            animation: shine 6s ease-in-out infinite alternate;
+        }
+        @keyframes shine {
+            0% { transform: scale(1); opacity: 0.9; }
+            100% { transform: scale(1.1); opacity: 1; }
+        }
 
 
+        /* Awan */
+        .cloud {
+            position: absolute;
+            background: radial-gradient(circle at 30% 30%, #fff 70%, #f0f0f0 100%);
+            border-radius: 50%;
+            opacity: 0.9;
+            animation: moveClouds 60s linear infinite;
+        }
+        .cloud::before, .cloud::after {
+            content: "";
+            position: absolute;
+            background: inherit;
+            border-radius: 50%;
+        }
+
+        @keyframes moveClouds {
+            0% { left: -300px; }
+            100% { left: 110%; }
+        }
+        </style>
+        <div class="sun"></div>
+        .cloud::before { width: 80px; height: 80px; top: -20px; left: -40px; }
+        .cloud::after  { width: 60px; height: 60px; top: -10px; right: -30px; }
+        .cloud.large  { width: 200px; height: 100px; }
+        .cloud.medium { width: 150px; height: 75px; }
+        .cloud.small  { width: 100px; height: 50px; }
+        """, unsafe_allow_html=True)
     st.markdown("---")
     st.subheader("🔑 Ubah Password")
     st.markdown("<div class='input-animate'>", unsafe_allow_html=True)
