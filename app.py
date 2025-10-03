@@ -25,6 +25,73 @@ st.set_page_config(
 st.markdown(
     """
 <style>
+/* ================================
+   Background langit biru
+================================ */
+html, body, [data-testid="stAppViewContainer"], .stApp {
+    background: linear-gradient(to bottom, #87ceeb, #ffffff);
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+/* Matahari */
+.sun {
+    position: absolute;
+    top: 50px;
+    left: 70%;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, #FFD700 60%, #FFA500 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 80px 20px rgba(255, 223, 0, 0.7);
+    animation: shine 6s ease-in-out infinite alternate;
+}
+
+/* Animasi cahaya matahari */
+@keyframes shine {
+    0% { transform: scale(1); opacity: 0.9; }
+    100% { transform: scale(1.1); opacity: 1; }
+}
+
+/* Burung */
+.bird {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border-radius: 50%;
+    animation: fly 20s linear infinite;
+}
+
+/* Bentuk burung pakai before & after */
+.bird::before, .bird::after {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 10px;
+    border-top: 3px solid black;
+    border-radius: 50%;
+    top: 15px;
+}
+
+.bird::before {
+    left: -25px;
+    transform: rotate(-20deg);
+}
+.bird::after {
+    right: -25px;
+    transform: rotate(20deg);
+}
+
+/* Animasi burung terbang */
+@keyframes fly {
+    0% { left: -100px; top: 150px; }
+    50% { left: 50%; top: 100px; }
+    100% { left: 110%; top: 180px; }
+}
+
+
 /* Title Animasi */
 @keyframes titleFadeIn {
     0% {opacity:0; transform:translateY(-20px) scale(0.9);}
@@ -192,6 +259,10 @@ div[data-baseweb="input"] input {
     border-top: 1px solid #ddd;
 }
 </style>
+<div class="sun"></div>
+<div class="bird" style="top:200px; left:-100px; animation-delay:0s;"></div>
+<div class="bird" style="top:250px; left:-200px; animation-delay:5s;"></div>
+<div class="bird" style="top:180px; left:-300px; animation-delay:10s;"></div>
 """,
     unsafe_allow_html=True,
 )
