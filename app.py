@@ -529,7 +529,7 @@ elif st.session_state.page == "profil":
         f"<p class='profil-text'>🆔 ID User: {user['id_user']}</p>",
         unsafe_allow_html=True
     )
-        st.markdown("---")
+    st.markdown("---")
     st.subheader("🎨 Tema Tampilan")
 
     if "tema" not in st.session_state:
