@@ -161,168 +161,18 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
     animation: titleFadeIn 1.2s ease-in-out, gradientText 6s ease infinite;
     text-shadow: 0px 0px 8px rgba(165,42,42,0.5);
 }
-/* Subtitle */
 h1, h2, h3, h4 {
     color: brown !important;
-}
-/* Input Animasi */
-@keyframes inputFadeIn {
-    0% {opacity:0; transform:translateY(10px) scale(0.95);}
-    100% {opacity:1; transform:translateY(0) scale(1);}
-}
-.input-animate {
-    animation:inputFadeIn 0.8s ease-in-out;
-}
-/* Tombol */
-div[data-testid="stButton"] > button {
-    width:100%;
-    min-height:50px;
-    padding:15px 0;
-    border-radius:20px;
-    font-size:16px;
-    font-weight:bold;
-    background-color:brown;
-    color:white;
-    border:none;
-    margin-right:5px;
-    transition:all 0.3s ease;
-}
-div[data-testid="stButton"] > button:hover {
-    background-color:#45a049;
-    transform:scale(1.05);
-}
-div[data-testid="stButton"] > button:active {
-    transform:scale(0.95);
-}
-/* Hilangkan sidebar bawaan */
-section[data-testid="stSidebar"] {
-    display:none !important;
-}
-/* Card Buku */
-.book-card {
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-    height:100%;
-    padding:12px;
-    border-radius:14px;
-    background:brown;
-    box-shadow:0 3px 8px rgba(0,0,0,0.1);
-    animation:fadeIn 0.6s ease-in-out;
-}
-.cover-box {
-    width:100%;
-    aspect-ratio:3/4;
-    overflow:hidden;
-    border-radius:12px;
-    box-shadow:0 2px 6px rgba(0,0,0,0.2);
-    margin-bottom:10px;
-}
-.cover-box img {
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
-.book-title {
-    font-weight:bold;
-    font-size:16px;
-    margin:8px 0;
-    flex-grow:1;
-    display:-webkit-box;
-    -webkit-line-clamp:2;
-    -webkit-box-orient:vertical;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    min-height:50px;
-    color: brown !important;
-}
-.book-meta {
-    font-size:13px;
-    color: brown !important;
-    margin-bottom:10px;
-}
-.book-desc {
-    font-size:13px;
-    color: brown;
-    margin-bottom:8px;
-}
-/* Tombol Baca Buku */
-.read-btn {
-    display:inline-block;
-    width:100%;
-    min-height:45px;
-    padding:12px 0;
-    background:linear-gradient(270deg, #2575fc, #6a11cb);
-    background-size:200% 200%;
-    color:white !important;
-    text-decoration:none;
-    border-radius:12px;
-    font-weight:bold;
-    text-align:center;
-    margin-top:auto;
-    transition:all 0.4s ease-in-out;
-    animation:gradientShift 4s ease infinite;
-}
-.read-btn:hover {
-    background-position:right center;
-    transform:scale(1.05) rotate(-1deg);
-    box-shadow:0 6px 16px rgba(0,0,0,0.25);
-}
-.read-btn:active {
-    transform:scale(0.95);
-}
-@keyframes gradientShift {
-    0%{background-position:left center;}
-    50%{background-position:right center;}
-    100%{background-position:left center;}
-}
-@keyframes fadeIn {
-    from{opacity:0; transform:translateY(-8px);}
-    to{opacity:1; transform:translateY(0);}
-}
-/* Profil text */
-.profil-text {
-    color: brown !important;
-    font-weight: bold;
-    font-size: 18px;
-}
-/* Label input password */
-div[data-baseweb="input"] input {
-    color: brown !important;
-}
-/* Tabel custom */
-.styled-table {
-    border-collapse: collapse;
-    width: 100%;
-}
-.styled-table th {
-    background-color: #f9f4f0;
-    color: brown;
-    padding: 8px;
-}
-.styled-table td {
-    color: brown;
-    padding: 8px;
-    border-top: 1px solid #ddd;
 }
 </style>
 <div class="sun"></div>
 <div class="rainbow"></div>
-
-<!-- Awan -->
 <div class="cloud large" style="top:80px; animation-delay:0s;"></div>
 <div class="cloud medium" style="top:150px; animation-delay:20s;"></div>
 <div class="cloud small" style="top:250px; animation-delay:40s;"></div>
-<div class="cloud medium" style="top:320px; animation-delay:10s;"></div>
-<div class="cloud small" style="top:400px; animation-delay:30s;"></div>
-
-<!-- Burung -->
 <div class="bird" style="top:100px; animation-delay:0s;"></div>
 <div class="bird" style="top:200px; animation-delay:5s;"></div>
 <div class="bird" style="top:300px; animation-delay:10s;"></div>
-<div class="bird" style="top:150px; animation-delay:15s;"></div>
-
-<!-- Hujan -->
 <div class="rain">
   <div class="raindrop" style="left:10%; animation-duration:1s; animation-delay:0s;"></div>
   <div class="raindrop" style="left:30%; animation-duration:1.2s; animation-delay:0.2s;"></div>
@@ -419,51 +269,15 @@ if st.session_state.page == "daftarbuku":
                 cols = st.columns(num_cols, gap="medium")
                 for i, buku in enumerate(row):
                     with cols[i]:
-                        st.markdown("<div class='book-card'>", unsafe_allow_html=True)
-
-                        # cover
-                        try:
-                            signed_cover = supabase.storage.from_("uploads").create_signed_url(
-                                buku["cover_url"], 3600
-                            )["signedURL"]
-                            st.markdown(
-                                f"<div class='cover-box'><img src='{signed_cover}'/></div>",
-                                unsafe_allow_html=True
-                            )
-                        except:
-                            pass
-
-                        # judul & meta
-                        st.markdown(
-                            f"<div class='book-title'>{buku['judul']}</div>",
-                            unsafe_allow_html=True
+                        st.image(
+                            supabase.storage.from_("uploads").create_signed_url(buku["cover_url"], 3600)["signedURL"],
+                            use_container_width=True
                         )
-                        st.markdown(
-                            f"<div class='book-meta'>✍️ {buku['penulis']} | 📅 {buku['tahun']} | 🏷️ {buku.get('genre','-')} | 📦 Stok: {buku.get('stok','-')}</div>",
-                            unsafe_allow_html=True
-                        )
-
-                        # deskripsi
-                        if buku.get("deskripsi"):
-                            deskripsi_pendek = buku["deskripsi"][:150] + ("..." if len(buku["deskripsi"]) > 150 else "")
-                            st.markdown(f"<div class='book-desc'>{deskripsi_pendek}</div>", unsafe_allow_html=True)
-                            with st.expander("📖 Selengkapnya"):
-                                st.write(buku["deskripsi"])
-
-                        # tombol baca
-                        if buku.get("pdf_url") and buku["pdf_url"].strip():
-                            try:
-                                signed_pdf = supabase.storage.from_("uploads").create_signed_url(
-                                    buku["pdf_url"], 3600
-                                )["signedURL"]
-                                st.markdown(
-                                    f"<a class='read-btn' href='{signed_pdf}' target='_blank'>📕 Baca Buku</a>",
-                                    unsafe_allow_html=True
-                                )
-                            except:
-                                pass
-
-                        st.markdown("</div>", unsafe_allow_html=True)
+                        st.markdown(f"**{buku['judul']}**")
+                        st.caption(f"✍️ {buku['penulis']} | 📅 {buku['tahun']} | 🏷️ {buku['genre']} | 📦 Stok: {buku['stok']}")
+                        if buku.get("pdf_url"):
+                            signed_pdf = supabase.storage.from_("uploads").create_signed_url(buku["pdf_url"], 3600)["signedURL"]
+                            st.markdown(f"[📕 Baca Buku]({signed_pdf})")
 
 # =====================================================
 # Halaman Peminjaman Saya
@@ -491,7 +305,7 @@ elif st.session_state.page == "peminjamansaya":
         for p in pinjam_data:
             buku = p.get("buku", {})
             table_data.append({
-                "Judul Buku": buku.get("judul", "(Tanpa Judul)"),
+                "Judul Buku": buku.get("judul", "-"),
                 "Penulis": buku.get("penulis", "-"),
                 "Tahun": buku.get("tahun", "-"),
                 "Genre": buku.get("genre", "-"),
@@ -502,51 +316,24 @@ elif st.session_state.page == "peminjamansaya":
             })
 
         df = pd.DataFrame(table_data)
-
-        # Styling warna denda
-        def color_denda(row):
-            if row["Denda (Rp)"] > 0:
-                if row["Status"].lower() == "dipinjam":
-                    return ["color: red" if col == "Denda (Rp)" else "" for col in df.columns]
-                elif row["Status"].lower() == "sudah dikembalikan":
-                    return ["color: green" if col == "Denda (Rp)" else "" for col in df.columns]
-            return [""] * len(df.columns)
-
-        styled_df = df.style.apply(color_denda, axis=1)
-        st.dataframe(styled_df, use_container_width=True)
+        st.dataframe(df, use_container_width=True)
 
 # =====================================================
 # Halaman Profil
 # =====================================================
 elif st.session_state.page == "profil":
     st.title("⚙️ Profil")
-
-    st.markdown(
-        f"<p class='profil-text'>👤 Username: {user['username']}</p>",
-        unsafe_allow_html=True
-    )
-    st.markdown(
-        f"<p class='profil-text'>🆔 ID User: {user['id_user']}</p>",
-        unsafe_allow_html=True
-    )
-
+    st.write(f"👤 Username: {user['username']}")
+    st.write(f"🆔 ID User: {user['id_user']}")
     if user.get("nama_lengkap"):
-        st.markdown(
-            f"<p class='profil-text'>📛 Nama Lengkap: {user['nama_lengkap']}</p>",
-            unsafe_allow_html=True
-        )
+        st.write(f"📛 Nama Lengkap: {user['nama_lengkap']}")
 
-    st.markdown("---")
     st.subheader("🔑 Ubah Password")
-    st.markdown("<div class='input-animate'>", unsafe_allow_html=True)
-
     with st.form("ubah_password_form"):
         old_pw = st.text_input("Password Lama", type="password")
         new_pw = st.text_input("Password Baru", type="password")
         confirm_pw = st.text_input("Konfirmasi Password Baru", type="password")
         submit_pw = st.form_submit_button("💾 Simpan Password")
-
-    st.markdown("</div>", unsafe_allow_html=True)
 
     if submit_pw:
         if not old_pw or not new_pw or not confirm_pw:
@@ -554,25 +341,12 @@ elif st.session_state.page == "profil":
         elif new_pw != confirm_pw:
             st.error("❌ Konfirmasi password tidak cocok!")
         else:
-            try:
-                db_user = (
-                    supabase.table("akun")
-                    .select("password")
-                    .eq("id_user", user["id_user"])
-                    .single()
-                    .execute()
-                )
-                if not db_user.data or db_user.data["password"] != old_pw:
-                    st.error("❌ Password lama salah!")
-                else:
-                    supabase.table("akun").update({"password": new_pw}).eq(
-                        "id_user", user["id_user"]
-                    ).execute()
-                    st.success("✅ Password berhasil diperbarui!")
-            except Exception as e:
-                st.error(f"❌ Gagal mengubah password: {e}")
-
-    st.markdown("---")
+            db_user = supabase.table("akun").select("password").eq("id_user", user["id_user"]).single().execute()
+            if not db_user.data or db_user.data["password"] != old_pw:
+                st.error("❌ Password lama salah!")
+            else:
+                supabase.table("akun").update({"password": new_pw}).eq("id_user", user["id_user"]).execute()
+                st.success("✅ Password berhasil diperbarui!")
 
     if st.button("🚪 Logout"):
         st.session_state.clear()
