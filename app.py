@@ -7,7 +7,7 @@ import pandas as pd
 # Supabase Config
 # =====================================================
 SUPABASE_URL = "https://bcalrkqeeoaalfpjrwvx.supabase.co"
-SUPABASE_ANON_KEY = ("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh..."
+SUPABASE_ANON_KEY = ("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjYWxya3FlZW9hYWxmcGpyd3Z4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMDc5NTUsImV4cCI6MjA3Mzc4Mzk1NX0.Pg0EUKGfDYk7-apJNjHoqVSub_atlE54ahVKuWtQc0o"
 )
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
 
