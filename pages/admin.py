@@ -165,14 +165,17 @@ st.subheader("❌ Hapus Akun")
 # Ambil daftar user
 try:
     users = supabase.table("akun").select("*").execute().data
+    # Buat map id_user ke username
     user_map = {u["id_user"]: u["username"] for u in users}
 
     if users:
-        selected_user = st.selectbox("Pilih User untuk Dihapus", ["--Pilih--"] + list(user_map.values()))
+        # Tampilkan selectbox dengan format "[id_user] username"
+        select_options = ["--Pilih--"] + [f"[{uid}] {uname}" for uid, uname in user_map.items()]
+        selected_user = st.selectbox("Pilih User untuk Dihapus", select_options)
         
         if selected_user != "--Pilih--":
-            # Cari id_user
-            id_user = [k for k, v in user_map.items() if v == selected_user][0]
+            # Ambil id_user dari string selectbox
+            id_user = int(selected_user.split("]")[0][1:])
             
             if st.button("Hapus Akun"):
                 # Ambil semua peminjaman user
@@ -187,11 +190,12 @@ try:
                     supabase.table("peminjaman").delete().eq("id_user", id_user).execute()
                     # Hapus user
                     supabase.table("akun").delete().eq("id_user", id_user).execute()
-                    st.success(f"✅ Akun '{selected_user}' dan semua peminjamannya telah dihapus.")
+                    st.success(f"✅ Akun '{user_map[id_user]}' dan semua peminjamannya telah dihapus.")
     else:
         st.info("📭 Belum ada user.")
 except Exception as e:
     st.error(f"❌ Gagal mengambil data akun: {e}")
+
 # =====================================================
 # Footer
 # =====================================================
