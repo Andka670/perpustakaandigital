@@ -137,3 +137,11 @@ if st.button("🚪 Logout", type="primary"):
     st.session_state.clear()  # hapus semua session
     st.success("✅ Anda berhasil logout, kembali ke halaman login...")
     st.switch_page("pages/login.py")
+# =====================================================
+# Footer
+# =====================================================
+st.markdown("<br><br><hr>", unsafe_allow_html=True)
+st.markdown(
+    "<center style='color:green;'>© 2025 Perpustakaan Digital Payakarta</center>",
+    unsafe_allow_html=True
+)
