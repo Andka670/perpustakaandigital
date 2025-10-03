@@ -30,7 +30,7 @@ st.markdown(
     background: #000; /* hitam pekat */
     overflow: hidden;
     position: relative;
-    color: white; /* biar teks tetap terlihat */
+    color: black; /* biar teks tetap terlihat */
 }
 
 /* Komet */
