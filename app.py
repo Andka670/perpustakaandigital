@@ -239,7 +239,12 @@ if st.session_state.page == "daftarbuku":
     st.title("📖 Daftar Buku Tersedia")
 
     try:
-        buku_data = supabase.table("buku").select("*").execute().data
+        buku_data = (
+            supabase.table("buku")
+            .select("id_buku, judul, penulis, tahun, genre, stok, cover_url, pdf_url, deskripsi")
+            .execute()
+            .data
+        )
     except Exception as e:
         buku_data = []
         st.error(f"❌ Gagal mengambil data buku: {e}")
