@@ -31,6 +31,27 @@ st.markdown("""
     background-size: 600% 600%;
     animation: gradientBG 5s ease infinite;
 }
+/* Komet dasar */
+.comet {
+    position: fixed;
+    top: -100px;
+    width: 2px;
+    height: 80px;
+    background: linear-gradient(45deg, white, rgba(255,255,255,0));
+    transform: rotate(45deg);
+    opacity: 0.8;
+    border-radius: 50%;
+    animation-name: fall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+/* Animasi jatuh */
+@keyframes fall {
+    0% {transform: translateX(0) translateY(0) rotate(45deg); opacity: 0;}
+    20% {opacity: 1;}
+    100% {transform: translateX(var(--x)) translateY(var(--y)) rotate(45deg); opacity: 0;}
+}
 @keyframes gradientBG {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
@@ -229,32 +250,7 @@ st.markdown(
 col1, col2, col3 = st.columns([2.20,2,1])
 with col2:
     st.page_link("pages/daftar.py", label="Klik disini")
-#komet
-st.markdown("""
-<style>
-/* Komet dasar */
-.comet {
-    position: fixed;
-    top: -100px;
-    width: 2px;
-    height: 80px;
-    background: linear-gradient(45deg, white, rgba(255,255,255,0));
-    transform: rotate(45deg);
-    opacity: 0.8;
-    border-radius: 50%;
-    animation-name: fall;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-}
 
-/* Animasi jatuh */
-@keyframes fall {
-    0% {transform: translateX(0) translateY(0) rotate(45deg); opacity: 0;}
-    20% {opacity: 1;}
-    100% {transform: translateX(var(--x)) translateY(var(--y)) rotate(45deg); opacity: 0;}
-}
-</style>
-""", unsafe_allow_html=True)
 # ----------------------------
 # Footer
 # ----------------------------
