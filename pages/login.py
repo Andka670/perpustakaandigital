@@ -62,10 +62,6 @@ st.markdown(f"""
     border-radius: 18px;
     padding: 30px 50px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-    max-width: 500px;
-    margin: auto;
-    position: relative;
-    top: 50px;
 }}
 
 /* Foto profil animasi */
