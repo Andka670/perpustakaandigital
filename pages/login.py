@@ -34,6 +34,16 @@ stars_html = generate_stars_html()
 # ----------------------------
 st.markdown(f"""
 <style>
+/* Hilangkan sidebar */
+section[data-testid="stSidebar"] {{display: none;}}
+
+/* Full screen container & hapus padding default Streamlit */
+[data-testid="stAppViewContainer"],
+[data-testid="stAppViewContainer"] > .main {{
+    background: none !important;
+    padding: 0rem 0rem !important;
+}}
+
 /* Full screen background container */
 #stars-container {{
     position: fixed;
@@ -42,13 +52,10 @@ st.markdown(f"""
     width:100%;
     height:100%;
     z-index:-1;
-    overflow:hidden;
     background: linear-gradient(135deg, #667eea, #764ba2, #ff758c, #ff7eb3);
     background-size: 600% 600%;
     animation: gradientBG 10s ease infinite;
 }}
-
-/* Gradient background animation */
 @keyframes gradientBG {{
     0% {{background-position:0% 50%;}}
     50% {{background-position:100% 50%;}}
@@ -105,6 +112,10 @@ st.markdown(f"""
     border-radius: 18px;
     padding: 30px 50px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    max-width: 500px;
+    margin: auto;
+    position: relative;
+    top: 50px;
 }}
 
 /* Foto profil animasi */
@@ -193,11 +204,11 @@ st.markdown(f"""
 
 <div id="stars-container">
     {stars_html}
-    <!-- Meteor / Komet Acak -->
+    <!-- Meteor / Komet -->
     <div class="meteor" style="top:-50px; left:10vw; --x:80vw; --y:60vh; animation-duration:2.5s;"></div>
     <div class="meteor" style="top:-100px; left:40vw; --x:70vw; --y:50vh; animation-duration:3s;"></div>
     <div class="meteor" style="top:-150px; left:70vw; --x:90vw; --y:70vh; animation-duration:2s;"></div>
-    <!-- Partikel Floating -->
+    <!-- Partikel -->
     <div class="particle" style="left:10vw; --x:20vw; animation-duration:10s;"></div>
     <div class="particle" style="left:30vw; --x:-15vw; animation-duration:12s;"></div>
     <div class="particle" style="left:50vw; --x:10vw; animation-duration:15s;"></div>
@@ -206,8 +217,11 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 # ----------------------------
-# Judul + Foto + Subtitle
+# Card container login
 # ----------------------------
+st.markdown('<div class="block-container">', unsafe_allow_html=True)
+
+# Judul + Foto + Subtitle
 st.markdown("""
 <div style="display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px;">
     <img class="animated-photo" 
@@ -218,24 +232,16 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ----------------------------
-# Input username & password
-# ----------------------------
-st.markdown('<div style="text-align:left;font-size:20px;color:white;font-weight:bold">👤 USERNAME:</div>', unsafe_allow_html=True)
-username = st.text_input("", placeholder="Masukkan username")
-st.markdown('<div style="text-align:left;font-size:20px;color:white;font-weight:bold">🔒 PASSWORD:</div>', unsafe_allow_html=True)
-password = st.text_input("", placeholder="Masukkan password", type="password")
+# Username & Password
+username = st.text_input("👤 USERNAME:", placeholder="Masukkan username")
+password = st.text_input("🔒 PASSWORD:", placeholder="Masukkan password", type="password")
 
-# ----------------------------
 # Tombol Lupa Password
-# ----------------------------
 col1, col2, col3 = st.columns([17,5,1])
 with col2:
     st.page_link("pages/ubahpw.py", label="Lupa Password ?", use_container_width=True)
 
-# ----------------------------
 # Tombol login
-# ----------------------------
 if st.button("Login", key="login_btn"):
     if username and password:
         response = supabase.table("akun").select("*")\
@@ -258,9 +264,7 @@ if st.button("Login", key="login_btn"):
     else:
         st.warning("⚠️ Harap isi username dan password.")
 
-# ----------------------------
 # Link register
-# ----------------------------
 st.markdown(
     "<div style='text-align:center; font-size:15px; color:black; font-weight:bold'>Belum punya akun?</div>",
     unsafe_allow_html=True
@@ -269,8 +273,9 @@ col1, col2, col3 = st.columns([2.20,2,1])
 with col2:
     st.page_link("pages/daftar.py", label="Klik disini")
 
-# ----------------------------
 # Footer
-# ----------------------------
 st.markdown("<br><br><hr>", unsafe_allow_html=True)
 st.markdown("<center style='color:white;'>© 2025 Perpustakaan Digital Payakarta</center>", unsafe_allow_html=True)
+
+# Tutup card container
+st.markdown('</div>', unsafe_allow_html=True)
