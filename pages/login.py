@@ -20,7 +20,7 @@ section[data-testid="stSidebar"] {display: none;}
 """, unsafe_allow_html=True)
 
 # ----------------------------
-# CSS styling + aurora + meteor
+# CSS styling
 # ----------------------------
 st.markdown("""
 <style>
@@ -29,31 +29,11 @@ st.markdown("""
     background: linear-gradient(135deg, #667eea, #764ba2, #ff758c, #ff7eb3);
     background-size: 600% 600%;
     animation: gradientBG 5s ease infinite;
-    position: relative;
-    overflow: hidden;
 }
 @keyframes gradientBG {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
-}
-
-/* Aurora overlay hanya di belakang card */
-.stApp::before {
-    content: "";
-    position: absolute;
-    top:0; left:0;
-    width:100%; height:100%;
-    background: linear-gradient(135deg, rgba(255,0,150,0.15), rgba(0,255,200,0.15), rgba(0,0,255,0.15));
-    background-size: 400% 400%;
-    animation: auroraBG 15s ease infinite;
-    z-index:0;  /* di bawah card */
-    pointer-events:none;
-}
-@keyframes auroraBG {
-    0% {background-position:0% 50%;}
-    50% {background-position:100% 50%;}
-    100% {background-position:0% 50%;}
 }
 
 /* Card transparan */
@@ -63,8 +43,6 @@ st.markdown("""
     border-radius: 18px;
     padding: 30px 50px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-    position: relative;
-    z-index:1; /* di atas aurora */
 }
 
 /* Foto profil animasi */
@@ -145,45 +123,12 @@ st.markdown("""
     box-shadow: 0 0 20px rgba(37,117,252,0.9),
                 0 0 35px rgba(106,17,203,0.8);
 }
+/* Tombol login */
 .stButton[data-st-key="login_btn"] > button {
     width: 100% !important;
     height: 70px !important;
 }
-
-/* Stars */
-.star {
-    position: absolute;
-    width: 2px; height: 2px;
-    background:white; border-radius:50%;
-    opacity:0.8;
-    animation: twinkle 2s infinite alternate;
-    z-index:0;
-}
-@keyframes twinkle {
-    0% {opacity:0.2;}
-    100% {opacity:1;}
-}
-
-/* Meteors */
-.meteor {
-    position:absolute;
-    width:2px; height:80px;
-    background: linear-gradient(45deg, white, rgba(255,255,255,0));
-    transform: rotate(45deg);
-    animation: fall linear infinite;
-    z-index:0;
-}
-@keyframes fall {
-    0% {transform: translateX(0) translateY(0); opacity:0;}
-    20% {opacity:1;}
-    100% {transform: translateX(var(--x)) translateY(var(--y)); opacity:0;}
-}
 </style>
-
-<!-- Contoh meteor -->
-<div class="meteor" style="top:-50px; left:10vw; --x:80vw; --y:60vh; animation-duration:2.5s;"></div>
-<div class="meteor" style="top:-100px; left:40vw; --x:70vw; --y:50vh; animation-duration:3s;"></div>
-<div class="meteor" style="top:-150px; left:70vw; --x:90vw; --y:70vh; animation-duration:2s;"></div>
 """, unsafe_allow_html=True)
 
 # ----------------------------
@@ -223,6 +168,7 @@ if st.button("Login", key="login_btn"):
             .eq("username", username).eq("password", password).execute()
         if response.data:
             user = response.data[0]
+            # simpan semua info user ke session
             st.session_state['logged_in'] = True
             st.session_state['user'] = {
                 "id_user": user.get("id_user"),
@@ -232,6 +178,7 @@ if st.button("Login", key="login_btn"):
 
             st.success(f"✅ Selamat datang, {user['username']}!")
 
+            # redirect sesuai level
             if user.get('level') == 'admin':
                 st.switch_page("pages/admin.py")
             else:
