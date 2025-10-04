@@ -71,11 +71,11 @@ st.markdown("""
     animation: colorchange 4s infinite;
 }
 @keyframes colorchange {
-    0% { color: white; }
-    25% { color: yellow; }
-    50% { color: white; }
-    75% { color: yellow; }
-    100% { color: white; }
+    0% { color: #FFD700; }
+    25% { color: #00FA9A; }
+    50% { color: #1E90FF; }
+    75% { color: #FF4500; }
+    100% { color: #FFD700; }
 }
 
 .stTextInput>div>div>input {
@@ -117,7 +117,7 @@ st.markdown("""
     height: 70px !important;
 }
 
-/* Animasi emoji buku jatuh meriah */
+/* Animasi buku jatuh */
 .book-emoji {
     position: fixed;
     font-size: 50px;
@@ -156,9 +156,9 @@ password = st.text_input("", placeholder="Masukkan password", type="password")
 # ----------------------------
 # Tombol Lupa Password
 # ----------------------------
-col1, col2, col3 = st.columns([15,5,1])
+col1, col2, col3 = st.columns([18,5,1])
 with col2:
-    st.page_link("pages/ubahpw.py", label="Lupa Password ?", use_container_width=True)
+    st.page_link("pages/ubahpw.py", label="Lupa Password?", use_container_width=True)
 
 # ----------------------------
 # Tombol login
@@ -178,28 +178,25 @@ if st.button("Login", key="login_btn"):
 
             st.success(f"✅ Selamat datang, {user['username']}!")
 
-            # -----------------------------
-            # Animasi emoji buku jatuh meriah
-            # -----------------------------
+            # animasi buku jatuh
             html_books = ""
-            for i in range(20):
+            for i in range(10):
                 left = random.randint(0, 95)
-                duration = round(random.uniform(1.5, 3.5), 2)
-                delay = round(random.uniform(0, 1.5), 2)
+                duration = round(random.uniform(1.5, 3.0), 2)
+                delay = round(random.uniform(0, 1.0), 2)
                 html_books += f'<div class="book-emoji" style="left:{left}%; animation-duration:{duration}s; animation-delay:{delay}s;">📚</div>\n'
             st.markdown(html_books, unsafe_allow_html=True)
 
-            # -----------------------------
-            # Redirect otomatis setelah delay 3 detik
-            # -----------------------------
+            # redirect otomatis pakai JS setelah 3 detik
             redirect_url = "pages/admin.py" if user.get('level') == 'admin' else "app.py"
             st.markdown(f"""
                 <script>
                 setTimeout(function(){{
                     window.location.href = '{redirect_url}';
-                }}, 3000);  // delay 3 detik
+                }}, 3000);
                 </script>
             """, unsafe_allow_html=True)
+
         else:
             st.error("❌ Username atau password anda salah.")
     else:
