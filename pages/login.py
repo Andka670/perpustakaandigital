@@ -40,7 +40,7 @@ st.markdown("""
     position: absolute;
     width: 80px;
     height: 80px;
-    background-image: url('https://png.pngtree.com/png-vector/20240812/ourmid/pngtree-hands-gently-cradle-an-open-book-png-image_13463156.png'); /* icon buku */
+    background-image: url('https://t4.ftcdn.net/jpg/05/40/40/71/360_F_540407197_9legLydAc0KWZYwmEA0Jy82IbeVAgkXs.jpg'); /* icon buku */
     background-size: cover;
     top: -50px;
     animation-name: fall;
