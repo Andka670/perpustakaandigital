@@ -81,9 +81,9 @@ st.markdown("""
 }
 @keyframes colorchange {
     0% { color: red; }
-    25% { color: blue; }
-    50% { color: yellow; }
-    75% { color: green; }
+    25% { color: yellow; }
+    50% { color: red; }
+    75% { color: yellow; }
     100% { color: red; }
 }
 
