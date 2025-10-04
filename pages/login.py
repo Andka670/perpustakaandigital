@@ -1,5 +1,6 @@
 import streamlit as st
 from supabase import create_client, Client
+import random
 
 # ----------------------------
 # Supabase config
@@ -12,19 +13,13 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 # Page config
 # ----------------------------
 st.set_page_config(page_title="Login", page_icon="🔑", layout="centered")
-st.markdown("""
-<style>
-/* Hilangkan sidebar */
-section[data-testid="stSidebar"] {display: none;}
-</style>
-""", unsafe_allow_html=True)
+st.markdown("""<style>section[data-testid="stSidebar"] {display: none;}</style>""", unsafe_allow_html=True)
 
 # ----------------------------
 # CSS styling
 # ----------------------------
 st.markdown("""
 <style>
-/* Background animasi utama */
 .stApp {
     background: linear-gradient(135deg, #667eea, #764ba2, #ff758c, #ff7eb3);
     background-size: 600% 600%;
@@ -36,7 +31,6 @@ st.markdown("""
     100% { background-position: 0% 50%; }
 }
 
-/* Card transparan */
 .block-container {
     background: rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(12px);
@@ -45,7 +39,6 @@ st.markdown("""
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
 }
 
-/* Foto profil animasi */
 @keyframes float {
     0% { transform: translateY(20px); }
     50% { transform: translateY(50px); }
@@ -59,7 +52,6 @@ st.markdown("""
     box-shadow: 0 0 25px rgba(255,255,255,0.6);
 }
 
-/* Judul LOGIN */
 .login-title {
     font-weight: bold;
     color: white;
@@ -69,7 +61,6 @@ st.markdown("""
     text-align: center;
 }
 
-/* Subtitle animasi */
 .animated-subtitle {
     font-size: 18px;
     margin-top: 8px;
@@ -87,7 +78,6 @@ st.markdown("""
     100% { color: white; }
 }
 
-/* Input */
 .stTextInput>div>div>input {
     background: rgba(255, 255, 255, 0.25);
     border: none !important;
@@ -105,7 +95,6 @@ st.markdown("""
     transform: scale(1.03);
 }
 
-/* Tombol gradient */
 .stButton>button {
     padding: 10px 299px;
     border-radius: 12px;
@@ -123,10 +112,22 @@ st.markdown("""
     box-shadow: 0 0 20px rgba(37,117,252,0.9),
                 0 0 35px rgba(106,17,203,0.8);
 }
-/* Tombol login */
 .stButton[data-st-key="login_btn"] > button {
     width: 100% !important;
     height: 70px !important;
+}
+
+/* Animasi emoji buku jatuh meriah */
+.book-emoji {
+    position: fixed;
+    font-size: 50px;
+    top: -50px;
+    animation: fall linear forwards;
+    z-index: 9999;
+}
+@keyframes fall {
+    0% { top: -50px; transform: rotate(0deg); }
+    100% { top: 80%; transform: rotate(360deg); }
 }
 </style>
 """, unsafe_allow_html=True)
@@ -168,7 +169,6 @@ if st.button("Login", key="login_btn"):
             .eq("username", username).eq("password", password).execute()
         if response.data:
             user = response.data[0]
-            # simpan semua info user ke session
             st.session_state['logged_in'] = True
             st.session_state['user'] = {
                 "id_user": user.get("id_user"),
@@ -178,11 +178,23 @@ if st.button("Login", key="login_btn"):
 
             st.success(f"✅ Selamat datang, {user['username']}!")
 
+            # -----------------------------
+            # Animasi emoji buku jatuh meriah
+            # -----------------------------
+            html_books = ""
+            for i in range(20):  # 20 emoji buku jatuh
+                left = random.randint(0, 95)
+                duration = round(random.uniform(1.5, 3.5), 2)
+                delay = round(random.uniform(0, 1.5), 2)
+                html_books += f'<div class="book-emoji" style="left:{left}%; animation-duration:{duration}s; animation-delay:{delay}s;">📚</div>\n'
+
+            st.markdown(html_books, unsafe_allow_html=True)
+
             # redirect sesuai level
             if user.get('level') == 'admin':
-                st.switch_page("pages/admin.py")
+                st.experimental_rerun()  # ganti st.switch_page("pages/admin.py") jika mau langsung
             else:
-                st.switch_page("app.py")
+                st.experimental_rerun()  # ganti st.switch_page("app.py")
         else:
             st.error("❌ Username atau password anda salah.")
     else:
