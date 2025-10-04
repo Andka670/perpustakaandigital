@@ -38,8 +38,8 @@ st.markdown("""
 /* Buku jatuh */
 .book {
     position: absolute;
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     background-image: url('https://png.pngtree.com/png-clipart/20221022/original/pngtree-medieval-crusader-book-png-image_8711503.png'); /* icon buku */
     background-size: cover;
     top: -50px;
