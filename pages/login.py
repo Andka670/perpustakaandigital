@@ -38,16 +38,16 @@ st.markdown("""
     100% { background-position: 0% 50%; }
 }
 
-/* Aurora overlay */
+/* Aurora overlay hanya di belakang card */
 .stApp::before {
     content: "";
-    position: fixed;
+    position: absolute;
     top:0; left:0;
     width:100%; height:100%;
-    background: linear-gradient(135deg, rgba(255,0,150,0.2), rgba(0,255,200,0.2), rgba(0,0,255,0.2));
+    background: linear-gradient(135deg, rgba(255,0,150,0.15), rgba(0,255,200,0.15), rgba(0,0,255,0.15));
     background-size: 400% 400%;
     animation: auroraBG 15s ease infinite;
-    z-index:-1;
+    z-index:0;  /* di bawah card */
     pointer-events:none;
 }
 @keyframes auroraBG {
@@ -64,7 +64,7 @@ st.markdown("""
     padding: 30px 50px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
     position: relative;
-    z-index: 1;
+    z-index:1; /* di atas aurora */
 }
 
 /* Foto profil animasi */
@@ -145,7 +145,6 @@ st.markdown("""
     box-shadow: 0 0 20px rgba(37,117,252,0.9),
                 0 0 35px rgba(106,17,203,0.8);
 }
-/* Tombol login */
 .stButton[data-st-key="login_btn"] > button {
     width: 100% !important;
     height: 70px !important;
@@ -158,7 +157,7 @@ st.markdown("""
     background:white; border-radius:50%;
     opacity:0.8;
     animation: twinkle 2s infinite alternate;
-    z-index:-1;
+    z-index:0;
 }
 @keyframes twinkle {
     0% {opacity:0.2;}
@@ -172,7 +171,7 @@ st.markdown("""
     background: linear-gradient(45deg, white, rgba(255,255,255,0));
     transform: rotate(45deg);
     animation: fall linear infinite;
-    z-index:-1;
+    z-index:0;
 }
 @keyframes fall {
     0% {transform: translateX(0) translateY(0); opacity:0;}
@@ -181,7 +180,7 @@ st.markdown("""
 }
 </style>
 
-<!-- Tambahkan meteor contoh -->
+<!-- Contoh meteor -->
 <div class="meteor" style="top:-50px; left:10vw; --x:80vw; --y:60vh; animation-duration:2.5s;"></div>
 <div class="meteor" style="top:-100px; left:40vw; --x:70vw; --y:50vh; animation-duration:3s;"></div>
 <div class="meteor" style="top:-150px; left:70vw; --x:90vw; --y:70vh; animation-duration:2s;"></div>
