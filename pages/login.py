@@ -40,7 +40,7 @@ st.markdown("""
     position: absolute;
     width: 40px;
     height: 40px;
-    background-image: url('https://cdn-icons-png.flaticon.com/512/29/29302.png'); /* icon buku */
+    background-image: url('https://www.google.com/url?sa=i&url=https%3A%2F%2Fpngtree.com%2Fso%2Fbuku&psig=AOvVaw1sAQw8rAMbe1F0XJUFCVG4&ust=1759627940489000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCOiX0IeziZADFQAAAAAdAAAAABAL'); /* icon buku */
     background-size: cover;
     top: -50px;
     animation-name: fall;
@@ -48,7 +48,7 @@ st.markdown("""
     animation-iteration-count: infinite;
 }
 @keyframes fall {
-    0% { transform: translateY(-200px) rotate(0deg); opacity: 1; }
+    0% { transform: translateY(-300px) rotate(0deg); opacity: 1; }
     100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
 }
 /* Card transparan */
