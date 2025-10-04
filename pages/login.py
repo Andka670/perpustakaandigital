@@ -40,7 +40,7 @@ st.markdown("""
     position: absolute;
     width: 80px;
     height: 80px;
-    background-image: url('https://png.pngtree.com/element_our/20190601/ourmid/pngtree-open-book-free-illustration-image_1348783.jpg'); /* icon buku */
+    background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTexSN4Ja108r0UbUSd0y49q_086N5xwrkjWw&s'); /* icon buku */
     background-size: cover;
     top: -50px;
     animation-name: fall;
