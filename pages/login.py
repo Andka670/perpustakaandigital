@@ -25,6 +25,21 @@ section[data-testid="stSidebar"] {display: none;}
 # ----------------------------
 st.markdown("""
 <style>
+.particle {
+    position: fixed;
+    width: 3px;
+    height: 3px;
+    background: white;
+    border-radius: 50%;
+    top: -10px;
+    left: 50%;
+    animation: float 10s linear infinite;
+}
+
+@keyframes float {
+    0% {transform: translateX(0) translateY(0);}
+    100% {transform: translateX(var(--x)) translateY(100vh);}
+}
 /* Background animasi utama */
 .stApp {
     background: linear-gradient(135deg, #667eea, #764ba2, #ff758c, #ff7eb3);
