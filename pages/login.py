@@ -151,6 +151,15 @@ st.markdown("""
     height: 70px !important;
 }
 </style>
+<div class="comet" style="
+    width:{size}px; 
+    height:{height}px; 
+    left:{left}%;
+    --x:{x_move}px;
+    --y:{y_move}px;
+    animation-duration:{duration}s;
+    animation-delay:{random.uniform(0,3)}s;">
+</div>
 """, unsafe_allow_html=True)
 # Generate beberapa komet dengan posisi & ukuran acak
 num_comets = 10
@@ -161,17 +170,6 @@ for i in range(num_comets):
     x_move = random.randint(200, 800) # jarak horizontal jatuh
     y_move = random.randint(400, 800) # jarak vertikal jatuh
     duration = random.uniform(1.5, 4) # durasi jatuh acak
-    st.markdown(f"""
-    <div class="comet" style="
-        width:{size}px; 
-        height:{height}px; 
-        left:{left}%;
-        --x:{x_move}px;
-        --y:{y_move}px;
-        animation-duration:{duration}s;
-        animation-delay:{random.uniform(0,3)}s;
-    "></div>
-    """, unsafe_allow_html=True)
 # ----------------------------
 # Judul + Foto + Subtitle
 # ----------------------------
