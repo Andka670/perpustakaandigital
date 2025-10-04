@@ -40,7 +40,7 @@ st.markdown("""
     position: absolute;
     width: 80px;
     height: 80px;
-    background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTexSN4Ja108r0UbUSd0y49q_086N5xwrkjWw&s'); /* icon buku */
+    background-image: url('https://www.stickpng.com/assets/images/5a5f1e7b4c7f4.png'); /* icon buku */
     background-size: cover;
     top: -50px;
     animation-name: fall;
