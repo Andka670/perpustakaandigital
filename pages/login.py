@@ -40,7 +40,7 @@ st.markdown("""
     position: absolute;
     width: 80px;
     height: 80px;
-    background-image: url('https://www.stickpng.com/assets/images/5a5f1e7b4c7f4.png'); /* icon buku */
+    background-image: url('https://img.pikbest.com/png-images/20250110/aged-torn-book-pages-_11365988.png!w700wp'); /* icon buku */
     background-size: cover;
     top: -50px;
     animation-name: fall;
