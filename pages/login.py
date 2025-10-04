@@ -217,6 +217,7 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
 <div class="particle" style="left:50%; --x:100px; animation-duration:15s; animation-delay:2s;"></div>
 <div class="particle" style="left:70%; --x:-200px; animation-duration:18s; animation-delay:3s;"></div>
 <div class="particle" style="left:85%; --x:150px; animation-duration:20s; animation-delay:4s;"></div>
+{stars_html}
 """, unsafe_allow_html=True)
 
 
@@ -287,7 +288,13 @@ st.markdown(
 col1, col2, col3 = st.columns([2.20,2,1])
 with col2:
     st.page_link("pages/daftar.py", label="Klik disini")
-
+stars_html = ""
+for _ in range(50):  # jumlah bintang
+    top = random.randint(0, 100)
+    left = random.randint(0, 100)
+    size = random.uniform(1, 3)  # ukuran bintang
+    duration = random.uniform(1.5, 3)  # kecepatan berkedip
+    stars_html += f'<div class="star" style="top:{top}%; left:{left}%; width:{size}px; height:{size}px; animation-duration:{duration}s;"></div>'
 # ----------------------------
 # Footer
 # ----------------------------
