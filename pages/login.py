@@ -8,7 +8,14 @@ import random
 SUPABASE_URL = "https://bcalrkqeeoaalfpjrwvx.supabase.co"
 SUPABASE_KEY = "YOUR_SUPABASE_KEY"
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-
+st.markdown("""
+<style>
+/* Hilangkan sidebar */
+section[data-testid="stSidebar"] {
+    display: none;
+}
+</style>
+""", unsafe_allow_html=True)
 # ----------------------------
 # Page config
 # ----------------------------
