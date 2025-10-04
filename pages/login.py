@@ -22,7 +22,8 @@ section[data-testid="stSidebar"] {display: none;}
 # ----------------------------
 # CSS styling utama
 # ----------------------------
-def generate_stars_html(n=120):
+# Fungsi generate bintang acak
+def generate_stars_html(n=150):
     stars = ""
     for _ in range(n):
         top = random.randint(0, 100)
@@ -31,34 +32,23 @@ def generate_stars_html(n=120):
         duration = random.uniform(1.5, 4)
         stars += f'<div class="star" style="top:{top}%; left:{left}%; width:{size}px; height:{size}px; animation-duration:{duration}s;"></div>'
     return stars
+
 stars_html = generate_stars_html()
 st.markdown("""
 <style>
-/* ========================================
-   Full Background Animasi Keren
-   - Gradient bergerak
-   - Meteor/komet jatuh
-   - Bintang berkedip
-   - Partikel floating
-   ======================================== */
-html, body, [data-testid="stAppViewContainer"], .stApp {
-    margin:0;
-    padding:0;
-    height:100%;
-    overflow:hidden;
+html, body, [data-testid="stAppViewContainer"], .stApp {{
+    margin:0; padding:0; height:100%; overflow:hidden;
     background: linear-gradient(270deg, #ff6a00, #ee0979, #2575fc, #6a11cb);
     background-size: 800% 800%;
     animation: gradientBG 20s ease infinite;
-}
+}}
 
-/* ---------- Gradient Background ---------- */
-@keyframes gradientBG {
-    0% {background-position:0% 50%;}
-    50% {background-position:100% 50%;}
-    100% {background-position:0% 50%;}
-}
+@keyframes gradientBG {{
+    0% {{background-position:0% 50%;}}
+    50% {{background-position:100% 50%;}}
+    100% {{background-position:0% 50%;}}
+}}
 
-/* ---------- Bintang Berkedip ---------- */
 .star {{
     position: absolute;
     background: white;
@@ -71,20 +61,20 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
     100% {{opacity:1;}}
 }}
 
-/* ---------- Meteor / Komet ---------- */
-.meteor {
+/* Meteor / Komet */
+.meteor {{
     position: absolute;
     width: 2px;
     height: 80px;
     background: linear-gradient(45deg, white, rgba(255,255,255,0));
     transform: rotate(45deg);
     animation: fall linear infinite;
-}
-@keyframes fall {
-    0% {transform: translateX(0) translateY(0); opacity:0;}
-    20% {opacity:1;}
-    100% {transform: translateX(var(--x)) translateY(var(--y)); opacity:0;}
-}
+}}
+@keyframes fall {{
+    0% {{transform: translateX(0) translateY(0); opacity:0;}}
+    20% {{opacity:1;}}
+    100% {{transform: translateX(var(--x)) translateY(var(--y)); opacity:0;}}
+}}
 
 /* Background animasi utama */
 .stApp {
@@ -193,17 +183,11 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
 }
 </style>
 {stars_html}
-<!-- Meteor / Komet Acak -->
-<div class="meteor" style="top:-50px; left:10%; --x:800px; --y:600px; animation-duration:2.5s; animation-delay:0s;"></div>
-<div class="meteor" style="top:-100px; left:40%; --x:700px; --y:500px; animation-duration:3s; animation-delay:1s;"></div>
-<div class="meteor" style="top:-150px; left:70%; --x:900px; --y:700px; animation-duration:2s; animation-delay:2s;"></div>
 
-<!-- Partikel Floating Acak -->
-<div class="particle" style="left:10%; --x:200px; animation-duration:10s; animation-delay:0s;"></div>
-<div class="particle" style="left:20%; --x:-150px; animation-duration:12s; animation-delay:1s;"></div>
-<div class="particle" style="left:50%; --x:100px; animation-duration:15s; animation-delay:2s;"></div>
-<div class="particle" style="left:70%; --x:-200px; animation-duration:18s; animation-delay:3s;"></div>
-<div class="particle" style="left:85%; --x:150px; animation-duration:20s; animation-delay:4s;"></div>
+<!-- Meteor acak -->
+<div class="meteor" style="top:-50px; left:10%; --x:800px; --y:600px; animation-duration:2.5s;"></div>
+<div class="meteor" style="top:-100px; left:40%; --x:700px; --y:500px; animation-duration:3s;"></div>
+<div class="meteor" style="top:-150px; left:70%; --x:900px; --y:700px; animation-duration:2s;"></div>
 
 """, unsafe_allow_html=True)
 
