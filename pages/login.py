@@ -9,11 +9,6 @@ SUPABASE_URL = "https://bcalrkqeeoaalfpjrwvx.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjYWxya3FlZW9hYWxmcGpyd3Z4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMDc5NTUsImV4cCI6MjA3Mzc4Mzk1NX0.Pg0EUKGfDYk7-apJNjHoqVSub_atlE54ahVKuWtQc0o"
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-for i in range(30):
-    x_move = random.randint(-200,200)
-    left = random.randint(0,100)
-    duration = random.uniform(5,15)
-    st.markdown(f'<div class="particle" style="--x:{x_move}px; left:{left}%; animation-duration:{duration}s;"></div>', unsafe_allow_html=True)
 # ----------------------------
 # Page config
 # ----------------------------
@@ -30,21 +25,6 @@ section[data-testid="stSidebar"] {display: none;}
 # ----------------------------
 st.markdown("""
 <style>
-.particle {
-    position: fixed;
-    width: 3px;
-    height: 3px;
-    background: white;
-    border-radius: 50%;
-    top: -10px;
-    left: 50%;
-    animation: float 10s linear infinite;
-}
-
-@keyframes float {
-    0% {transform: translateX(0) translateY(0);}
-    100% {transform: translateX(var(--x)) translateY(100vh);}
-}
 /* Background animasi utama */
 .stApp {
     background: linear-gradient(135deg, #667eea, #764ba2, #ff758c, #ff7eb3);
