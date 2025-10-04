@@ -23,7 +23,7 @@ section[data-testid="stSidebar"] {display: none;}
 # CSS styling utama
 # ----------------------------
 stars_html = ""
-for _ in range(50):  # jumlah bintang
+for _ in range(1000):  # jumlah bintang
     top = random.randint(0, 100)
     left = random.randint(0, 100)
     size = random.uniform(1, 3)  # ukuran bintang
