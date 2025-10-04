@@ -42,7 +42,7 @@ st.markdown("""
     height: 40px;
     background-image: url('https://cdn-icons-png.flaticon.com/512/29/29302.png'); /* icon buku */
     background-size: cover;
-    top: -50px;
+    top: 0px;
     animation-name: fall;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
