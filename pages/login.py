@@ -206,12 +206,6 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
     height: 70px !important;
 }
 </style>
-<!-- Bintang Acak -->
-<div class="star" style="top:10%; left:5%;"></div>
-<div class="star" style="top:20%; left:25%;"></div>
-<div class="star" style="top:50%; left:70%;"></div>
-<div class="star" style="top:80%; left:40%;"></div>
-<div class="star" style="top:30%; left:80%;"></div>
 
 <!-- Meteor / Komet Acak -->
 <div class="meteor" style="top:-50px; left:10%; --x:800px; --y:600px; animation-duration:2.5s; animation-delay:0s;"></div>
