@@ -190,11 +190,16 @@ if st.button("Login", key="login_btn"):
 
             st.markdown(html_books, unsafe_allow_html=True)
 
-            # redirect sesuai level
-            if user.get('level') == 'admin':
-                st.experimental_rerun()  # ganti st.switch_page("pages/admin.py") jika mau langsung
-            else:
-                st.experimental_rerun()  # ganti st.switch_page("app.py")
+            # -----------------------------
+            # Tombol lanjut ke halaman sesuai level
+            # -----------------------------
+            if st.button("➡️ Lanjut ke Aplikasi"):
+                if user.get('level') == 'admin':
+                    st.session_state['page'] = 'admin'
+                    st.switch_page("pages/admin.py")
+                else:
+                    st.session_state['page'] = 'app'
+                    st.switch_page("app.py")
         else:
             st.error("❌ Username atau password anda salah.")
     else:
