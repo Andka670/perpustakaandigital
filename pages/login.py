@@ -40,7 +40,7 @@ st.markdown("""
     position: absolute;
     width: 80px;
     height: 80px;
-    background-image: url('https://img.pikbest.com/png-images/20250110/aged-torn-book-pages-_11365988.png!w700wp'); /* icon buku */
+    background-image: url('https://img.freepik.com/psd-premium/png-fairy-and-fairy-dust-book-reading-open_53876-634743.jpg'); /* icon buku */
     background-size: cover;
     top: -50px;
     animation-name: fall;
