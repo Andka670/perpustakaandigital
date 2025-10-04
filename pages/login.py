@@ -88,21 +88,6 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
     100% {transform: translateX(var(--x)) translateY(var(--y)); opacity:0;}
 }
 
-/* ---------- Partikel Floating ---------- */
-.particle {
-    position: absolute;
-    width: 3px;
-    height: 3px;
-    background: white;
-    border-radius: 50%;
-    top: 20px;
-    animation: float linear infinite;
-}
-@keyframes float {
-    0% {transform: translateX(0) translateY(0);}
-    100% {transform: translateX(var(--x)) translateY(100vh);}
-}
-
 /* Background animasi utama */
 .stApp {
     background: linear-gradient(135deg, #667eea, #764ba2, #ff758c, #ff7eb3);
