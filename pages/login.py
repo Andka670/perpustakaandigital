@@ -64,7 +64,6 @@ st.markdown(f"""
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
 }}
 
-
 /* Foto profil animasi */
 @keyframes float {{
     0% {{ transform: translateY(20px); }}
@@ -100,11 +99,11 @@ st.markdown(f"""
     animation: colorchange 4s infinite;
 }}
 @keyframes colorchange {{
-    0% {{ color: #FFD700; }}
-    25% {{ color: #00FA9A; }}
-    50% {{ color: #1E90FF; }}
-    75% {{ color: #FF4500; }}
-    100% {{ color: #FFD700; }}
+    0% {{ color: white; }}
+    25% {{ color: yellow; }}
+    50% {{ color: white; }}
+    75% {{ color: yellow; }}
+    100% {{ color: white; }}
 }}
 
 /* Input */
