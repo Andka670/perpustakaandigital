@@ -9,6 +9,11 @@ SUPABASE_URL = "https://bcalrkqeeoaalfpjrwvx.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjYWxya3FlZW9hYWxmcGpyd3Z4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMDc5NTUsImV4cCI6MjA3Mzc4Mzk1NX0.Pg0EUKGfDYk7-apJNjHoqVSub_atlE54ahVKuWtQc0o"
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+for i in range(30):
+    x_move = random.randint(-200,200)
+    left = random.randint(0,100)
+    duration = random.uniform(5,15)
+    st.markdown(f'<div class="particle" style="--x:{x_move}px; left:{left}%; animation-duration:{duration}s;"></div>', unsafe_allow_html=True)
 # ----------------------------
 # Page config
 # ----------------------------
