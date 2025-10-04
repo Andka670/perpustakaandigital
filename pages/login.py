@@ -15,17 +15,7 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 st.set_page_config(page_title="Login", page_icon="🔑", layout="centered")
 
 # ----------------------------
-# Hilangkan sidebar default
-# ----------------------------
-st.markdown("""
-<style>
-section[data-testid="stSidebar"] {display: none;}
-main {background: transparent !important;}
-</style>
-""", unsafe_allow_html=True)
-
-# ----------------------------
-# Generate bintang acak
+# Generate stars & meteors
 # ----------------------------
 def generate_stars_html(n=150):
     stars = ""
@@ -44,6 +34,11 @@ stars_html = generate_stars_html()
 # ----------------------------
 st.markdown(f"""
 <style>
+/* Hapus background default Streamlit */
+main {{
+    background: transparent !important;
+}}
+
 /* Background gradient animasi utama */
 .stApp {{
     background: linear-gradient(135deg, #667eea, #764ba2, #ff758c, #ff7eb3);
@@ -53,106 +48,12 @@ st.markdown(f"""
     overflow: hidden;
 }}
 @keyframes gradientBG {{
-    0% {{ background-position: 0% 50%; }}
-    50% {{ background-position: 100% 50%; }}
-    100% {{ background-position: 0% 50%; }}
+    0% {{ background-position:0% 50%; }}
+    50% {{ background-position:100% 50%; }}
+    100% {{ background-position:0% 50%; }}
 }}
 
-/* Card transparan untuk login */
-.block-container {{
-    background: rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(12px);
-    border-radius: 18px;
-    padding: 30px 50px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-    text-align: center;
-    z-index: 10;
-    position: relative;
-}}
-
-/* Foto profil animasi */
-@keyframes float {{
-    0% {{ transform: translateY(20px); }}
-    50% {{ transform: translateY(50px); }}
-    100% {{ transform: translateY(20px); }}
-}}
-.animated-photo {{
-    animation: float 3s ease-in-out infinite;
-    border-radius:50%;
-    border:6px solid white;
-    width:150px;
-    box-shadow: 0 0 25px rgba(255,255,255,0.6);
-}}
-
-/* Judul LOGIN */
-.login-title {{
-    font-weight: bold;
-    color: white;
-    font-size: 55px;
-    border-bottom: 4px solid white;
-    padding-bottom: 5px;
-}}
-
-/* Subtitle animasi */
-.animated-subtitle {{
-    font-size: 18px;
-    margin-top: 8px;
-    margin-bottom: 30px;
-    font-style: italic;
-    font-weight: bold;
-    color: #f5f5f5;
-    animation: colorchange 4s infinite;
-}}
-@keyframes colorchange {{
-    0% {{ color: white; }}
-    25% {{ color: yellow; }}
-    50% {{ color: white; }}
-    75% {{ color: yellow; }}
-    100% {{ color: white; }}
-}}
-
-/* Input */
-.stTextInput>div>div>input {{
-    background: rgba(255, 255, 255, 0.25);
-    border: none !important;
-    border-radius: 10px;
-    padding: 12px;
-    color: #222;
-    font-weight: bold;
-    transition: 0.3s ease;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); 
-}}
-.stTextInput>div>div>input:hover,
-.stTextInput>div>div>input:focus {{
-    box-shadow: 0 0 15px rgba(106, 17, 203, 0.8),
-                0 0 30px rgba(37, 117, 252, 0.7);
-    transform: scale(1.03);
-}}
-
-/* Tombol gradient */
-.stButton>button {{
-    padding: 10px 299px;
-    border-radius: 12px;
-    background: linear-gradient(90deg, #6a11cb, #2575fc);
-    color: white;
-    font-weight: bold;
-    font-size: 20px;
-    border: none;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 25px rgba(0,0,0,0.35);
-}}
-.stButton>button:hover {{
-    background: linear-gradient(90deg, #2575fc, #6a11cb);
-    transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(37,117,252,0.9),
-                0 0 35px rgba(106,17,203,0.8);
-}}
-.stButton[data-st-key="login_btn"] > button {{
-    width: 100% !important;
-    height: 70px !important;
-}}
-
-/* Bintang */
+/* Stars */
 .star {{
     position: absolute;
     background: white;
@@ -179,36 +80,114 @@ st.markdown(f"""
     20% {{opacity:1;}}
     100% {{transform: translateX(var(--x)) translateY(var(--y)); opacity:0;}}
 }}
+
+/* Card login */
+.login-card {{
+    position: relative;
+    z-index: 10;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(12px);
+    border-radius: 18px;
+    padding: 30px 50px;
+    text-align: center;
+    margin: auto;
+    width: 400px;
+    top: 50px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}}
+
+/* Foto profil animasi */
+.animated-photo {{
+    animation: float 3s ease-in-out infinite;
+    border-radius:50%;
+    border:6px solid white;
+    width:150px;
+    box-shadow: 0 0 25px rgba(255,255,255,0.6);
+}}
+@keyframes float {{
+    0% {{ transform: translateY(20px); }}
+    50% {{ transform: translateY(50px); }}
+    100% {{ transform: translateY(20px); }}
+}}
+
+/* Judul LOGIN */
+.login-title {{
+    font-weight:bold;
+    color:white;
+    font-size:55px;
+    border-bottom:4px solid white;
+    padding-bottom:5px;
+}}
+
+/* Subtitle animasi */
+.animated-subtitle {{
+    font-size:18px;
+    margin:8px 0 30px 0;
+    font-style:italic;
+    font-weight:bold;
+    color:#f5f5f5;
+    animation: colorchange 4s infinite;
+}}
+@keyframes colorchange {{
+    0% {{ color:white; }}
+    25% {{ color:yellow; }}
+    50% {{ color:white; }}
+    75% {{ color:yellow; }}
+    100% {{ color:white; }}
+}}
+
+/* Input */
+.stTextInput>div>div>input {{
+    background: rgba(255, 255, 255, 0.25);
+    border: none !important;
+    border-radius: 10px;
+    padding: 12px;
+    color: #222;
+    font-weight: bold;
+}}
+
+/* Tombol gradient */
+.stButton>button {{
+    padding:10px 0;
+    border-radius:12px;
+    background: linear-gradient(90deg,#6a11cb,#2575fc);
+    color:white;
+    font-weight:bold;
+    font-size:20px;
+    border:none;
+    width:100%;
+    height:50px;
+}}
 </style>
 
-<!-- Background stars + meteor -->
+<!-- Stars -->
 <div id="stars-container">
     {stars_html}
-    <div class="meteor" style="top:-50px; left:10vw; --x:80vw; --y:60vh; animation-duration:2.5s;"></div>
-    <div class="meteor" style="top:-100px; left:40vw; --x:70vw; --y:50vh; animation-duration:3s;"></div>
-    <div class="meteor" style="top:-150px; left:70vw; --x:90vw; --y:70vh; animation-duration:2s;"></div>
 </div>
+
+<!-- Meteors -->
+<div class="meteor" style="top:-50px; left:10vw; --x:80vw; --y:60vh; animation-duration:2.5s;"></div>
+<div class="meteor" style="top:-100px; left:40vw; --x:70vw; --y:50vh; animation-duration:3s;"></div>
+<div class="meteor" style="top:-150px; left:70vw; --x:90vw; --y:70vh; animation-duration:2s;"></div>
 """, unsafe_allow_html=True)
 
 # ----------------------------
-# Card container (logo + login form)
+# Card container login
 # ----------------------------
-st.markdown('<div class="block-container">', unsafe_allow_html=True)
+st.markdown('<div class="login-card">', unsafe_allow_html=True)
 
+# Logo + Judul + Subtitle
 st.markdown("""
-<div style="display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px;">
-    <img class="animated-photo" 
-         src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png">
-    <div class="login-title">LOGIN</div>
-    <div class="animated-subtitle">✨ Selamat Datang di Perpustakaan Digital Payakarta ✨</div>
-</div>
+<img class="animated-photo" src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png">
+<div class="login-title">LOGIN</div>
+<div class="animated-subtitle">✨ Selamat Datang di Perpustakaan Digital Payakarta ✨</div>
 """, unsafe_allow_html=True)
 
 # Input username & password
 username = st.text_input("👤 USERNAME:", placeholder="Masukkan username")
 password = st.text_input("🔒 PASSWORD:", placeholder="Masukkan password", type="password")
 
-# Tombol Lupa Password
+# Tombol lupa password
 col1, col2, col3 = st.columns([18,5,1])
 with col2:
     st.page_link("pages/ubahpw.py", label="Lupa Password?", use_container_width=True)
