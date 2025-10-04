@@ -48,7 +48,7 @@ st.markdown("""
     animation-iteration-count: infinite;
 }
 @keyframes fall {
-    0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
+    0% { transform: translateY(0px) rotate(0deg); opacity: 1; }
     100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
 }
 /* Card transparan */
