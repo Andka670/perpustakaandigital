@@ -85,7 +85,7 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
     height: 3px;
     background: white;
     border-radius: 50%;
-    top: -10px;
+    top: 20px;
     animation: float linear infinite;
 }
 @keyframes float {
