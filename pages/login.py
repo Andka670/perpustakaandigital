@@ -22,13 +22,16 @@ section[data-testid="stSidebar"] {display: none;}
 # ----------------------------
 # CSS styling utama
 # ----------------------------
-stars_html = ""
-for _ in range(1000):  # jumlah bintang
-    top = random.randint(0, 100)
-    left = random.randint(0, 100)
-    size = random.uniform(1, 3)  # ukuran bintang
-    duration = random.uniform(1.5, 3)  # kecepatan berkedip
-    stars_html += f'<div class="star" style="top:{top}%; left:{left}%; width:{size}px; height:{size}px; animation-duration:{duration}s;"></div>'
+def generate_stars_html(n=120):
+    stars = ""
+    for _ in range(n):
+        top = random.randint(0, 100)
+        left = random.randint(0, 100)
+        size = random.uniform(1.5, 4.5)
+        duration = random.uniform(1.5, 4)
+        stars += f'<div class="star" style="top:{top}%; left:{left}%; width:{size}px; height:{size}px; animation-duration:{duration}s;"></div>'
+    return stars
+stars_html = generate_stars_html()
 st.markdown("""
 <style>
 /* ========================================
