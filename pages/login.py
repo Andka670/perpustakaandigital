@@ -38,8 +38,8 @@ st.markdown("""
 /* Buku jatuh */
 .book {
     position: absolute;
-    width: 40px;
-    height: 40px;
+    width: 80px;
+    height: 80px;
     background-image: url('https://img.pikbest.com/png-images/20250110/aged-torn-book-pages-_11365988.png!w700wp'); /* icon buku */
     background-size: cover;
     top: -50px;
