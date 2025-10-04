@@ -24,28 +24,6 @@ section[data-testid="stSidebar"] {display: none;}
 # ----------------------------
 st.markdown("""
 <style>
-/* Komet dasar */
-.comet {
-    position: fixed;
-    top: -100px;
-    width: 2px;
-    height: 80px;
-    background: linear-gradient(45deg, white, rgba(255,255,255,0));
-    transform: rotate(45deg);
-    opacity: 0.8;
-    border-radius: 50%;
-    animation-name: fall;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-}
-
-/* Animasi jatuh */
-@keyframes fall {
-    0% {transform: translateX(0) translateY(0) rotate(45deg); opacity: 0;}
-    20% {opacity: 1;}
-    100% {transform: translateX(var(--x)) translateY(var(--y)) rotate(45deg); opacity: 0;}
-}
-
 /* Background animasi utama */
 .stApp {
     background: linear-gradient(135deg, #667eea, #764ba2, #ff758c, #ff7eb3);
@@ -161,15 +139,7 @@ st.markdown("""
     animation-delay:{random.uniform(0,3)}s;">
 </div>
 """, unsafe_allow_html=True)
-# Generate beberapa komet dengan posisi & ukuran acak
-num_comets = 10
-for i in range(num_comets):
-    size = random.randint(1, 3)       # lebar komet acak
-    height = random.randint(50, 120)  # panjang ekor komet acak
-    left = random.randint(0, 100)     # posisi horizontal (%)
-    x_move = random.randint(200, 800) # jarak horizontal jatuh
-    y_move = random.randint(400, 800) # jarak vertikal jatuh
-    duration = random.uniform(1.5, 4) # durasi jatuh acak
+
 # ----------------------------
 # Judul + Foto + Subtitle
 # ----------------------------
