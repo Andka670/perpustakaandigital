@@ -80,11 +80,11 @@ st.markdown("""
     animation: colorchange 4s infinite;
 }
 @keyframes colorchange {
-    0% { color: red; }
+    0% { color: white; }
     25% { color: yellow; }
-    50% { color: red; }
+    50% { color: white; }
     75% { color: yellow; }
-    100% { color: red; }
+    100% { color: white; }
 }
 
 /* Input */
