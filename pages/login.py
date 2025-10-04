@@ -1,6 +1,5 @@
 import streamlit as st
 from supabase import create_client, Client
-import random
 
 # ----------------------------
 # Supabase config
@@ -25,6 +24,75 @@ section[data-testid="stSidebar"] {display: none;}
 # ----------------------------
 st.markdown("""
 <style>
+/* ========================================
+   Full Background Animasi Keren
+   - Gradient bergerak
+   - Meteor/komet jatuh
+   - Bintang berkedip
+   - Partikel floating
+   ======================================== */
+html, body, [data-testid="stAppViewContainer"], .stApp {
+    margin:0;
+    padding:0;
+    height:100%;
+    overflow:hidden;
+    background: linear-gradient(270deg, #ff6a00, #ee0979, #2575fc, #6a11cb);
+    background-size: 800% 800%;
+    animation: gradientBG 20s ease infinite;
+}
+
+/* ---------- Gradient Background ---------- */
+@keyframes gradientBG {
+    0% {background-position:0% 50%;}
+    50% {background-position:100% 50%;}
+    100% {background-position:0% 50%;}
+}
+
+/* ---------- Bintang Berkedip ---------- */
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.8;
+    animation: twinkle 2s infinite alternate;
+}
+@keyframes twinkle {
+    0% {opacity:0.2;}
+    100% {opacity:1;}
+}
+
+/* ---------- Meteor / Komet ---------- */
+.meteor {
+    position: absolute;
+    width: 2px;
+    height: 80px;
+    background: linear-gradient(45deg, white, rgba(255,255,255,0));
+    transform: rotate(45deg);
+    animation: fall linear infinite;
+}
+@keyframes fall {
+    0% {transform: translateX(0) translateY(0); opacity:0;}
+    20% {opacity:1;}
+    100% {transform: translateX(var(--x)) translateY(var(--y)); opacity:0;}
+}
+
+/* ---------- Partikel Floating ---------- */
+.particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: white;
+    border-radius: 50%;
+    top: -10px;
+    animation: float linear infinite;
+}
+@keyframes float {
+    0% {transform: translateX(0) translateY(0);}
+    100% {transform: translateX(var(--x)) translateY(100vh);}
+}
+
 /* Background animasi utama */
 .stApp {
     background: linear-gradient(135deg, #667eea, #764ba2, #ff758c, #ff7eb3);
@@ -131,15 +199,24 @@ st.markdown("""
     height: 70px !important;
 }
 </style>
-<div class="comet" style="
-    width:{size}px; 
-    height:{height}px; 
-    left:{left}%;
-    --x:{x_move}px;
-    --y:{y_move}px;
-    animation-duration:{duration}s;
-    animation-delay:{random.uniform(0,3)}s;">
-</div>
+<!-- Bintang Acak -->
+<div class="star" style="top:10%; left:5%;"></div>
+<div class="star" style="top:20%; left:25%;"></div>
+<div class="star" style="top:50%; left:70%;"></div>
+<div class="star" style="top:80%; left:40%;"></div>
+<div class="star" style="top:30%; left:80%;"></div>
+
+<!-- Meteor / Komet Acak -->
+<div class="meteor" style="top:-50px; left:10%; --x:800px; --y:600px; animation-duration:2.5s; animation-delay:0s;"></div>
+<div class="meteor" style="top:-100px; left:40%; --x:700px; --y:500px; animation-duration:3s; animation-delay:1s;"></div>
+<div class="meteor" style="top:-150px; left:70%; --x:900px; --y:700px; animation-duration:2s; animation-delay:2s;"></div>
+
+<!-- Partikel Floating Acak -->
+<div class="particle" style="left:10%; --x:200px; animation-duration:10s; animation-delay:0s;"></div>
+<div class="particle" style="left:20%; --x:-150px; animation-duration:12s; animation-delay:1s;"></div>
+<div class="particle" style="left:50%; --x:100px; animation-duration:15s; animation-delay:2s;"></div>
+<div class="particle" style="left:70%; --x:-200px; animation-duration:18s; animation-delay:3s;"></div>
+<div class="particle" style="left:85%; --x:150px; animation-duration:20s; animation-delay:4s;"></div>
 """, unsafe_allow_html=True)
 
 
