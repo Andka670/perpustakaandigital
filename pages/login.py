@@ -22,13 +22,13 @@ section[data-testid="stSidebar"] {display: none;}
 # ----------------------------
 # CSS styling utama
 # ----------------------------
-def generate_stars_html(n=1000):
+def generate_stars_html(n=120):
     stars = ""
     for _ in range(n):
-        top = random.randint(0, 1000)
-        left = random.randint(0, 1000)
+        top = random.randint(0, 100)
+        left = random.randint(0, 100)
         size = random.uniform(1.5, 4.5)
-        duration = random.uniform(1.5, 100)
+        duration = random.uniform(1.5, 4)
         stars += f'<div class="star" style="top:{top}%; left:{left}%; width:{size}px; height:{size}px; animation-duration:{duration}s;"></div>'
     return stars
 stars_html = generate_stars_html()
@@ -59,18 +59,17 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
 }
 
 /* ---------- Bintang Berkedip ---------- */
-.star {
+..star {{
     position: absolute;
-    width: 2px;
-    height: 2px;
     background: white;
     border-radius: 50%;
     opacity: 0.8;
-    animation: twinkle 2s infinite alternate;
-}
-@keyframes twinkle {
-    0% {opacity:0.2;}
-    100% {opacity:1;}
+    animation: twinkle linear infinite alternate;
+}}
+@keyframes twinkle {{
+    0% {{opacity:0.2;}}
+    100% {{opacity:1;}}
+}}
 }
 
 /* ---------- Meteor / Komet ---------- */
