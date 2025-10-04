@@ -20,6 +20,7 @@ st.set_page_config(page_title="Login", page_icon="🔑", layout="centered")
 st.markdown("""
 <style>
 section[data-testid="stSidebar"] {display: none;}
+main {background: transparent !important;}
 </style>
 """, unsafe_allow_html=True)
 
@@ -57,7 +58,7 @@ st.markdown(f"""
     100% {{ background-position: 0% 50%; }}
 }}
 
-/* Card transparan */
+/* Card transparan untuk login */
 .block-container {{
     background: rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(12px);
