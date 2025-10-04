@@ -95,11 +95,11 @@ st.markdown("""
     animation: colorchange 4s infinite;
 }
 @keyframes colorchange {
-    0% { color: #FFD700; }
-    25% { color: #00FA9A; }
-    50% { color: #1E90FF; }
-    75% { color: #FF4500; }
-    100% { color: #FFD700; }
+    0% { color: white; }
+    25% { color: yellow; }
+    50% { color: white; }
+    75% { color: yellow; }
+    100% { color: white; }
 }
 
 /* Input */
