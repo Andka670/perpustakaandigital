@@ -40,7 +40,7 @@ st.markdown("""
     position: absolute;
     width: 80px;
     height: 80px;
-    background-image: url('https://e7.pngegg.com/pngimages/633/560/png-clipart-history-of-books-history-of-books-open-book-leaf-text.png'); /* icon buku */
+    background-image: url('https://png.pngtree.com/png-clipart/20210423/ourmid/pngtree-cowhide-drawing-vintage-book-png-image_3235643.jpg'); /* icon buku */
     background-size: cover;
     top: -50px;
     animation-name: fall;
