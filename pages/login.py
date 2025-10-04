@@ -59,7 +59,7 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
 }
 
 /* ---------- Bintang Berkedip ---------- */
-..star {{
+.star {{
     position: absolute;
     background: white;
     border-radius: 50%;
@@ -70,7 +70,6 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
     0% {{opacity:0.2;}}
     100% {{opacity:1;}}
 }}
-}
 
 /* ---------- Meteor / Komet ---------- */
 .meteor {
