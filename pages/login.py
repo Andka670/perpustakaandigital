@@ -182,24 +182,24 @@ if st.button("Login", key="login_btn"):
             # Animasi emoji buku jatuh meriah
             # -----------------------------
             html_books = ""
-            for i in range(20):  # 20 emoji buku jatuh
+            for i in range(20):
                 left = random.randint(0, 95)
                 duration = round(random.uniform(1.5, 3.5), 2)
                 delay = round(random.uniform(0, 1.5), 2)
                 html_books += f'<div class="book-emoji" style="left:{left}%; animation-duration:{duration}s; animation-delay:{delay}s;">📚</div>\n'
-
             st.markdown(html_books, unsafe_allow_html=True)
 
             # -----------------------------
-            # Tombol lanjut ke halaman sesuai level
+            # Redirect otomatis setelah delay 3 detik
             # -----------------------------
-            if st.button("➡️ Lanjut ke Aplikasi"):
-                if user.get('level') == 'admin':
-                    st.session_state['page'] = 'admin'
-                    st.switch_page("pages/admin.py")
-                else:
-                    st.session_state['page'] = 'app'
-                    st.switch_page("app.py")
+            redirect_url = "pages/admin.py" if user.get('level') == 'admin' else "app.py"
+            st.markdown(f"""
+                <script>
+                setTimeout(function(){{
+                    window.location.href = '{redirect_url}';
+                }}, 3000);  // delay 3 detik
+                </script>
+            """, unsafe_allow_html=True)
         else:
             st.error("❌ Username atau password anda salah.")
     else:
