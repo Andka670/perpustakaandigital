@@ -48,6 +48,8 @@ st.markdown(f"""
     background: linear-gradient(135deg, #667eea, #764ba2, #ff758c, #ff7eb3);
     background-size: 600% 600%;
     animation: gradientBG 5s ease infinite;
+    position: relative;
+    overflow: hidden;
 }}
 @keyframes gradientBG {{
     0% {{ background-position: 0% 50%; }}
@@ -62,6 +64,9 @@ st.markdown(f"""
     border-radius: 18px;
     padding: 30px 50px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    text-align: center;
+    z-index: 10;
+    position: relative;
 }}
 
 /* Foto profil animasi */
@@ -85,7 +90,6 @@ st.markdown(f"""
     font-size: 55px;
     border-bottom: 4px solid white;
     padding-bottom: 5px;
-    text-align: center;
 }}
 
 /* Subtitle animasi */
@@ -176,9 +180,9 @@ st.markdown(f"""
 }}
 </style>
 
+<!-- Background stars + meteor -->
 <div id="stars-container">
     {stars_html}
-    <!-- Meteor acak -->
     <div class="meteor" style="top:-50px; left:10vw; --x:80vw; --y:60vh; animation-duration:2.5s;"></div>
     <div class="meteor" style="top:-100px; left:40vw; --x:70vw; --y:50vh; animation-duration:3s;"></div>
     <div class="meteor" style="top:-150px; left:70vw; --x:90vw; --y:70vh; animation-duration:2s;"></div>
@@ -186,17 +190,15 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 # ----------------------------
-# Card container
+# Card container (logo + login form)
 # ----------------------------
 st.markdown('<div class="block-container">', unsafe_allow_html=True)
 
-# Judul + Foto + Subtitle
 st.markdown("""
 <div style="display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px;">
     <img class="animated-photo" 
-         src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
-         style="margin-bottom:30px;">
-    <div class="login-title" style="margin-top:10px;">LOGIN</div>
+         src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png">
+    <div class="login-title">LOGIN</div>
     <div class="animated-subtitle">✨ Selamat Datang di Perpustakaan Digital Payakarta ✨</div>
 </div>
 """, unsafe_allow_html=True)
@@ -246,5 +248,4 @@ with col2:
 st.markdown("<br><br><hr>", unsafe_allow_html=True)
 st.markdown("<center style='color:white;'>© 2025 Perpustakaan Digital Payakarta</center>", unsafe_allow_html=True)
 
-# Tutup card container
 st.markdown('</div>', unsafe_allow_html=True)
