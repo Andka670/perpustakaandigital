@@ -40,7 +40,7 @@ st.markdown("""
     position: absolute;
     width: 80px;
     height: 80px;
-    background-image: url('https://png.pngtree.com/png-clipart/20230813/original/pngtree-paper-sheets-flying-sheet-falling-picture-image_7903781.png'); /* icon buku */
+    background-image: url('https://w7.pngwing.com/pngs/874/892/png-transparent-paper-book-open-books-angle-comic-book-open-door.png'); /* icon buku */
     background-size: cover;
     top: -50px;
     animation-name: fall;
