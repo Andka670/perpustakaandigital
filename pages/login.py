@@ -1,28 +1,22 @@
 import streamlit as st
 from supabase import create_client, Client
 import random
+
 # ----------------------------
 # Supabase config
 # ----------------------------
 SUPABASE_URL = "https://bcalrkqeeoaalfpjrwvx.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjYWxya3FlZW9hYWxmcGpyd3Z4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMDc5NTUsImV4cCI6MjA3Mzc4Mzk1NX0.Pg0EUKGfDYk7-apJNjHoqVSub_atlE54ahVKuWtQc0o"
+SUPABASE_KEY = "YOUR_SUPABASE_KEY"
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # ----------------------------
 # Page config
 # ----------------------------
 st.set_page_config(page_title="Login", page_icon="🔑", layout="centered")
-st.markdown("""
-<style>
-/* Hilangkan sidebar */
-section[data-testid="stSidebar"] {display: none;}
-</style>
-""", unsafe_allow_html=True)
 
 # ----------------------------
-# CSS styling utama
-# ----------------------------
 # Generate bintang acak
+# ----------------------------
 def generate_stars_html(n=150):
     stars = ""
     for _ in range(n):
@@ -34,8 +28,13 @@ def generate_stars_html(n=150):
     return stars
 
 stars_html = generate_stars_html()
-st.markdown("""
+
+# ----------------------------
+# CSS & background
+# ----------------------------
+st.markdown(f"""
 <style>
+/* Full screen background container */
 #stars-container {{
     position: fixed;
     top:0;
@@ -44,8 +43,19 @@ st.markdown("""
     height:100%;
     z-index:-1;
     overflow:hidden;
-    background: black;
+    background: linear-gradient(135deg, #667eea, #764ba2, #ff758c, #ff7eb3);
+    background-size: 600% 600%;
+    animation: gradientBG 10s ease infinite;
 }}
+
+/* Gradient background animation */
+@keyframes gradientBG {{
+    0% {{background-position:0% 50%;}}
+    50% {{background-position:100% 50%;}}
+    100% {{background-position:0% 50%;}}
+}}
+
+/* Bintang */
 .star {{
     position: absolute;
     background: white;
@@ -57,6 +67,8 @@ st.markdown("""
     0% {{opacity:0.2;}}
     100% {{opacity:1;}}
 }}
+
+/* Meteor / Komet */
 .meteor {{
     position: absolute;
     width: 2px;
@@ -70,54 +82,57 @@ st.markdown("""
     20% {{opacity:1;}}
     100% {{transform: translateX(var(--x)) translateY(var(--y)); opacity:0;}}
 }}
-/* Background animasi utama */
-.stApp {
-    background: linear-gradient(135deg, #667eea, #764ba2, #ff758c, #ff7eb3);
-    background-size: 600% 600%;
-    animation: gradientBG 5s ease infinite;
-}
 
-@keyframes gradientBG {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
+/* Partikel floating */
+.particle {{
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: white;
+    border-radius: 50%;
+    top: 0;
+    animation: float linear infinite;
+}}
+@keyframes float {{
+    0% {{transform: translateX(0) translateY(0);}}
+    100% {{transform: translateX(var(--x)) translateY(100vh);}}
+}}
 
 /* Card transparan */
-.block-container {
+.block-container {{
     background: rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(12px);
     border-radius: 18px;
     padding: 30px 50px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-}
+}}
 
 /* Foto profil animasi */
-@keyframes float {
-    0% { transform: translateY(20px); }
-    50% { transform: translateY(50px); }
-    100% { transform: translateY(20px); }
-}
-.animated-photo {
-    animation: float 3s ease-in-out infinite;
+@keyframes floatPhoto {{
+    0% {{ transform: translateY(20px); }}
+    50% {{ transform: translateY(50px); }}
+    100% {{ transform: translateY(20px); }}
+}}
+.animated-photo {{
+    animation: floatPhoto 3s ease-in-out infinite;
     border-radius:50%;
     border:6px solid white;
     width:150px;
     box-shadow: 0 0 25px rgba(255,255,255,0.6);
-}
+}}
 
 /* Judul LOGIN */
-.login-title {
+.login-title {{
     font-weight: bold;
     color: white;
     font-size: 55px;
     border-bottom: 4px solid white;
     padding-bottom: 5px;
     text-align: center;
-}
+}}
 
 /* Subtitle animasi */
-.animated-subtitle {
+.animated-subtitle {{
     font-size: 18px;
     margin-top: 8px;
     margin-bottom: 30px;
@@ -125,17 +140,17 @@ st.markdown("""
     font-weight: bold;
     color: #f5f5f5;
     animation: colorchange 4s infinite;
-}
-@keyframes colorchange {
-    0% { color: white; }
-    25% { color: yellow; }
-    50% { color: white; }
-    75% { color: yellow; }
-    100% { color: white; }
-}
+}}
+@keyframes colorchange {{
+    0% {{ color: white; }}
+    25% {{ color: yellow; }}
+    50% {{ color: white; }}
+    75% {{ color: yellow; }}
+    100% {{ color: white; }}
+}}
 
 /* Input */
-.stTextInput>div>div>input {
+.stTextInput>div>div>input {{
     background: rgba(255, 255, 255, 0.25);
     border: none !important;
     border-radius: 10px;
@@ -144,16 +159,16 @@ st.markdown("""
     font-weight: bold;
     transition: 0.3s ease;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); 
-}
+}}
 .stTextInput>div>div>input:hover,
-.stTextInput>div>div>input:focus {
+.stTextInput>div>div>input:focus {{
     box-shadow: 0 0 15px rgba(106, 17, 203, 0.8),
                 0 0 30px rgba(37, 117, 252, 0.7);
     transform: scale(1.03);
-}
+}}
 
 /* Tombol gradient */
-.stButton>button {
+.stButton>button {{
     padding: 10px 299px;
     border-radius: 12px;
     background: linear-gradient(90deg, #6a11cb, #2575fc);
@@ -163,27 +178,32 @@ st.markdown("""
     border: none;
     transition: all 0.3s ease;
     box-shadow: 0 4px 25px rgba(0,0,0,0.35);
-}
-.stButton>button:hover {
+}}
+.stButton>button:hover {{
     background: linear-gradient(90deg, #2575fc, #6a11cb);
     transform: scale(1.05);
     box-shadow: 0 0 20px rgba(37,117,252,0.9),
                 0 0 35px rgba(106,17,203,0.8);
-}
-/* Tombol login */
-.stButton[data-st-key="login_btn"] > button {
+}}
+.stButton[data-st-key="login_btn"] > button {{
     width: 100% !important;
     height: 70px !important;
-}
+}}
 </style>
+
 <div id="stars-container">
     {stars_html}
+    <!-- Meteor / Komet Acak -->
     <div class="meteor" style="top:-50px; left:10vw; --x:80vw; --y:60vh; animation-duration:2.5s;"></div>
     <div class="meteor" style="top:-100px; left:40vw; --x:70vw; --y:50vh; animation-duration:3s;"></div>
     <div class="meteor" style="top:-150px; left:70vw; --x:90vw; --y:70vh; animation-duration:2s;"></div>
+    <!-- Partikel Floating -->
+    <div class="particle" style="left:10vw; --x:20vw; animation-duration:10s;"></div>
+    <div class="particle" style="left:30vw; --x:-15vw; animation-duration:12s;"></div>
+    <div class="particle" style="left:50vw; --x:10vw; animation-duration:15s;"></div>
+    <div class="particle" style="left:70vw; --x:-20vw; animation-duration:18s;"></div>
 </div>
 """, unsafe_allow_html=True)
-
 
 # ----------------------------
 # Judul + Foto + Subtitle
@@ -222,28 +242,24 @@ if st.button("Login", key="login_btn"):
             .eq("username", username).eq("password", password).execute()
         if response.data:
             user = response.data[0]
-            # simpan semua info user ke session
             st.session_state['logged_in'] = True
             st.session_state['user'] = {
                 "id_user": user.get("id_user"),
                 "username": user["username"],
                 "level": user.get("level", "member")
             }
-
             st.success(f"✅ Selamat datang, {user['username']}!")
-
-            # redirect sesuai level
             if user.get('level') == 'admin':
                 st.switch_page("pages/admin.py")
             else:
                 st.switch_page("app.py")
         else:
-            st.error("❌ Username atau password anda salah.")
+            st.error("❌ Username atau password salah.")
     else:
-        st.warning("⚠️ Harap isi username dan password anda.")
+        st.warning("⚠️ Harap isi username dan password.")
 
 # ----------------------------
-# Link ke halaman register
+# Link register
 # ----------------------------
 st.markdown(
     "<div style='text-align:center; font-size:15px; color:black; font-weight:bold'>Belum punya akun?</div>",
