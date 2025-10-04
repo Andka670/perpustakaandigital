@@ -19,9 +19,35 @@ st.markdown("""
 section[data-testid="stSidebar"] {display: none;}
 </style>
 """, unsafe_allow_html=True)
+#komet
+st.markdown("""
+<style>
+/* Komet dasar */
+.comet {
+    position: fixed;
+    top: -100px;
+    width: 2px;
+    height: 80px;
+    background: linear-gradient(45deg, white, rgba(255,255,255,0));
+    transform: rotate(45deg);
+    opacity: 0.8;
+    border-radius: 50%;
+    animation-name: fall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+/* Animasi jatuh */
+@keyframes fall {
+    0% {transform: translateX(0) translateY(0) rotate(45deg); opacity: 0;}
+    20% {opacity: 1;}
+    100% {transform: translateX(var(--x)) translateY(var(--y)) rotate(45deg); opacity: 0;}
+}
+</style>
+""", unsafe_allow_html=True)
 
 # ----------------------------
-# CSS styling
+# CSS styling utama
 # ----------------------------
 st.markdown("""
 <style>
@@ -139,32 +165,6 @@ st.markdown("""
     animation-duration:{duration}s;
     animation-delay:{random.uniform(0,3)}s;">
 </div>
-""", unsafe_allow_html=True)
-
-st.markdown("""
-<style>
-/* Komet dasar */
-.comet {
-    position: fixed;
-    top: -100px;
-    width: 2px;
-    height: 80px;
-    background: linear-gradient(45deg, white, rgba(255,255,255,0));
-    transform: rotate(45deg);
-    opacity: 0.8;
-    border-radius: 50%;
-    animation-name: fall;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-}
-
-/* Animasi jatuh */
-@keyframes fall {
-    0% {transform: translateX(0) translateY(0) rotate(45deg); opacity: 0;}
-    20% {opacity: 1;}
-    100% {transform: translateX(var(--x)) translateY(var(--y)) rotate(45deg); opacity: 0;}
-}
-</style>
 """, unsafe_allow_html=True)
 
 # Generate beberapa komet dengan posisi & ukuran acak
