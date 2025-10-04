@@ -40,7 +40,7 @@ st.markdown("""
     position: absolute;
     width: 80px;
     height: 80px;
-    background-image: url('https://img1.pngdownload.id/20240128/xep/transparent-open-book-open-book-with-flipping-pages-on-black-1710895153730.webp'); /* icon buku */
+    background-image: url('https://img1.pngdownload.id/ci2/rtf/ogn/aqb0h4qoc.png'); /* icon buku */
     background-size: cover;
     top: -50px;
     animation-name: fall;
