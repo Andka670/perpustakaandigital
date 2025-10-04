@@ -12,7 +12,7 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 # ----------------------------
 # Page config
 # ----------------------------
-st.set_page_config(page_title="Login", page_icon="🔑", layout="wide")
+st.set_page_config(page_title="Login", page_icon="🔑", layout="centered")
 
 # ----------------------------
 # Generate bintang acak
@@ -34,15 +34,6 @@ stars_html = generate_stars_html()
 # ----------------------------
 st.markdown(f"""
 <style>
-/* Reset padding/margin & full screen */
-html, body, [data-testid="stAppViewContainer"], .stApp {{
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-}}
-
 /* Full screen background container */
 #stars-container {{
     position: fixed;
@@ -51,6 +42,7 @@ html, body, [data-testid="stAppViewContainer"], .stApp {{
     width:100%;
     height:100%;
     z-index:-1;
+    overflow:hidden;
     background: linear-gradient(135deg, #667eea, #764ba2, #ff758c, #ff7eb3);
     background-size: 600% 600%;
     animation: gradientBG 10s ease infinite;
