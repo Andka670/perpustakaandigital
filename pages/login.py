@@ -209,7 +209,7 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
     height: 70px !important;
 }
 </style>
-
+{stars_html}
 <!-- Meteor / Komet Acak -->
 <div class="meteor" style="top:-50px; left:10%; --x:800px; --y:600px; animation-duration:2.5s; animation-delay:0s;"></div>
 <div class="meteor" style="top:-100px; left:40%; --x:700px; --y:500px; animation-duration:3s; animation-delay:1s;"></div>
@@ -221,7 +221,7 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
 <div class="particle" style="left:50%; --x:100px; animation-duration:15s; animation-delay:2s;"></div>
 <div class="particle" style="left:70%; --x:-200px; animation-duration:18s; animation-delay:3s;"></div>
 <div class="particle" style="left:85%; --x:150px; animation-duration:20s; animation-delay:4s;"></div>
-{stars_html}
+
 """, unsafe_allow_html=True)
 
 
