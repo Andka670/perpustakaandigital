@@ -35,7 +35,22 @@ st.markdown("""
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
-
+/* Buku jatuh */
+.book {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-image: url('https://cdn-icons-png.flaticon.com/512/29/29302.png'); /* icon buku */
+    background-size: cover;
+    top: -50px;
+    animation-name: fall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+@keyframes fall {
+    0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+}
 /* Card transparan */
 .block-container {
     background: rgba(255, 255, 255, 0.12);
@@ -143,7 +158,14 @@ st.markdown("""
     <div class="animated-subtitle">✨ Selamat Datang di Perpustakaan Digital Payakarta ✨</div>
 </div>
 """, unsafe_allow_html=True)
-
+# Tambahkan HTML untuk beberapa buku
+st.markdown("""
+<div class="book" style="left:10%; animation-duration:6s;"></div>
+<div class="book" style="left:30%; animation-duration:8s;"></div>
+<div class="book" style="left:50%; animation-duration:5s;"></div>
+<div class="book" style="left:70%; animation-duration:7s;"></div>
+<div class="book" style="left:90%; animation-duration:6.5s;"></div>
+""", unsafe_allow_html=True)
 # ----------------------------
 # Input username & password
 # ----------------------------
