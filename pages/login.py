@@ -40,7 +40,7 @@ st.markdown("""
     position: absolute;
     width: 40px;
     height: 40px;
-    background-image: url('https://w7.pngwing.com/pngs/722/964/png-transparent-book-fly-books-angle-comic-book-heart.png'); /* icon buku */
+    background-image: url('https://img.pikbest.com/png-images/20250110/aged-torn-book-pages-_11365988.png!w700wp'); /* icon buku */
     background-size: cover;
     top: -50px;
     animation-name: fall;
