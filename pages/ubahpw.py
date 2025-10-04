@@ -27,7 +27,7 @@ section[data-testid="stSidebar"] { display: none; }
 
 .login-title {font-weight: bold; color: white; font-size: 50px; text-align: center;}
 .animated-subtitle {font-size: 18px; margin-top: 8px; margin-bottom: 25px; font-style: italic; font-weight: bold; color: #f5f5f5; animation: colorchange 4s infinite;}
-@keyframes colorchange {0% { color: #FFD700; } 25% { color: #00FA9A; } 50% { color: #1E90FF; } 75% { color: #FF4500; } 100% { color: #FFD700; }}
+@keyframes colorchange {0% { color: yellow; } 25% { color: white; } 50% { color: yellow; } 75% { color: white; } 100% { color: yellow; }}
 
 .stTextInput>div>div>input {background: rgba(255, 255, 255, 0.25); border: none !important; border-radius: 10px; padding: 12px; color: #222; font-weight: bold; transition: 0.3s ease; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);}
 .stTextInput>div>div>input:hover, .stTextInput>div>div>input:focus {box-shadow: 0 0 15px rgba(106, 17, 203, 0.8), 0 0 30px rgba(37, 117, 252, 0.7); transform: scale(1.03);}
