@@ -15,23 +15,16 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 st.set_page_config(page_title="Login", page_icon="🔑", layout="centered")
 
 # ----------------------------
-# Generate stars & meteors
+# CSS untuk background & card
 # ----------------------------
 def generate_stars_html(n=150):
-    stars = ""
-    for _ in range(n):
-        top = random.uniform(0, 100)
-        left = random.uniform(0, 100)
-        size = random.uniform(1, 3)
-        duration = random.uniform(2, 5)
-        stars += f'<div class="star" style="top:{top}vh; left:{left}vw; width:{size}px; height:{size}px; animation-duration:{duration}s;"></div>'
-    return stars
+    return "".join(
+        f'<div class="star" style="top:{random.uniform(0,100)}vh; left:{random.uniform(0,100)}vw; width:{random.uniform(1,3)}px; height:{random.uniform(1,3)}px; animation-duration:{random.uniform(2,5)}s;"></div>'
+        for _ in range(n)
+    )
 
 stars_html = generate_stars_html()
 
-# ----------------------------
-# CSS + background + stars + meteor
-# ----------------------------
 st.markdown(f"""
 <style>
 /* Hapus background default Streamlit */
@@ -39,11 +32,11 @@ main {{
     background: transparent !important;
 }}
 
-/* Background gradient animasi utama */
+/* Background gradient animasi */
 .stApp {{
     background: linear-gradient(135deg, #667eea, #764ba2, #ff758c, #ff7eb3);
     background-size: 600% 600%;
-    animation: gradientBG 5s ease infinite;
+    animation: gradientBG 10s ease infinite;
     position: relative;
     overflow: hidden;
 }}
@@ -56,9 +49,9 @@ main {{
 /* Stars */
 .star {{
     position: absolute;
-    background: white;
-    border-radius: 50%;
-    opacity: 0.8;
+    background:white;
+    border-radius:50%;
+    opacity:0.8;
     animation: twinkle linear infinite alternate;
 }}
 @keyframes twinkle {{
@@ -68,9 +61,9 @@ main {{
 
 /* Meteor */
 .meteor {{
-    position: absolute;
-    width: 2px;
-    height: 80px;
+    position:absolute;
+    width:2px;
+    height:80px;
     background: linear-gradient(45deg, white, rgba(255,255,255,0));
     transform: rotate(45deg);
     animation: fall linear infinite;
@@ -90,9 +83,9 @@ main {{
     border-radius: 18px;
     padding: 30px 50px;
     text-align: center;
-    margin: auto;
-    width: 400px;
-    top: 50px;
+    margin:auto;
+    max-width: 400px;
+    margin-top: 50px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
 }}
 
@@ -102,7 +95,7 @@ main {{
     border-radius:50%;
     border:6px solid white;
     width:150px;
-    box-shadow: 0 0 25px rgba(255,255,255,0.6);
+    box-shadow:0 0 25px rgba(255,255,255,0.6);
 }}
 @keyframes float {{
     0% {{ transform: translateY(20px); }}
@@ -138,7 +131,7 @@ main {{
 
 /* Input */
 .stTextInput>div>div>input {{
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(255,255,255,0.25);
     border: none !important;
     border-radius: 10px;
     padding: 12px;
@@ -172,11 +165,10 @@ main {{
 """, unsafe_allow_html=True)
 
 # ----------------------------
-# Card container login
+# Card login
 # ----------------------------
 st.markdown('<div class="login-card">', unsafe_allow_html=True)
 
-# Logo + Judul + Subtitle
 st.markdown("""
 <img class="animated-photo" src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png">
 <div class="login-title">LOGIN</div>
