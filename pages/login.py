@@ -22,6 +22,13 @@ section[data-testid="stSidebar"] {display: none;}
 # ----------------------------
 # CSS styling utama
 # ----------------------------
+stars_html = ""
+for _ in range(50):  # jumlah bintang
+    top = random.randint(0, 100)
+    left = random.randint(0, 100)
+    size = random.uniform(1, 3)  # ukuran bintang
+    duration = random.uniform(1.5, 3)  # kecepatan berkedip
+    stars_html += f'<div class="star" style="top:{top}%; left:{left}%; width:{size}px; height:{size}px; animation-duration:{duration}s;"></div>'
 st.markdown("""
 <style>
 /* ========================================
@@ -288,13 +295,7 @@ st.markdown(
 col1, col2, col3 = st.columns([2.20,2,1])
 with col2:
     st.page_link("pages/daftar.py", label="Klik disini")
-stars_html = ""
-for _ in range(50):  # jumlah bintang
-    top = random.randint(0, 100)
-    left = random.randint(0, 100)
-    size = random.uniform(1, 3)  # ukuran bintang
-    duration = random.uniform(1.5, 3)  # kecepatan berkedip
-    stars_html += f'<div class="star" style="top:{top}%; left:{left}%; width:{size}px; height:{size}px; animation-duration:{duration}s;"></div>'
+
 # ----------------------------
 # Footer
 # ----------------------------
