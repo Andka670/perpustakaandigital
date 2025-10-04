@@ -40,7 +40,7 @@ st.markdown("""
     position: absolute;
     width: 80px;
     height: 80px;
-    background-image: url('https://e7.pngegg.com/pngimages/719/465/png-clipart-falling-dried-leaves-autumn-leaf-color-falling-leaves-image-file-formats-leaf-thumbnail.png'); /* icon buku */
+    background-image: url('https://png.pngtree.com/element_our/20190601/ourmid/pngtree-open-book-free-illustration-image_1348783.jpg'); /* icon buku */
     background-size: cover;
     top: -50px;
     animation-name: fall;
