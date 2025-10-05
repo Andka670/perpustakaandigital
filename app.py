@@ -216,7 +216,7 @@ if st.session_state.page == "daftarbuku":
                                     min-height: 2px !important;
                                     padding: 2px 2px !important;
                                     font-size: 3px !important;
-                                    border-radius: 8px !important;
+                                    border-radius: 3px !important;
                                     width: auto !important;
                                     background-color: #a52828 !important;  /* warna merah tua */
                                     color: white !important;
