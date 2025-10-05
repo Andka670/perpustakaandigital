@@ -198,7 +198,7 @@ if st.session_state.page == "daftarbuku":
                         st.markdown(f"<div class='book-meta'>✍️ {buku['penulis']} | 📅 {buku['tahun']} | 🏷️ {buku.get('genre','-')} | 📦 Stok: {buku.get('stok','-')}</div>", unsafe_allow_html=True)
                         if buku.get("deskripsi"):
                             full_desc = buku["deskripsi"]
-                            short_desc = full_desc[:150] + ("..." if len(full_desc) > 150 else "")
+                            short_desc = full_desc[:40] + ("..." if len(full_desc) > 150 else "")
                             desc_key = f"show_full_{buku['id_buku']}"
                             if desc_key not in st.session_state:
                                 st.session_state[desc_key] = False
