@@ -206,8 +206,8 @@ if submit:
             except Exception as e:
                 st.error(f"❌ Gagal mencatat peminjaman: {e}")
 # ----------------------------
-# Judul Halaman Persetujuan
-st.markdown("<h1 style='text-align:center;'>📬 Persetujuan Peminjaman</h1>", unsafe_allow_html=True)
+# Halaman Persetujuan
+st.markdown("<h1 style='text-align:center;'>📬 Persetujuan Peminjaman Online</h1>", unsafe_allow_html=True)
 st.markdown("<hr>", unsafe_allow_html=True)
 
 # ----------------------------
