@@ -201,24 +201,29 @@ except Exception as e:
     st.error(f"❌ Gagal mengambil data buku: {e}")
 
 # ----------------------------
-# Form ubah detail buku
+# Form ubah detail buku (pakai selectbox)
 # ----------------------------
 st.markdown('<hr>', unsafe_allow_html=True)
 st.subheader("✏️ Ubah Detail Buku")
 
-judul_ubah = st.text_input("Masukkan Judul Buku untuk diubah", key="cari_judul")
-if st.button("Cari Buku"):
-    try:
-        book = supabase.table("buku").select("*").eq("judul", judul_ubah).execute().data
-        if book:
-            st.session_state.edit = book[0]
-        else:
-            st.warning("Buku tidak ditemukan")
-    except Exception as e:
-        st.error(f"❌ Terjadi kesalahan: {e}")
+try:
+    buku_list = supabase.table("buku").select("id_buku, judul").execute().data
+    if buku_list:
+        buku_dict = {b["judul"]: b for b in buku_list}
+        selected_judul = st.selectbox("Pilih Buku untuk Diubah", list(buku_dict.keys()), key="pilih_buku_ubah")
+
+        if st.button("Pilih Buku"):
+            st.session_state.edit = buku_dict[selected_judul]
+    else:
+        st.info("Belum ada data buku untuk diubah.")
+except Exception as e:
+    st.error(f"❌ Gagal memuat daftar buku: {e}")
 
 if "edit" in st.session_state:
     book_edit = st.session_state.edit
+    st.markdown("---")
+    st.subheader(f"📖 Mengedit: **{book_edit['judul']}**")
+
     edit_judul = st.text_input("Judul Baru", value=book_edit["judul"], key="edit_judul")
     edit_penulis = st.text_input("Penulis Baru", value=book_edit["penulis"], key="edit_penulis")
     edit_tahun = st.number_input("Tahun Terbit Baru", value=book_edit["tahun"], key="edit_tahun")
@@ -245,7 +250,7 @@ if "edit" in st.session_state:
             "deskripsi": edit_deskripsi
         }
 
-        # Cover baru
+        # Upload cover baru
         if new_cover is not None:
             file_bytes = new_cover.read()
             cover_path = f"covers/{datetime.now().strftime('%Y%m%d%H%M%S')}_{new_cover.name}"
@@ -256,7 +261,7 @@ if "edit" in st.session_state:
             )
             update_data["cover_url"] = cover_path
 
-        # PDF baru
+        # Upload PDF baru
         if new_pdf is not None:
             file_bytes = new_pdf.read()
             pdf_path = f"pdfs/{datetime.now().strftime('%Y%m%d%H%M%S')}_{new_pdf.name}"
@@ -267,10 +272,11 @@ if "edit" in st.session_state:
             )
             update_data["pdf_url"] = pdf_path
 
-        # Update database
+        # Update data ke database
         supabase.table("buku").update(update_data).eq("id_buku", book_edit["id_buku"]).execute()
         st.success(f"✅ Buku '{edit_judul}' berhasil diperbarui!")
         del st.session_state.edit
+
 # =====================================================
 # Footer
 # =====================================================
