@@ -128,18 +128,14 @@ st.markdown('<hr>', unsafe_allow_html=True)
 # Fungsi highlight denda berdasar status
 # ----------------------------
 def highlight_denda(row):
-    styles = []
-    for col in row.index:
-        if col == "Denda (Rp)":
-            if row["Status"] == "dipinjam" and row["Denda (Rp)"] > 0:
-                styles.append("background-color: #ffcccc; color: red; font-weight: bold;")
-            elif row["Status"] == "sudah dikembalikan" and row["Denda (Rp)"] > 0:
-                styles.append("background-color: #ccffcc; color: green; font-weight: bold;")
-            else:
-                styles.append("")
-        else:
-            styles.append("")
+    styles = [""] * len(row.index)
+    if row["Denda (Rp)"] > 0:
+        if row["Status"] == "dipinjam":
+            styles = ["background-color: #ffcccc; color: brown; font-weight: bold;"] * len(row.index)
+        elif row["Status"] == "sudah dikembalikan":
+            styles = ["background-color: #ccffcc; color: green; font-weight: bold;"] * len(row.index)
     return styles
+
 
 # ----------------------------
 # Ambil data peminjaman
