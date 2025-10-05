@@ -112,6 +112,22 @@ st.markdown("""
 h1,h2,h3,h4{color:brown !important;}
 @keyframes inputFadeIn{0%{opacity:0;transform:translateY(10px) scale(0.95);}100%{opacity:1;transform:translateY(0) scale(1);}}
 .input-animate{animation:inputFadeIn 0.8s ease-in-out;}
+
+.desc-container {
+    font-size: 13px;
+    color: #333;
+}
+.tiny-link {
+    color: #a52828;
+    font-size: 10px;
+    margin-left: 6px;
+    cursor: pointer;
+    user-select: none;
+    text-decoration: underline;
+}
+.tiny-link:hover {
+    color: #d23b3b;
+}
 div[data-testid="stButton"]>button{width:100%;min-height:50px;padding:15px 0;border-radius:20px;font-size:16px;font-weight:bold;background-color:brown;color:white;border:none;margin-right:5px;transition:all 0.3s ease;}
 div[data-testid="stButton"]>button:hover{background-color:#45a049;transform:scale(1.05);}
 div[data-testid="stButton"]>button:active{transform:scale(0.95);}
