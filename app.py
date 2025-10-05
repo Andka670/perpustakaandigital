@@ -314,7 +314,7 @@ else:
                     .select("id_user, id_peminjaman")\
                     .eq("id_buku", p["id_buku"])\
                     .eq("ajuan", "menunggu")\
-                    .order("created_at", ascending=True)\
+                    .order("created_at", ascending=false)\
                     .execute().data
                 posisi = next((i+1 for i, x in enumerate(antrian_data) if x["id_peminjaman"] == p["id_peminjaman"]), None)
                 p["antrian"] = f"{posisi} dari {len(antrian_data)}"
