@@ -122,7 +122,7 @@ section[data-testid="stSidebar"]{display:none !important;}
 }
 
 .desc-summary {
-    font-size: 10px;
+    font-size: 13px;
     color: #a52828;
     cursor: pointer;
     user-select: none;
@@ -133,7 +133,7 @@ section[data-testid="stSidebar"]{display:none !important;}
 }
 
 .desc-text {
-    font-size: 13px;
+    font-size: 20px;
     color: #333;
     margin-top: 4px;
     line-height: 1.4;
