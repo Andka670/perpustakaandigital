@@ -95,6 +95,12 @@ div[data-testid="stButton"] > button:active {
     50%  { transform: translateX(20px);  color: #4CAF50; }
     100% { transform: translateX(-20px); color: #333; }
 }
+/* Input & Selectbox */
+div[data-baseweb="select"], div[data-baseweb="input"] {
+    border-radius: 12px;
+    border: 2px solid #4CAF50;
+    padding: 5px;
+}
 </style>
 """, unsafe_allow_html=True)
 st.markdown(
