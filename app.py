@@ -360,7 +360,7 @@ else:
 # =====================================================
 # Halaman Profil
 # =====================================================
-if st.session_state.page == "profil":
+else st.session_state.page == "profil":
     st.title("⚙️ Profil")
     st.markdown(f"<p class='profil-text'>👤 Username: {user['username']}</p>", unsafe_allow_html=True)
     st.markdown(f"<p class='profil-text'>🆔 ID User: {user['id_user']}</p>", unsafe_allow_html=True)
