@@ -204,40 +204,42 @@ if st.session_state.page == "daftarbuku":
                             if desc_key not in st.session_state:
                                 st.session_state[desc_key] = False
                         
-                            # Jika sedang menampilkan penuh
                             if st.session_state[desc_key]:
                                 st.markdown(
                                     f"""
-                                    <div class='book-desc'>
+                                    <div style="font-size: 14px; line-height: 1.5;">
                                         {full_desc}
-                                        <span style='color:#007bff; cursor:pointer; text-decoration:underline;'
-                                              onclick="fetch('/_stcore/_session_state?key={desc_key}&value=false',{{
-                                              method:'POST'}}).then(()=>window.location.reload())">
-                                              Sembunyikan
-                                        </span>
                                     </div>
                                     """,
                                     unsafe_allow_html=True,
                                 )
                         
-                            # Jika menampilkan singkat
+                                hide_key = f"hide_{buku['id_buku']}"
+                                st.markdown(
+                                    f"""
+                                    <span style="color:#007bff; cursor:pointer; text-decoration:underline;"
+                                          onClick="document.getElementById('{hide_key}').click()">
+                                          Sembunyikan
+                                    </span>
+                                    """,
+                                    unsafe_allow_html=True,
+                                )
+                                st.button(" ", key=hide_key, on_click=lambda: st.session_state.update({desc_key: False}), label_visibility="collapsed")
+                        
                             else:
-                                if len(full_desc) > 80:
-                                    st.markdown(
-                                        f"""
-                                        <div class='book-desc'>
-                                            {short_desc}
-                                            <span style='color:#007bff; cursor:pointer; text-decoration:underline;'
-                                                  onclick="fetch('/_stcore/_session_state?key={desc_key}&value=true',{{
-                                                  method:'POST'}}).then(()=>window.location.reload())">
-                                                  Lihat selengkapnya
-                                            </span>
-                                        </div>
-                                        """,
-                                        unsafe_allow_html=True,
-                                    )
-                                else:
-                                    st.markdown(f"<div class='book-desc'>{full_desc}</div>", unsafe_allow_html=True)
+                                st.markdown(
+                                    f"""
+                                    <div style="font-size: 14px; line-height: 1.5; display:inline;">
+                                        {short_desc}
+                                    </div>
+                                    <span style="color:#007bff; cursor:pointer; text-decoration:underline;"
+                                          onClick="document.getElementById('show_{buku['id_buku']}').click()">
+                                          Lihat selengkapnya
+                                    </span>
+                                    """,
+                                    unsafe_allow_html=True,
+                                )
+                                st.button(" ", key=f"show_{buku['id_buku']}", on_click=lambda: st.session_state.update({desc_key: True}), label_visibility="collapsed")
 
                         if buku.get("pdf_url") and buku["pdf_url"].strip():
                             try:
