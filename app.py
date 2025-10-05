@@ -122,7 +122,7 @@ section[data-testid="stSidebar"]{display:none !important;}
 }
 
 .desc-summary {
-    font-size: 13px;
+    font-size: 20px;
     color: #a52828;
     cursor: pointer;
     user-select: none;
