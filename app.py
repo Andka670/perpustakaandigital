@@ -198,13 +198,13 @@ if st.session_state.page == "daftarbuku":
                         st.markdown(f"<div class='book-meta'>✍️ {buku['penulis']} | 📅 {buku['tahun']} | 🏷️ {buku.get('genre','-')} | 📦 Stok: {buku.get('stok','-')}</div>", unsafe_allow_html=True)
                         if buku.get("deskripsi"):
                             full_desc = buku["deskripsi"]
-                            short_desc = full_desc[:100] + ("..." if len(full_desc) > 100 else "")
+                            short_desc = full_desc[:40] + ("..." if len(full_desc) > 40 else "")
                             desc_key = f"desc_expand_{buku['id_buku']}"
-                
+                            
                             # inisialisasi state
                             if desc_key not in st.session_state:
                                 st.session_state[desc_key] = False
-                
+                        
                             if st.session_state[desc_key]:
                                 # tampilkan deskripsi lengkap
                                 st.markdown(
@@ -223,9 +223,10 @@ if st.session_state.page == "daftarbuku":
                                     """,
                                     unsafe_allow_html=True,
                                 )
-                                if len(full_desc) > 100:
+                                if len(full_desc) > 40:
                                     if st.button("🔽 Lihat selengkapnya", key=f"show_{buku['id_buku']}", use_container_width=True):
                                         st.session_state[desc_key] = True
+
 
                         if buku.get("pdf_url") and buku["pdf_url"].strip():
                             try:
