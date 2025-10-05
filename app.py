@@ -206,23 +206,29 @@ if st.session_state.page == "daftarbuku":
                             if desc_key not in st.session_state:
                                 st.session_state[desc_key] = False
                         
-                            # CSS tombol kecil
+                            # CSS khusus tombol deskripsi (berdasarkan key)
                             st.markdown("""
                                 <style>
-                                .mini-btn {
-                                    background-color: #f0f0f0;
-                                    border: 0px solid #ccc;
-                                    border-radius: 1px;
-                                    padding: -10px -10px;
-                                    font-size: 12px;
-                                    cursor: pointer;
+                                /* hanya tombol deskripsi lengkap (🔽 / 🔼) yang kecil */
+                                div[data-testid="stButton"][key^="show_"] > button,
+                                div[data-testid="stButton"][key^="hide_"] > button {
+                                    min-height: 25px !important;
+                                    font-size: 12px !important;
+                                    padding: 2px 6px !important;
+                                    border-radius: 6px !important;
+                                    width: auto !important;
+                                    background-color: #f0f0f0 !important;
+                                    color: black !important;
+                                    border: 1px solid #ccc !important;
                                     transition: 0.2s;
                                 }
-                                .mini-btn:hover {
-                                    background-color: #e0e0e0;
+                                div[data-testid="stButton"][key^="show_"] > button:hover,
+                                div[data-testid="stButton"][key^="hide_"] > button:hover {
+                                    background-color: #e0e0e0 !important;
                                 }
                                 </style>
                             """, unsafe_allow_html=True)
+
                         
                             # tampilkan deskripsi
                             col_desc, col_btn = st.columns([4, 2])
