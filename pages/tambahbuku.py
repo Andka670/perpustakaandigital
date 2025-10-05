@@ -226,12 +226,17 @@ if "edit" in st.session_state:
     st.markdown("---")
     st.subheader(f"📖 Mengedit: **{book_edit.get('judul', 'Tanpa Judul')}** (ID: {book_edit.get('id_buku', '-')})")
 
+
     # Preview cover lama (jika ada)
     if book_edit.get("cover_url"):
         try:
-            cover_public_url = supabase.storage.from_("uploads").get_public_url(book_edit["cover_url"]).get("publicUrl")
+            # Ambil URL publik dari Supabase Storage
+            cover_url_dict = supabase.storage.from_("uploads").get_public_url(book_edit["cover_url"])
+            cover_public_url = cover_url_dict.get("public_url")
             if cover_public_url:
                 st.image(cover_public_url, caption="Cover Saat Ini", width=200)
+            else:
+                st.info("⚠️ Cover belum tersedia di storage.")
         except Exception as e:
             st.warning(f"⚠️ Tidak bisa menampilkan cover: {e}")
 
