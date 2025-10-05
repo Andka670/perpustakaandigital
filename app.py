@@ -354,34 +354,35 @@ if st.session_state.page == "peminjamansaya":
             })
         
         df = pd.DataFrame(table_data)
-        # Fungsi pewarnaan baris dan kolom denda
+        # Fungsi pewarnaan baris
         def color_row(row):
+            # Cek nilai denda
+            try:
+                denda_value = int(str(row.get("Denda","Rp 0")).replace("Rp ","").replace(",",""))
+            except:
+                denda_value = 0
+        
+            if denda_value > 0:
+                # Seluruh baris merah kalau ada denda
+                return ["background-color: #f8d7da; color: #721c24; font-weight:bold;"] * len(row)
+        
+            # Kalau tidak ada denda, beri warna berdasarkan status
             styles = [""] * len(row)
             ajuan = str(row.get("Ajuan", "")).lower()
             status = str(row.get("Status", "")).lower()
-            
-            # warna baris berdasarkan status, tapi hanya untuk kolom selain Denda
-            for i, col in enumerate(row.index):
-                if col != "Denda":
-                    if ajuan == "menunggu":
-                        styles[i] = "background-color: #fff3cd; color: #856404; font-weight:bold;"
-                    elif ajuan == "disetujui" and status == "dipinjam":
-                        styles[i] = "background-color: #d4edda; color: #155724; font-weight:bold;"
-                    elif status == "sudah dikembalikan":
-                        styles[i] = "background-color: #cce5ff; color: #004085; font-weight:bold;"
-                    elif ajuan == "ditolak":
-                        styles[i] = "background-color: #f8d7da; color: #721c24; font-weight:bold;"
         
-            # warna kolom Denda merah jika ada denda
-            try:
-                denda_value = int(str(row.get("Denda","Rp 0")).replace("Rp ","").replace(",",""))
-                if denda_value > 0:
-                    col_idx = row.index.get_loc("Denda")
-                    styles[col_idx] = "background-color: #f8d7da; color: #721c24; font-weight:bold;"
-            except:
-                pass
+            for i, col in enumerate(row.index):
+                if ajuan == "menunggu":
+                    styles[i] = "background-color: #fff3cd; color: #856404; font-weight:bold;"
+                elif ajuan == "disetujui" and status == "dipinjam":
+                    styles[i] = "background-color: #d4edda; color: #155724; font-weight:bold;"
+                elif status == "sudah dikembalikan":
+                    styles[i] = "background-color: #cce5ff; color: #004085; font-weight:bold;"
+                elif ajuan == "ditolak":
+                    styles[i] = "background-color: #f8d7da; color: #721c24; font-weight:bold;"
         
             return styles
+        
         st.dataframe(df.style.apply(color_row, axis=1), use_container_width=True)
 
 
