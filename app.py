@@ -116,8 +116,6 @@ div[data-testid="stButton"]>button{width:100%;min-height:50px;padding:15px 0;bor
 div[data-testid="stButton"]>button:hover{background-color:#45a049;transform:scale(1.05);}
 div[data-testid="stButton"]>button:active{transform:scale(0.95);}
 section[data-testid="stSidebar"]{display:none !important;}
-st.markdown("""
-<style>
 .desc-box {
     margin-top: 4px;
     margin-bottom: 6px;
@@ -140,8 +138,6 @@ st.markdown("""
     margin-top: 4px;
     line-height: 1.4;
 }
-</style>
-""", unsafe_allow_html=True)
 
 .book-card{display:flex;flex-direction:column;justify-content:space-between;height:100%;padding:12px;border-radius:14px;background:brown;box-shadow:0 3px 8px rgba(0,0,0,0.1);animation:fadeIn 0.6s ease-in-out;}
 .cover-box{width:100%;aspect-ratio:3/4;overflow:hidden;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,0.2);margin-bottom:10px;}
