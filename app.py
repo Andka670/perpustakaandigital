@@ -197,10 +197,24 @@ if st.session_state.page == "daftarbuku":
                         st.markdown(f"<div class='book-title'>{buku['judul']}</div>", unsafe_allow_html=True)
                         st.markdown(f"<div class='book-meta'>✍️ {buku['penulis']} | 📅 {buku['tahun']} | 🏷️ {buku.get('genre','-')} | 📦 Stok: {buku.get('stok','-')}</div>", unsafe_allow_html=True)
                         if buku.get("deskripsi"):
-                            deskripsi_pendek = buku["deskripsi"][:150]+("..." if len(buku["deskripsi"])>150 else "")
-                            st.markdown(f"<div class='book-desc'>{deskripsi_pendek}</div>", unsafe_allow_html=True)
-                            with st.expander("📖 Selengkapnya"):
-                                st.write(buku["deskripsi"])
+                            full_desc = buku["deskripsi"]
+                            short_desc = full_desc[:150] + ("..." if len(full_desc) > 150 else "")
+                            desc_key = f"show_full_{buku['id_buku']}"
+                            if desc_key not in st.session_state:
+                                st.session_state[desc_key] = False
+                        
+                            # Tampilkan deskripsi pendek atau penuh
+                            if st.session_state[desc_key]:
+                                st.markdown(f"<div class='book-desc'>{full_desc}</div>", unsafe_allow_html=True)
+                                if st.button("⬅️ Sembunyikan", key=f"hide_{buku['id_buku']}"):
+                                    st.session_state[desc_key] = False
+                                    st.rerun()
+                            else:
+                                st.markdown(f"<div class='book-desc'>{short_desc}</div>", unsafe_allow_html=True)
+                                if len(full_desc) > 150:
+                                    if st.button("📖 Lihat Selengkapnya", key=f"show_{buku['id_buku']}"):
+                                        st.session_state[desc_key] = True
+                                        st.rerun()
                         if buku.get("pdf_url") and buku["pdf_url"].strip():
                             try:
                                 signed_pdf = supabase.storage.from_("uploads").create_signed_url(buku["pdf_url"],3600)["signedURL"]
