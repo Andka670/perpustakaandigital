@@ -69,6 +69,12 @@ def load_theme_css():
         .cloud.medium {width:150px; height:75px;}
         .cloud.small {width:100px; height:50px;}
         @keyframes moveClouds {0% {left:-300px;} 100% {left:110%;}}
+        /* Input & Selectbox */
+        div[data-baseweb="select"], div[data-baseweb="input"] {
+            border-radius: 12px;
+            border: 2px solid brown;
+            padding: 5px;
+        }
         </style>
         <div class="sun"></div>
         <div class="cloud large" style="top:120px; left:10%;"></div>
