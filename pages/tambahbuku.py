@@ -13,8 +13,11 @@ supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 # CSS dan Animasi
 # ----------------------------
 st.markdown(""" <style>
+/* Hilangkan sidebar */
 section[data-testid="stSidebar"] {display: none !important;}
 div[data-testid="collapsedControl"] {display: none !important;}
+
+/* Perlebar container utama */
 .block-container {
     max-width: 79% !important;
     padding-left: 5% !important;
@@ -26,6 +29,18 @@ div[data-testid="collapsedControl"] {display: none !important;}
     padding-bottom: 50px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
 }
+/* Title Animasi */
+@keyframes titleFadeIn {
+    0% {opacity:0; transform:translateY(-20px) scale(0.9);}
+    50% {opacity:0.5; transform:translateY(0) scale(1.05);}
+    100% {opacity:1; transform:translateY(0) scale(1);}
+}
+@keyframes gradientText {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
 .main-title {
     text-align:center;
     font-size:52px;
@@ -37,6 +52,7 @@ div[data-testid="collapsedControl"] {display: none !important;}
     animation: titleFadeIn 1.2s ease-in-out, gradientText 6s ease infinite;
     text-shadow: 0px 0px 8px rgba(165,42,42,0.5);
 }
+/* Tombol navigasi */
 div[data-testid="stButton"] > button {
     min-height: 75px;
     width: 100% !important;
@@ -61,6 +77,8 @@ div[data-testid="stButton"] > button:active {
     transform: scale(0.95);
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
+
+/* Animasi teks judul */
 .animated-title {
     font-size: 40px;
     font-weight: bold;
@@ -75,9 +93,10 @@ div[data-testid="stButton"] > button:active {
     100% { transform: translateX(-20px); color: #333; }
 }
 </style> """, unsafe_allow_html=True)
-
-st.markdown("<div class='main-title'>Admin Perpustakaan</div><br>", unsafe_allow_html=True)
-
+st.markdown(
+    "<div class='main-title'>Admin Perpustakaan</div><br>",
+    unsafe_allow_html=True
+)
 # ----------------------------
 # Navigasi horizontal
 # ----------------------------
@@ -121,21 +140,30 @@ if submitted:
         st.warning("⚠️ Mohon lengkapi semua kolom yang wajib.")
     else:
         try:
-            cover_url = None
-            pdf_url = None
+            cover_path = None
+            pdf_path = None
 
-            if file_cover:
+            # Upload cover
+            if file_cover is not None:
                 file_bytes = file_cover.read()
-                file_name = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{file_cover.name}"
-                supabase.storage.from_("uploads").upload(f"covers/{file_name}", file_bytes, {"content-type": file_cover.type})
-                cover_url = supabase.storage.from_("uploads").get_public_url(f"covers/{file_name}").public_url
+                cover_path = f"covers/{datetime.now().strftime('%Y%m%d%H%M%S')}_{file_cover.name}"
+                supabase.storage.from_("uploads").upload(
+                    cover_path,
+                    file_bytes,
+                    {"content-type": file_cover.type}
+                )
 
-            if file_pdf:
+            # Upload PDF
+            if file_pdf is not None:
                 file_bytes = file_pdf.read()
-                file_name = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{file_pdf.name}"
-                supabase.storage.from_("uploads").upload(f"pdfs/{file_name}", file_bytes, {"content-type": "application/pdf"})
-                pdf_url = supabase.storage.from_("uploads").get_public_url(f"pdfs/{file_name}").public_url
+                pdf_path = f"pdfs/{datetime.now().strftime('%Y%m%d%H%M%S')}_{file_pdf.name}"
+                supabase.storage.from_("uploads").upload(
+                    pdf_path,
+                    file_bytes,
+                    {"content-type": "application/pdf"}
+                )
 
+            # Simpan data buku
             supabase.table("buku").insert({
                 "judul": judul,
                 "penulis": penulis,
@@ -143,18 +171,19 @@ if submitted:
                 "stok": int(stok),
                 "genre": genre,
                 "deskripsi": deskripsi,
-                "cover_url": cover_url,
-                "pdf_url": pdf_url
+                "cover_url": cover_path,   # simpan path
+                "pdf_url": pdf_path        # simpan path
             }).execute()
             st.success("✅ Buku baru berhasil ditambahkan!")
         except Exception as e:
             st.error(f"❌ Terjadi kesalahan: {e}")
 
 # ----------------------------
-# Update Stok
+# Form Update Stok Buku
 # ----------------------------
 st.markdown('<hr>', unsafe_allow_html=True)
 st.subheader("📦 Update Stok Buku")
+
 try:
     buku_list = supabase.table("buku").select("id_buku, judul, stok").execute().data
     if buku_list:
