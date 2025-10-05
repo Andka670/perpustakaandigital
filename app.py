@@ -205,33 +205,32 @@ if st.session_state.page == "daftarbuku":
                             # inisialisasi state
                             if desc_key not in st.session_state:
                                 st.session_state[desc_key] = False
-                        
-                            # CSS khusus tombol deskripsi (berdasarkan key)
                             st.markdown("""
                                 <style>
-                                /* Tombol kecil khusus tombol 'lihat' */
-                                div[data-testid="stButton"] > button:has(span:contains('lihat')),
+                                /* Tombol kecil elegan untuk deskripsi */
                                 div[data-testid="stButton"][key^="show_"] > button,
                                 div[data-testid="stButton"][key^="hide_"] > button {
-                                    min-height: 2px !important;
-                                    padding: 0px 0px !important;
-                                    font-size: 3px !important;
-                                    border-radius: 0px !important;
+                                    min-height: 20px !important;
+                                    padding: 1px 8px !important;
+                                    font-size: 10px !important;
+                                    line-height: 1 !important;
+                                    border-radius: 6px !important;
                                     width: auto !important;
-                                    background-color: #a52828 !important;  /* warna merah tua */
+                                    background-color: #b22a2a !important;
                                     color: white !important;
                                     border: none !important;
-                                    margin-top: 2px !important;
-                                    margin-bottom: 4px !important;
+                                    margin-top: 1px !important;
+                                    margin-bottom: 2px !important;
                                     transition: 0.2s;
                                 }
-                                div[data-testid="stButton"] > button:has(span:contains('lihat')):hover,
                                 div[data-testid="stButton"][key^="show_"] > button:hover,
                                 div[data-testid="stButton"][key^="hide_"] > button:hover {
-                                    background-color: #c53737 !important;
+                                    background-color: #d03c3c !important;
+                                    transform: scale(1.03);
                                 }
                                 </style>
                             """, unsafe_allow_html=True)
+
 
 
                         
