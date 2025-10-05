@@ -260,7 +260,7 @@ elif st.session_state.page == "peminjamansaya":
         with st.form("form_peminjaman"):
             buku_options = {b["judul"]: b["id_buku"] for b in buku_data}
             pilih_buku = st.selectbox("Pilih Buku", list(buku_options.keys()))
-            nomor_hp = st.text_input("Nomor HP")
+            nomor = st.text_input("Nomor HP")
             alamat = st.text_area("Alamat")
             tanggal_pinjam = datetime.now().date()
             tanggal_kembali = tanggal_pinjam + pd.Timedelta(days=7)
@@ -280,7 +280,7 @@ elif st.session_state.page == "peminjamansaya":
                         "tanggal_pinjam": str(tanggal_pinjam),
                         "tanggal_kembali": str(tanggal_kembali),
                         "status": "dipinjam",
-                        "nomor_hp": nomor_hp,
+                        "nomor": nomor,
                         "alamat": alamat
                     }).execute()
                     # Kurangi stok buku
