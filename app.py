@@ -112,26 +112,37 @@ st.markdown("""
 h1,h2,h3,h4{color:brown !important;}
 @keyframes inputFadeIn{0%{opacity:0;transform:translateY(10px) scale(0.95);}100%{opacity:1;transform:translateY(0) scale(1);}}
 .input-animate{animation:inputFadeIn 0.8s ease-in-out;}
-
-.desc-container {
-    font-size: 13px;
-    color: #333;
-}
-.tiny-link {
-    color: #a52828;
-    font-size: 10px;
-    margin-left: 6px;
-    cursor: pointer;
-    user-select: none;
-    text-decoration: underline;
-}
-.tiny-link:hover {
-    color: #d23b3b;
-}
 div[data-testid="stButton"]>button{width:100%;min-height:50px;padding:15px 0;border-radius:20px;font-size:16px;font-weight:bold;background-color:brown;color:white;border:none;margin-right:5px;transition:all 0.3s ease;}
 div[data-testid="stButton"]>button:hover{background-color:#45a049;transform:scale(1.05);}
 div[data-testid="stButton"]>button:active{transform:scale(0.95);}
 section[data-testid="stSidebar"]{display:none !important;}
+st.markdown("""
+<style>
+.desc-box {
+    margin-top: 4px;
+    margin-bottom: 6px;
+}
+
+.desc-summary {
+    font-size: 10px;
+    color: #a52828;
+    cursor: pointer;
+    user-select: none;
+}
+
+.desc-summary:hover {
+    color: #d23b3b;
+}
+
+.desc-text {
+    font-size: 13px;
+    color: #333;
+    margin-top: 4px;
+    line-height: 1.4;
+}
+</style>
+""", unsafe_allow_html=True)
+
 .book-card{display:flex;flex-direction:column;justify-content:space-between;height:100%;padding:12px;border-radius:14px;background:brown;box-shadow:0 3px 8px rgba(0,0,0,0.1);animation:fadeIn 0.6s ease-in-out;}
 .cover-box{width:100%;aspect-ratio:3/4;overflow:hidden;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,0.2);margin-bottom:10px;}
 .cover-box img{width:100%;height:100%;object-fit:cover;}
@@ -216,30 +227,12 @@ if st.session_state.page == "daftarbuku":
                         if buku.get("deskripsi"):
                             full_desc = buku["deskripsi"]
                             short_desc = full_desc[:40] + ("..." if len(full_desc) > 40 else "")
-                            desc_id = f"desc_{buku['id_buku']}"  # buat ID unik untuk tiap buku
                         
                             st.markdown(f"""
-                                <div class="desc-container">
-                                    <span id="{desc_id}_short">{short_desc}</span>
-                                    <span id="{desc_id}_full" style="display:none;">{full_desc}</span>
-                                    <span class="tiny-link" onclick="toggleDesc('{desc_id}')">lihat</span>
-                                </div>
-                                <script>
-                                function toggleDesc(id) {{
-                                    var shortEl = window.parent.document.getElementById(id + '_short');
-                                    var fullEl = window.parent.document.getElementById(id + '_full');
-                                    var btn = window.parent.document.querySelector('[onclick="toggleDesc(\\'' + id + '\\')"]');
-                                    if (shortEl.style.display === 'none') {{
-                                        shortEl.style.display = 'inline';
-                                        fullEl.style.display = 'none';
-                                        btn.innerText = 'lihat';
-                                    }} else {{
-                                        shortEl.style.display = 'none';
-                                        fullEl.style.display = 'inline';
-                                        btn.innerText = 'tutup';
-                                    }}
-                                }}
-                                </script>
+                                <details class="desc-box">
+                                    <summary class="desc-summary">lihat deskripsi</summary>
+                                    <p class="desc-text">{full_desc}</p>
+                                </details>
                             """, unsafe_allow_html=True)
 
 #PDF
