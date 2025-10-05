@@ -124,23 +124,17 @@ if submitted:
             cover_path = None
             pdf_path = None
 
-            if file_cover is not None:
+            if file_cover:
                 file_bytes = file_cover.read()
-                cover_path = f"https://bcalrkqeeoaalfpjrwvx.supabase.co/storage/v1/object/public/uploads/covers/{datetime.now().strftime('%Y%m%d%H%M%S')}_{file_cover.name}"
-                supabase.storage.from_("uploads").upload(
-                    f"covers/{datetime.now().strftime('%Y%m%d%H%M%S')}_{file_cover.name}",
-                    file_bytes,
-                    {"content-type": file_cover.type}
-                )
+                file_name = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{file_cover.name}"
+                supabase.storage.from_("uploads").upload(f"covers/{file_name}", file_bytes, {"content-type": file_cover.type})
+                cover_path = f"https://bcalrkqeeoaalfpjrwvx.supabase.co/storage/v1/object/public/uploads/covers/{file_name}"
 
-            if file_pdf is not None:
+            if file_pdf:
                 file_bytes = file_pdf.read()
-                pdf_path = f"https://bcalrkqeeoaalfpjrwvx.supabase.co/storage/v1/object/public/uploads/pdfs/{datetime.now().strftime('%Y%m%d%H%M%S')}_{file_pdf.name}"
-                supabase.storage.from_("uploads").upload(
-                    f"pdfs/{datetime.now().strftime('%Y%m%d%H%M%S')}_{file_pdf.name}",
-                    file_bytes,
-                    {"content-type": "application/pdf"}
-                )
+                file_name = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{file_pdf.name}"
+                supabase.storage.from_("uploads").upload(f"pdfs/{file_name}", file_bytes, {"content-type": "application/pdf"})
+                pdf_path = f"https://bcalrkqeeoaalfpjrwvx.supabase.co/storage/v1/object/public/uploads/pdfs/{file_name}"
 
             supabase.table("buku").insert({
                 "judul": judul,
@@ -183,7 +177,7 @@ except Exception as e:
 st.markdown('<hr>', unsafe_allow_html=True)
 st.subheader("✏️ Ubah Detail Buku")
 try:
-    buku_list = supabase.table("buku").select("id_buku, judul, cover_url, pdf_url").execute().data
+    buku_list = supabase.table("buku").select("id_buku, judul, genre, tahun, stok, deskripsi, cover_url, pdf_url, penulis").execute().data
     if buku_list:
         buku_dict = {f"{b['judul']} (ID: {b['id_buku']})": b for b in buku_list}
         selected_buku = st.selectbox("Pilih Buku untuk Diubah", list(buku_dict.keys()), key="pilih_buku_ubah")
@@ -201,11 +195,17 @@ if "edit" in st.session_state:
 
     # Preview cover lama
     if book_edit.get("cover_url"):
-        st.image(book_edit["cover_url"], caption="Cover Saat Ini", width=200)
+        try:
+            st.image(book_edit["cover_url"], caption="Cover Saat Ini", width=200)
+        except Exception as e:
+            st.warning(f"⚠️ Tidak bisa menampilkan cover: {e}")
 
     # Preview PDF lama
     if book_edit.get("pdf_url"):
-        st.markdown(f"[📄 PDF Saat Ini]({book_edit['pdf_url']})", unsafe_allow_html=True)
+        try:
+            st.markdown(f"[📄 PDF Saat Ini]({book_edit['pdf_url']})", unsafe_allow_html=True)
+        except Exception as e:
+            st.warning(f"⚠️ Tidak bisa menampilkan PDF: {e}")
 
     # Input edit
     edit_judul = st.text_input("Judul Baru", value=book_edit.get("judul", ""), key="edit_judul")
@@ -236,23 +236,15 @@ if "edit" in st.session_state:
 
         if new_cover:
             file_bytes = new_cover.read()
-            cover_path = f"https://bcalrkqeeoaalfpjrwvx.supabase.co/storage/v1/object/public/uploads/covers/{datetime.now().strftime('%Y%m%d%H%M%S')}_{new_cover.name}"
-            supabase.storage.from_("uploads").upload(
-                f"covers/{datetime.now().strftime('%Y%m%d%H%M%S')}_{new_cover.name}",
-                file_bytes,
-                {"content-type": new_cover.type}
-            )
-            update_data["cover_url"] = cover_path
+            file_name = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{new_cover.name}"
+            supabase.storage.from_("uploads").upload(f"covers/{file_name}", file_bytes, {"content-type": new_cover.type})
+            update_data["cover_url"] = f"https://bcalrkqeeoaalfpjrwvx.supabase.co/storage/v1/object/public/uploads/covers/{file_name}"
 
         if new_pdf:
             file_bytes = new_pdf.read()
-            pdf_path = f"https://bcalrkqeeoaalfpjrwvx.supabase.co/storage/v1/object/public/uploads/pdfs/{datetime.now().strftime('%Y%m%d%H%M%S')}_{new_pdf.name}"
-            supabase.storage.from_("uploads").upload(
-                f"pdfs/{datetime.now().strftime('%Y%m%d%H%M%S')}_{new_pdf.name}",
-                file_bytes,
-                {"content-type": "application/pdf"}
-            )
-            update_data["pdf_url"] = pdf_path
+            file_name = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{new_pdf.name}"
+            supabase.storage.from_("uploads").upload(f"pdfs/{file_name}", file_bytes, {"content-type": "application/pdf"})
+            update_data["pdf_url"] = f"https://bcalrkqeeoaalfpjrwvx.supabase.co/storage/v1/object/public/uploads/pdfs/{file_name}"
 
         supabase.table("buku").update(update_data).eq("id_buku", book_edit.get("id_buku")).execute()
         st.success(f"✅ Buku '{edit_judul}' berhasil diperbarui!")
