@@ -189,10 +189,22 @@ try:
     if buku_list:
         buku_dict = {f"{b['judul']} (stok: {b['stok']})": b for b in buku_list}
         selected_buku = st.selectbox("Pilih Buku", list(buku_dict.keys()))
-        jumlah_tambah = st.number_input("Jumlah Tambahan Stok", min_value=1, step=1)
+
+        # Pilih aksi: tambah atau kurang stok
+        aksi = st.radio("Aksi Stok", ["Tambah", "Kurangi"])
+        jumlah = st.number_input("Jumlah", min_value=1, step=1)
+
         if st.button("Update Stok"):
             buku = buku_dict[selected_buku]
-            new_stok = buku["stok"] + int(jumlah_tambah)
+            if aksi == "Tambah":
+                new_stok = buku["stok"] + int(jumlah)
+            else:  # Kurangi stok
+                if jumlah > buku["stok"]:
+                    st.warning(f"⚠️ Jumlah pengurangan melebihi stok saat ini ({buku['stok']})!")
+                    new_stok = buku["stok"]
+                else:
+                    new_stok = buku["stok"] - int(jumlah)
+
             supabase.table("buku").update({"stok": new_stok}).eq("id_buku", buku["id_buku"]).execute()
             st.success(f"✅ Stok buku '{buku['judul']}' berhasil diperbarui menjadi {new_stok}")
     else:
