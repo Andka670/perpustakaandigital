@@ -244,11 +244,64 @@ if st.session_state.page == "daftarbuku":
 # =====================================================
 elif st.session_state.page == "peminjamansaya":
     st.title("📋 Peminjaman Saya")
+
+    # ------------------------------
+    # Form Peminjaman Buku Baru
+    # ------------------------------
+    st.subheader("📝 Form Peminjaman Buku Baru")
+    try:
+        # Ambil daftar buku yang masih tersedia (stok > 0)
+        buku_data = supabase.table("buku").select("id_buku, judul, stok").gt("stok", 0).execute().data
+    except Exception as e:
+        buku_data = []
+        st.error(f"❌ Gagal mengambil daftar buku: {e}")
+
+    if buku_data:
+        with st.form("form_peminjaman"):
+            buku_options = {b["judul"]: b["id_buku"] for b in buku_data}
+            pilih_buku = st.selectbox("Pilih Buku", list(buku_options.keys()))
+            nomor_hp = st.text_input("Nomor HP")
+            alamat = st.text_area("Alamat")
+            tanggal_pinjam = datetime.now().date()
+            tanggal_kembali = tanggal_pinjam + pd.Timedelta(days=7)
+            st.markdown(f"**Tanggal Pinjam:** {tanggal_pinjam}  |  **Tanggal Kembali:** {tanggal_kembali}")
+            
+            submit_pinjam = st.form_submit_button("📌 Pinjam Buku")
+
+        if submit_pinjam:
+            if not nomor_hp.strip() or not alamat.strip():
+                st.error("⚠️ Nomor HP dan alamat wajib diisi!")
+            else:
+                try:
+                    # Insert ke tabel peminjaman
+                    supabase.table("peminjaman").insert({
+                        "id_user": user["id_user"],
+                        "id_buku": buku_options[pilih_buku],
+                        "tanggal_pinjam": str(tanggal_pinjam),
+                        "tanggal_kembali": str(tanggal_kembali),
+                        "status": "dipinjam",
+                        "nomor_hp": nomor_hp,
+                        "alamat": alamat
+                    }).execute()
+                    # Kurangi stok buku
+                    supabase.table("buku").update({"stok": supabase.table("buku").select("stok").eq("id_buku", buku_options[pilih_buku]).execute().data[0]["stok"] - 1}).eq("id_buku", buku_options[pilih_buku]).execute()
+                    st.success(f"✅ Buku '{pilih_buku}' berhasil dipinjam!")
+                except Exception as e:
+                    st.error(f"❌ Gagal meminjam buku: {e}")
+    else:
+        st.info("ℹ️ Tidak ada buku yang tersedia untuk dipinjam.")
+
+    st.markdown("<hr>", unsafe_allow_html=True)
+
+    # ------------------------------
+    # Tampilkan Daftar Peminjaman
+    # ------------------------------
     try:
         pinjam_data = supabase.table("peminjaman").select("*, buku(judul, penulis, tahun, genre)").eq("id_user", user["id_user"]).order("tanggal_pinjam", desc=True).execute().data
     except Exception as e:
         pinjam_data = []
         st.error(f"❌ Gagal mengambil data peminjaman: {e}")
+    
     if not pinjam_data:
         st.info("ℹ️ Kamu belum pernah meminjam buku.")
     else:
