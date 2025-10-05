@@ -224,34 +224,24 @@ if st.session_state.page == "daftarbuku":
                                 </style>
                             """, unsafe_allow_html=True)
                         
-                            if st.session_state[desc_key]:
-                                # tampilkan deskripsi lengkap dengan tombol kecil di samping
-                                col_desc, col_btn = st.columns([4, 1])
-                                with col_desc:
-                                    st.markdown(
-                                        f"<div style='font-size:14px; line-height:1.5; text-align:justify;'>{full_desc}</div>",
-                                        unsafe_allow_html=True,
-                                    )
-                                with col_btn:
-                                    hide_key = f"hide_{buku['id_buku']}"
-                                    if st.button("🔼", key=hide_key):
-                                        st.session_state[desc_key] = False
-                                    st.markdown("<button class='mini-btn'>🔼</button>", unsafe_allow_html=True)
+                            # tampilkan deskripsi
+                            col_desc, col_btn = st.columns([4, 1])
+                            with col_desc:
+                                st.markdown(
+                                    f"<div style='font-size:14px; line-height:1.5; text-align:justify;'>"
+                                    f"{full_desc if st.session_state[desc_key] else short_desc}"
+                                    f"</div>",
+                                    unsafe_allow_html=True,
+                                )
                         
-                            else:
-                                # tampilkan deskripsi singkat dengan tombol kecil di samping
-                                col_desc, col_btn = st.columns([4, 1])
-                                with col_desc:
-                                    st.markdown(
-                                        f"<div style='font-size:14px; line-height:1.5; text-align:justify;'>{short_desc}</div>",
-                                        unsafe_allow_html=True,
-                                    )
-                                with col_btn:
-                                    if len(full_desc) > 40:
-                                        show_key = f"show_{buku['id_buku']}"
-                                        if st.button("🔽", key=show_key):
+                            with col_btn:
+                                if len(full_desc) > 40:
+                                    if st.session_state[desc_key]:
+                                        if st.button("🔼", key=f"hide_{buku['id_buku']}"):
+                                            st.session_state[desc_key] = False
+                                    else:
+                                        if st.button("🔽", key=f"show_{buku['id_buku']}"):
                                             st.session_state[desc_key] = True
-                                        st.markdown("<button class='mini-btn'>🔽</button>", unsafe_allow_html=True)
 
 #PDF
                         if buku.get("pdf_url") and buku["pdf_url"].strip():
