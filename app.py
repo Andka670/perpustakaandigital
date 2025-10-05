@@ -352,41 +352,6 @@ elif st.session_state.page == "peminjamansaya":
 
         st.dataframe(df.style.apply(color_row, axis=1), use_container_width=True)
 
-    # ------------------------------
-    # Tampilkan Daftar Peminjaman
-    # ------------------------------
-    try:
-        pinjam_data = supabase.table("peminjaman").select("*, buku(judul, penulis, tahun, genre)").eq("id_user", user["id_user"]).order("tanggal_pinjam", desc=True).execute().data
-    except Exception as e:
-        pinjam_data = []
-        st.error(f"❌ Gagal mengambil data peminjaman: {e}")
-    
-    if not pinjam_data:
-        st.info("ℹ️ Kamu belum pernah meminjam buku.")
-    else:
-        table_data = []
-        for p in pinjam_data:
-            buku = p.get("buku", {})
-            table_data.append({
-                "Judul Buku": buku.get("judul","(Tanpa Judul)"),
-                "Penulis": buku.get("penulis","-"),
-                "Tahun": buku.get("tahun","-"),
-                "Genre": buku.get("genre","-"),
-                "Tanggal Pinjam": p["tanggal_pinjam"],
-                "Tanggal Kembali": p.get("tanggal_kembali","-"),
-                "Status": p["status"],
-                "Denda (Rp)": p.get("denda",0)
-            })
-        df = pd.DataFrame(table_data)
-        def color_denda(row):
-            styles = [""] * len(df.columns)
-            if row["Denda (Rp)"] > 0:
-                if row["Status"].lower() == "dipinjam":
-                    styles = ["background-color: #ffcccc; color: brown; font-weight: bold;"] * len(df.columns)
-                elif row["Status"].lower() == "sudah dikembalikan":
-                    styles = ["background-color: #d9ffd9; color: green; font-weight: bold;"] * len(df.columns)
-            return styles
-        st.dataframe(df.style.apply(color_denda,axis=1), use_container_width=True)
 
 # =====================================================
 # Halaman Profil
