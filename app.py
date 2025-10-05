@@ -134,7 +134,7 @@ section[data-testid="stSidebar"]{display:none !important;}
 
 .desc-text {
     font-size: 20px;
-    color: #333;
+    color: brown;
     margin-top: 4px;
     line-height: 1.4;
 }
