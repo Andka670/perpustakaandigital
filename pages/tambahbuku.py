@@ -206,24 +206,36 @@ except Exception as e:
 st.markdown('<hr>', unsafe_allow_html=True)
 st.subheader("✏️ Ubah Detail Buku")
 
+# Ambil daftar buku untuk dipilih
 try:
     buku_list = supabase.table("buku").select("id_buku, judul").execute().data
     if buku_list:
-        buku_dict = {b["judul"]: b for b in buku_list}
-        selected_judul = st.selectbox("Pilih Buku untuk Diubah", list(buku_dict.keys()), key="pilih_buku_ubah")
+        buku_dict = {f"{b['judul']} (ID: {b['id_buku']})": b for b in buku_list}
+        selected_buku = st.selectbox("Pilih Buku untuk Diubah", list(buku_dict.keys()), key="pilih_buku_ubah")
 
         if st.button("Pilih Buku"):
-            st.session_state.edit = buku_dict[selected_judul]
+            st.session_state.edit = buku_dict[selected_buku]
     else:
         st.info("Belum ada data buku untuk diubah.")
 except Exception as e:
     st.error(f"❌ Gagal memuat daftar buku: {e}")
 
+# Form edit detail buku
 if "edit" in st.session_state:
     book_edit = st.session_state.edit
     st.markdown("---")
-    st.subheader(f"📖 Mengedit: **{book_edit.get('judul', 'Tanpa Judul')}**")
+    st.subheader(f"📖 Mengedit: **{book_edit.get('judul', 'Tanpa Judul')}** (ID: {book_edit.get('id_buku', '-')})")
 
+    # Preview cover lama (jika ada)
+    if book_edit.get("cover_url"):
+        try:
+            cover_public_url = supabase.storage.from_("uploads").get_public_url(book_edit["cover_url"]).get("publicUrl")
+            if cover_public_url:
+                st.image(cover_public_url, caption="Cover Saat Ini", width=200)
+        except Exception as e:
+            st.warning(f"⚠️ Tidak bisa menampilkan cover: {e}")
+
+    # Input edit buku
     edit_judul = st.text_input("Judul Baru", value=book_edit.get("judul", ""), key="edit_judul")
     edit_penulis = st.text_input("Penulis Baru", value=book_edit.get("penulis", ""), key="edit_penulis")
     edit_tahun = st.number_input("Tahun Terbit Baru", value=book_edit.get("tahun", 2000), key="edit_tahun")
