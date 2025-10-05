@@ -259,7 +259,7 @@ elif st.session_state.page == "peminjamansaya":
         with st.form("form_peminjaman"):
             buku_options = {b["judul"]: b["id_buku"] for b in buku_data}
             pilih_buku = st.selectbox("Pilih Buku", list(buku_options.keys()))
-            nomor_hp = st.text_input("Nomor HP")
+            nomor = st.text_input("Nomor HP")
             alamat = st.text_area("Alamat")
             tanggal_pinjam = datetime.now().date()
             tanggal_kembali = tanggal_pinjam + pd.Timedelta(days=7)
@@ -279,7 +279,7 @@ elif st.session_state.page == "peminjamansaya":
                         "tanggal_kembali": str(tanggal_kembali),
                         "ajuan": "menunggu",
                         "status": "-",  # Belum diproses admin
-                        "nomor_hp": nomor_hp,
+                        "nomor": nomor,
                         "alamat": alamat,
                         "created_at": datetime.now().isoformat()  # untuk urutan antrean
                     }).execute()
