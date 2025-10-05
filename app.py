@@ -219,7 +219,7 @@ if st.session_state.page == "daftarbuku":
                                         background:none !important;
                                         color:#007bff !important;
                                         border:none !important;
-                                        padding:0;
+                                        padding:100;
                                         font-size:13px;
                                         text-decoration:underline;
                                         cursor:pointer;
