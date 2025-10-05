@@ -209,25 +209,30 @@ if st.session_state.page == "daftarbuku":
                             # CSS khusus tombol deskripsi (berdasarkan key)
                             st.markdown("""
                                 <style>
-                                /* hanya tombol deskripsi lengkap (lihat / tutup) yang kecil */
+                                /* Tombol kecil khusus tombol 'lihat' */
+                                div[data-testid="stButton"] > button:has(span:contains('lihat')),
                                 div[data-testid="stButton"][key^="show_"] > button,
                                 div[data-testid="stButton"][key^="hide_"] > button {
-                                    min-height: 5px !important;
-                                    font-size: 3px !important;
-                                    padding: 2px 6px !important;
-                                    border-radius: 6px !important;
+                                    min-height: 25px !important;
+                                    padding: 2px 10px !important;
+                                    font-size: 12px !important;
+                                    border-radius: 8px !important;
                                     width: auto !important;
-                                    background-color: #f0f0f0 !important;
-                                    color: black !important;
-                                    border: 1px solid #ccc !important;
+                                    background-color: #a52828 !important;  /* warna merah tua */
+                                    color: white !important;
+                                    border: none !important;
+                                    margin-top: 2px !important;
+                                    margin-bottom: 4px !important;
                                     transition: 0.2s;
                                 }
+                                div[data-testid="stButton"] > button:has(span:contains('lihat')):hover,
                                 div[data-testid="stButton"][key^="show_"] > button:hover,
                                 div[data-testid="stButton"][key^="hide_"] > button:hover {
-                                    background-color: #e0e0e0 !important;
+                                    background-color: #c53737 !important;
                                 }
                                 </style>
                             """, unsafe_allow_html=True)
+
 
                         
                             # tampilkan deskripsi
