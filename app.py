@@ -212,8 +212,8 @@ if st.session_state.page == "daftarbuku":
                                 .mini-btn {
                                     background-color: #f0f0f0;
                                     border: 1px solid #ccc;
-                                    border-radius: 6px;
-                                    padding: 2px 6px;
+                                    border-radius: 3px;
+                                    padding: 1px 1px;
                                     font-size: 12px;
                                     cursor: pointer;
                                     transition: 0.2s;
