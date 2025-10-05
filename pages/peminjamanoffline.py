@@ -110,7 +110,7 @@ st.markdown(
 # ----------------------------
 menu_options = {
     "📚 Tambah/Ubah Buku": "pages/tambahbuku.py",
-    "📋 Tabel User&Buku": "pages/daftarpeminjaman.py",
+    "📋 Data Buku&User": "pages/daftarpeminjaman.py",
     "🖊️ Peminjaman Offline": "pages/peminjamanoffline.py",
     "🔄 Pengembalian": "pages/pengembalian.py",
     "⚙️ Settings": "pages/settings.py"
