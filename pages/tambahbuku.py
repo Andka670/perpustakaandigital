@@ -228,7 +228,8 @@ try:
     # Ambil daftar buku
     buku_list = supabase.table("buku").select("id_buku, judul").execute().data
     if buku_list:
-        buku_dict = {b['judul']: b for b in buku_list}
+        # Tampilkan ID buku di selectbox
+        buku_dict = {f"{b['id_buku']} - {b['judul']}": b for b in buku_list}
         selected_buku = st.selectbox("Pilih Buku yang ingin dihapus", list(buku_dict.keys()))
 
         if st.button("Hapus Buku"):
@@ -238,7 +239,7 @@ try:
             peminjaman = supabase.table("peminjaman").select("id_peminjaman, status").eq("id_buku", buku["id_buku"]).execute().data
             
             if peminjaman:
-                masih_dipinjam = any(p["status"] != "dikembalikan" for p in peminjaman)
+                masih_dipinjam = any(p["status"] != "sudah dikembalikan" for p in peminjaman)
                 if masih_dipinjam:
                     st.warning(f"⚠️ Buku '{buku['judul']}' masih dipinjam, tidak bisa dihapus!")
                 else:
@@ -246,15 +247,16 @@ try:
                     supabase.table("peminjaman").delete().eq("id_buku", buku["id_buku"]).execute()
                     # Hapus buku
                     supabase.table("buku").delete().eq("id_buku", buku["id_buku"]).execute()
-                    st.success(f"✅ Buku '{buku['judul']}' beserta riwayat peminjamannya berhasil dihapus.")
+                    st.success(f"✅ Buku '{buku['judul']}' (ID: {buku['id_buku']}) beserta riwayat peminjamannya berhasil dihapus.")
             else:
                 # Tidak ada peminjaman, langsung hapus buku
                 supabase.table("buku").delete().eq("id_buku", buku["id_buku"]).execute()
-                st.success(f"✅ Buku '{buku['judul']}' berhasil dihapus.")
+                st.success(f"✅ Buku '{buku['judul']}' (ID: {buku['id_buku']}) berhasil dihapus.")
     else:
         st.info("Belum ada data buku.")
 except Exception as e:
     st.error(f"❌ Gagal menghapus buku: {e}")
+
 
 # ----------------------------
 # Ubah Detail Buku
