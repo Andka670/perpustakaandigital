@@ -201,7 +201,7 @@ except Exception as e:
     st.error(f"❌ Gagal mengambil data buku: {e}")
 
 # ----------------------------
-# Form ubah detail buku (pakai selectbox)
+# Form ubah detail buku 
 # ----------------------------
 st.markdown('<hr>', unsafe_allow_html=True)
 st.subheader("✏️ Ubah Detail Buku")
@@ -222,19 +222,20 @@ except Exception as e:
 if "edit" in st.session_state:
     book_edit = st.session_state.edit
     st.markdown("---")
-    st.subheader(f"📖 Mengedit: **{book_edit['judul']}**")
+    st.subheader(f"📖 Mengedit: **{book_edit.get('judul', 'Tanpa Judul')}**")
 
-    edit_judul = st.text_input("Judul Baru", value=book_edit["judul"], key="edit_judul")
-    edit_penulis = st.text_input("Penulis Baru", value=book_edit["penulis"], key="edit_penulis")
-    edit_tahun = st.number_input("Tahun Terbit Baru", value=book_edit["tahun"], key="edit_tahun")
-    edit_stok = st.number_input("Stok Baru", value=book_edit["stok"], key="edit_stok")
+    edit_judul = st.text_input("Judul Baru", value=book_edit.get("judul", ""), key="edit_judul")
+    edit_penulis = st.text_input("Penulis Baru", value=book_edit.get("penulis", ""), key="edit_penulis")
+    edit_tahun = st.number_input("Tahun Terbit Baru", value=book_edit.get("tahun", 2000), key="edit_tahun")
+    edit_stok = st.number_input("Stok Baru", value=book_edit.get("stok", 1), key="edit_stok")
     edit_genre = st.selectbox(
         "Genre Baru",
         genre_options,
-        index=genre_options.index(book_edit["genre"]) if book_edit.get("genre") in genre_options else 0,
+        index=genre_options.index(book_edit.get("genre", genre_options[0])) 
+        if book_edit.get("genre") in genre_options else 0,
         key="edit_genre"
     )
-    edit_deskripsi = st.text_area("Deskripsi Baru", value=book_edit["deskripsi"], key="edit_deskripsi")
+    edit_deskripsi = st.text_area("Deskripsi Baru", value=book_edit.get("deskripsi", ""), key="edit_deskripsi")
 
     # Upload cover/pdf baru
     new_cover = st.file_uploader("Upload Cover Baru (jpg/png)", type=["jpg", "png"], key="edit_cover")
@@ -273,9 +274,10 @@ if "edit" in st.session_state:
             update_data["pdf_url"] = pdf_path
 
         # Update data ke database
-        supabase.table("buku").update(update_data).eq("id_buku", book_edit["id_buku"]).execute()
+        supabase.table("buku").update(update_data).eq("id_buku", book_edit.get("id_buku")).execute()
         st.success(f"✅ Buku '{edit_judul}' berhasil diperbarui!")
         del st.session_state.edit
+
 
 # =====================================================
 # Footer
