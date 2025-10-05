@@ -267,10 +267,13 @@ elif st.session_state.page == "peminjamansaya":
             })
         df = pd.DataFrame(table_data)
         def color_denda(row):
-            if row["Denda (Rp)"]>0:
-                if row["Status"].lower()=="dipinjam": return ["color:red" if col=="Denda (Rp)" else "" for col in df.columns]
-                elif row["Status"].lower()=="sudah dikembalikan": return ["color:green" if col=="Denda (Rp)" else "" for col in df.columns]
-            return [""]*len(df.columns)
+            styles = [""] * len(df.columns)
+            if row["Denda (Rp)"] > 0:
+                if row["Status"].lower() == "dipinjam":
+                    styles = ["background-color: #ffcccc; color: brown; font-weight: bold;"] * len(df.columns)
+                elif row["Status"].lower() == "sudah dikembalikan":
+                    styles = ["background-color: #d9ffd9; color: green; font-weight: bold;"] * len(df.columns)
+            return styles
         st.dataframe(df.style.apply(color_denda,axis=1), use_container_width=True)
 
 # =====================================================
