@@ -198,58 +198,35 @@ if st.session_state.page == "daftarbuku":
                         st.markdown(f"<div class='book-meta'>✍️ {buku['penulis']} | 📅 {buku['tahun']} | 🏷️ {buku.get('genre','-')} | 📦 Stok: {buku.get('stok','-')}</div>", unsafe_allow_html=True)
                         if buku.get("deskripsi"):
                             full_desc = buku["deskripsi"]
-                            short_desc = full_desc[:80] + ("..." if len(full_desc) > 80 else "")
-                            desc_key = f"show_full_{buku['id_buku']}"
-                        
+                            short_desc = full_desc[:100] + ("..." if len(full_desc) > 100 else "")
+                            desc_key = f"desc_expand_{buku['id_buku']}"
+                
+                            # inisialisasi state
                             if desc_key not in st.session_state:
                                 st.session_state[desc_key] = False
-                        
-                            # CSS untuk menyembunyikan tombol Streamlit
-                            st.markdown("""
-                                <style>
-                                .hidden-btn button {
-                                    background: none;
-                                    border: none;
-                                    color: transparent;
-                                    height: 0;
-                                    padding: 0;
-                                    margin: 0;
-                                }
-                                </style>
-                            """, unsafe_allow_html=True)
-                        
+                
                             if st.session_state[desc_key]:
-                                st.markdown(f"<div style='font-size:14px; line-height:1.5;'>{full_desc}</div>", unsafe_allow_html=True)
-                        
-                                hide_key = f"hide_{buku['id_buku']}"
+                                # tampilkan deskripsi lengkap
                                 st.markdown(
-                                    f"""
-                                    <span style="color:#007bff; cursor:pointer; text-decoration:underline;"
-                                          onClick="document.getElementById('{hide_key}').click()">
-                                          Sembunyikan
-                                    </span>
-                                    """,
+                                    f"<div class='book-desc' style='font-size:14px; line-height:1.5; text-align:justify;'>{full_desc}</div>",
                                     unsafe_allow_html=True,
                                 )
-                                with st.container():
-                                    st.button(" ", key=hide_key, on_click=lambda: st.session_state.update({desc_key: False}), help="hide", type="secondary", use_container_width=False)
+                                if st.button("🔼 Sembunyikan", key=f"hide_{buku['id_buku']}", use_container_width=True):
+                                    st.session_state[desc_key] = False
                             else:
+                                # tampilkan deskripsi singkat + tombol selengkapnya
                                 st.markdown(
                                     f"""
-                                    <div style="font-size:14px; line-height:1.5; display:inline;">
+                                    <div class='book-desc' style='font-size:14px; line-height:1.5; text-align:justify; display:inline;'>
                                         {short_desc}
                                     </div>
-                                    <span style="color:#007bff; cursor:pointer; text-decoration:underline;"
-                                          onClick="document.getElementById('show_{buku['id_buku']}').click()">
-                                          Lihat selengkapnya
-                                    </span>
                                     """,
                                     unsafe_allow_html=True,
                                 )
-                                with st.container():
-                                    st.markdown("<div class='hidden-btn'>", unsafe_allow_html=True)
-                                    st.button(" ", key=f"show_{buku['id_buku']}", on_click=lambda: st.session_state.update({desc_key: True}), help="show")
-                                    st.markdown("</div>", unsafe_allow_html=True)
+                                if len(full_desc) > 100:
+                                    if st.button("🔽 Lihat selengkapnya", key=f"show_{buku['id_buku']}", use_container_width=True):
+                                        st.session_state[desc_key] = True
+
                         if buku.get("pdf_url") and buku["pdf_url"].strip():
                             try:
                                 signed_pdf = supabase.storage.from_("uploads").create_signed_url(buku["pdf_url"],3600)["signedURL"]
