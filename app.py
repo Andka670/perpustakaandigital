@@ -382,8 +382,7 @@ if st.session_state.page == "peminjamansaya":
                 pass
         
             return styles
-
-
+        st.dataframe(df.style.apply(color_row, axis=1), use_container_width=True)
 
 
 # =====================================================
