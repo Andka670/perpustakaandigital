@@ -206,35 +206,29 @@ if st.session_state.page == "daftarbuku":
                                 st.session_state[desc_key] = False
                         
                             if st.session_state[desc_key]:
-                                # tampilkan deskripsi lengkap + cover kecil di samping
-                                st.markdown(
-                                    f"""
-                                    <div style='display:flex; align-items:flex-start; gap:10px;'>
-                                        <img src='{signed_cover}' style='width:80px; height:auto; border-radius:8px;'/>
-                                        <div style='font-size:14px; line-height:1.5; text-align:justify;'>{full_desc}</div>
-                                    </div>
-                                    """,
-                                    unsafe_allow_html=True,
-                                )
-                                if st.button("🔼 Sembunyikan", key=f"hide_{buku['id_buku']}", use_container_width=True):
-                                    st.session_state[desc_key] = False
+                                # tampilkan deskripsi lengkap dengan tombol di samping
+                                col_desc, col_btn = st.columns([4, 1])
+                                with col_desc:
+                                    st.markdown(
+                                        f"<div style='font-size:14px; line-height:1.5; text-align:justify;'>{full_desc}</div>",
+                                        unsafe_allow_html=True,
+                                    )
+                                with col_btn:
+                                    if st.button("🔼", key=f"hide_{buku['id_buku']}"):
+                                        st.session_state[desc_key] = False
+                        
                             else:
-                                # tampilkan deskripsi singkat
-                                st.markdown(
-                                    f"""
-                                    <div style='display:flex; align-items:flex-start; gap:10px;'>
-                                        <img src='{signed_cover}' style='width:60px; height:auto; border-radius:8px;'/>
-                                        <div style='font-size:14px; line-height:1.5; text-align:justify;'>
-                                            {short_desc}
-                                        </div>
-                                    </div>
-                                    """,
-                                    unsafe_allow_html=True,
-                                )
-                                if len(full_desc) > 40:
-                                    if st.button("🔽 Lihat selengkapnya", key=f"show_{buku['id_buku']}", use_container_width=True):
-                                        st.session_state[desc_key] = True
-
+                                # tampilkan deskripsi singkat dengan tombol di samping
+                                col_desc, col_btn = st.columns([4, 1])
+                                with col_desc:
+                                    st.markdown(
+                                        f"<div style='font-size:14px; line-height:1.5; text-align:justify;'>{short_desc}</div>",
+                                        unsafe_allow_html=True,
+                                    )
+                                with col_btn:
+                                    if len(full_desc) > 40:
+                                        if st.button("🔽", key=f"show_{buku['id_buku']}"):
+                                            st.session_state[desc_key] = True
 
                         if buku.get("pdf_url") and buku["pdf_url"].strip():
                             try:
