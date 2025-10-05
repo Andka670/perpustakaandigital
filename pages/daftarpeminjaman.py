@@ -237,47 +237,49 @@ except Exception as e:
     st.error(f"❌ Gagal mengambil data peminjaman: {e}")
 
 # ----------------------------
-# Tabel Buku + Pencarian
+# Tabel Buku + Filter Selectbox
 # ----------------------------
 st.subheader("📚 Daftar Buku")
 
 try:
     buku_data = supabase.table("buku").select("*").execute().data
     if buku_data:
-        # Input pencarian
-        search_query = st.text_input("🔍 Cari Buku (berdasarkan judul, penulis, genre, atau tahun):").lower().strip()
+        # Buat DataFrame dari data buku
+        df_buku = pd.DataFrame(buku_data)
 
-        buku_table = []
-        for b in buku_data:
-            buku_table.append({
-                "ID Buku": b["id_buku"],
-                "Judul": b["judul"],
-                "Penulis": b["penulis"],
-                "Tahun": b["tahun"],
-                "Stok": b["stok"],
-                "Genre": b["genre"],
-                "Deskripsi": b["deskripsi"]
-            })
+        # Ambil nilai unik untuk filter
+        genre_list = ["Semua"] + sorted(df_buku["genre"].dropna().unique().tolist())
+        penulis_list = ["Semua"] + sorted(df_buku["penulis"].dropna().unique().tolist())
+        tahun_list = ["Semua"] + sorted(df_buku["tahun"].dropna().unique().tolist())
 
-        df_buku = pd.DataFrame(buku_table)
+        # Buat kolom filter
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            selected_genre = st.selectbox("🎭 Pilih Genre", genre_list)
+        with col2:
+            selected_penulis = st.selectbox("✍️ Pilih Penulis", penulis_list)
+        with col3:
+            selected_tahun = st.selectbox("📅 Pilih Tahun", tahun_list)
 
-        # Filter hasil pencarian
-        if search_query:
-            df_buku = df_buku[
-                df_buku.apply(
-                    lambda row: search_query in str(row["Judul"]).lower()
-                    or search_query in str(row["Penulis"]).lower()
-                    or search_query in str(row["Genre"]).lower()
-                    or search_query in str(row["Tahun"]).lower(),
-                    axis=1
-                )
-            ]
+        # Filter DataFrame sesuai pilihan
+        df_filtered = df_buku.copy()
 
-        # Tampilkan hasil
-        if not df_buku.empty:
-            st.dataframe(df_buku, use_container_width=True)
+        if selected_genre != "Semua":
+            df_filtered = df_filtered[df_filtered["genre"] == selected_genre]
+        if selected_penulis != "Semua":
+            df_filtered = df_filtered[df_filtered["penulis"] == selected_penulis]
+        if selected_tahun != "Semua":
+            df_filtered = df_filtered[df_filtered["tahun"] == selected_tahun]
+
+        # Pilih kolom yang ingin ditampilkan
+        df_filtered = df_filtered[["id_buku", "judul", "penulis", "tahun", "stok", "genre", "deskripsi"]]
+        df_filtered.columns = ["ID Buku", "Judul", "Penulis", "Tahun", "Stok", "Genre", "Deskripsi"]
+
+        # Tampilkan hasil filter
+        if not df_filtered.empty:
+            st.dataframe(df_filtered, use_container_width=True)
         else:
-            st.warning("📭 Tidak ditemukan buku yang cocok dengan pencarian.")
+            st.warning("📭 Tidak ada buku yang sesuai dengan filter yang dipilih.")
     else:
         st.info("📭 Belum ada data buku.")
 except Exception as e:
