@@ -241,173 +241,118 @@ if st.session_state.page == "daftarbuku":
 # =====================================================
 # Halaman Peminjaman Saya
 # =====================================================
-if st.session_state.page == "peminjamansaya":
-    st.title("📋 Peminjaman Saya")
+st.title("📋 Peminjaman Saya")
 
-    # Form Ajukan Peminjaman Baru
-    st.subheader("📝 Ajukan Peminjaman Buku Baru")
-    try:
-        buku_data = supabase.table("buku").select("id_buku, judul, stok").gt("stok", 0).execute().data
-    except Exception as e:
-        buku_data = []
-        st.error(f"❌ Gagal mengambil daftar buku: {e}")
+# =====================================================
+# Form Ajukan Peminjaman Baru
+# =====================================================
+st.subheader("📝 Ajukan Peminjaman Buku Baru")
+try:
+    buku_data = supabase.table("buku").select("id_buku, judul, stok").gt("stok", 0).execute().data
+except Exception as e:
+    buku_data = []
+    st.error(f"❌ Gagal mengambil daftar buku: {e}")
 
-    if buku_data:
-        with st.form("form_peminjaman"):
-            buku_options = {b["judul"]: b["id_buku"] for b in buku_data}
-            pilih_buku = st.selectbox("Pilih Buku", list(buku_options.keys()))
-            nomor = st.text_input("Nomor HP")
-            alamat = st.text_area("Alamat")
-            tanggal_pinjam = datetime.now().date()
-            tanggal_kembali = tanggal_pinjam + pd.Timedelta(days=7)
-            st.markdown(f"**Tanggal Pinjam:** {tanggal_pinjam}  |  **Tanggal Kembali:** {tanggal_kembali}")
+if buku_data:
+    with st.form("form_peminjaman"):
+        buku_options = {b["judul"]: b["id_buku"] for b in buku_data}
+        pilih_buku = st.selectbox("Pilih Buku", list(buku_options.keys()))
+        nomor = st.text_input("Nomor HP")
+        alamat = st.text_area("Alamat")
+        tanggal_pinjam = datetime.now().date()
+        tanggal_kembali = tanggal_pinjam + pd.Timedelta(days=7)
+        st.markdown(f"**Tanggal Pinjam:** {tanggal_pinjam}  |  **Tanggal Kembali:** {tanggal_kembali}")
 
-            submit_pinjam = st.form_submit_button("📌 Ajukan Peminjaman")
+        submit_pinjam = st.form_submit_button("📌 Ajukan Peminjaman")
 
-        if submit_pinjam:
-            if not nomor.strip() or not alamat.strip():
-                st.error("⚠️ Nomor HP dan alamat wajib diisi!")
-            else:
-                try:
-                    supabase.table("peminjaman").insert({
-                        "id_user": user["id_user"],
-                        "id_buku": buku_options[pilih_buku],
-                        "tanggal_pinjam": str(tanggal_pinjam),
-                        "tanggal_kembali": str(tanggal_kembali),
-                        "ajuan": "menunggu",
-                        "status": "-",  # belum diproses admin
-                        "nomor": nomor,
-                        "alamat": alamat,
-                        "created_at": datetime.now().isoformat()  # untuk urutan antrean
-                    }).execute()
-                    st.success(f"✅ Permintaan peminjaman buku '{pilih_buku}' berhasil diajukan. Tunggu persetujuan admin.")
-                except Exception as e:
-                    st.error(f"❌ Gagal mengajukan peminjaman: {e}")
-    else:
-        st.info("ℹ️ Tidak ada buku yang tersedia untuk diajukan.")
+    if submit_pinjam:
+        if not nomor.strip() or not alamat.strip():
+            st.error("⚠️ Nomor HP dan alamat wajib diisi!")
+        else:
+            try:
+                supabase.table("peminjaman").insert({
+                    "id_user": user["id_user"],
+                    "id_buku": buku_options[pilih_buku],
+                    "tanggal_pinjam": str(tanggal_pinjam),
+                    "tanggal_kembali": str(tanggal_kembali),
+                    "ajuan": "menunggu",
+                    "status": "-",  # belum diproses admin
+                    "nomor": nomor,
+                    "alamat": alamat,
+                    "created_at": datetime.now().isoformat()  # untuk urutan antrean
+                }).execute()
+                st.success(f"✅ Permintaan peminjaman buku '{pilih_buku}' berhasil diajukan. Tunggu persetujuan admin.")
+            except Exception as e:
+                st.error(f"❌ Gagal mengajukan peminjaman: {e}")
+else:
+    st.info("ℹ️ Tidak ada buku yang tersedia untuk diajukan.")
 
-    st.markdown("<hr>", unsafe_allow_html=True)
+st.markdown("<hr>", unsafe_allow_html=True)
 
-    # Daftar Peminjaman User
-    st.subheader("📖 Riwayat Peminjaman")
-    try:
-        pinjam_data = supabase.table("peminjaman").select("*, buku(judul, penulis, tahun, genre)")\
-            .eq("id_user", user["id_user"]).order("created_at", desc=True).execute().data
-    except Exception as e:
-        pinjam_data = []
-        st.error(f"❌ Gagal mengambil data peminjaman: {e}")
+# =====================================================
+# Daftar Peminjaman User
+# =====================================================
+st.subheader("📖 Riwayat Peminjaman")
+try:
+    pinjam_data = supabase.table("peminjaman")\
+        .select("*, buku(judul, penulis, tahun, genre)")\
+        .eq("id_user", user["id_user"])\
+        .order("created_at", ascending=False)\
+        .execute().data
+except Exception as e:
+    pinjam_data = []
+    st.error(f"❌ Gagal mengambil data peminjaman: {e}")
 
-    if not pinjam_data:
-        st.info("ℹ️ Kamu belum pernah mengajukan peminjaman.")
-    else:
-        # Hitung antrean berdasarkan created_at
-        for p in pinjam_data:
-            if p.get("ajuan","") == "menunggu":
-                antrian_data = supabase.table("peminjaman")\
-                    .select("id_user, id_peminjaman")\
-                    .eq("id_buku", p["id_buku"])\
-                    .eq("ajuan", "menunggu")\
-                    .order("created_at", asc=True)\
-                    .execute().data
-                posisi = next((i+1 for i, x in enumerate(antrian_data) if x["id_peminjaman"] == p["id_peminjaman"]), None)
-                p["antrian"] = f"{posisi} dari {len(antrian_data)}"
-            else:
-                p["antrian"] = "-"
+if not pinjam_data:
+    st.info("ℹ️ Kamu belum pernah mengajukan peminjaman.")
+else:
+    # Hitung antrean berdasarkan created_at
+    for p in pinjam_data:
+        if p.get("ajuan","") == "menunggu":
+            antrian_data = supabase.table("peminjaman")\
+                .select("id_user, id_peminjaman")\
+                .eq("id_buku", p["id_buku"])\
+                .eq("ajuan", "menunggu")\
+                .order("created_at", ascending=True)\
+                .execute().data
+            posisi = next((i+1 for i, x in enumerate(antrian_data) if x["id_peminjaman"] == p["id_peminjaman"]), None)
+            p["antrian"] = f"{posisi} dari {len(antrian_data)}"
+        else:
+            p["antrian"] = "-"
 
-        # Tampilkan DataFrame
-        table_data = []
-        for p in pinjam_data:
-            buku = p.get("buku", {})
-            table_data.append({
-                "Judul Buku": buku.get("judul","(Tanpa Judul)"),
-                "Penulis": buku.get("penulis","-"),
-                "Tahun": buku.get("tahun","-"),
-                "Genre": buku.get("genre","-"),
-                "Tanggal Pinjam": p.get("tanggal_pinjam","-"),
-                "Tanggal Kembali": p.get("tanggal_kembali","-"),
-                "Ajuan": p.get("ajuan","-"),
-                "Status": p.get("status","-"),
-                "Antrian": p.get("antrian","-"),
-                "Nomor HP": p.get("nomor","-"),
-                "Alamat": p.get("alamat","-")
-            })
-        df = pd.DataFrame(table_data)
+    # Buat DataFrame untuk ditampilkan
+    table_data = []
+    for p in pinjam_data:
+        buku = p.get("buku", {})
+        table_data.append({
+            "Judul Buku": buku.get("judul","(Tanpa Judul)"),
+            "Penulis": buku.get("penulis","-"),
+            "Tahun": buku.get("tahun","-"),
+            "Genre": buku.get("genre","-"),
+            "Tanggal Pinjam": p.get("tanggal_pinjam","-"),
+            "Tanggal Kembali": p.get("tanggal_kembali","-"),
+            "Ajuan": p.get("ajuan","-"),
+            "Status": p.get("status","-"),
+            "Antrian": p.get("antrian","-"),
+            "Nomor HP": p.get("nomor","-"),
+            "Alamat": p.get("alamat","-")
+        })
+    df = pd.DataFrame(table_data)
 
-        # Fungsi pewarnaan baris
-        def color_row(row):
-            styles = [""] * len(df.columns)
-            if row["Ajuan"].lower() == "menunggu":
-                styles = ["background-color: #fff3cd; color: #856404; font-weight:bold;"] * len(df.columns)
-            elif row["Ajuan"].lower() == "disetujui" and row["Status"].lower() == "dipinjam":
-                styles = ["background-color: #d4edda; color: #155724; font-weight:bold;"] * len(df.columns)
-            elif row["Status"].lower() == "sudah dikembalikan":
-                styles = ["background-color: #cce5ff; color: #004085; font-weight:bold;"] * len(df.columns)
-            elif row["Ajuan"].lower() == "ditolak":
-                styles = ["background-color: #f8d7da; color: #721c24; font-weight:bold;"] * len(df.columns)
-            return styles
+    # Fungsi pewarnaan baris
+    def color_row(row):
+        styles = [""] * len(df.columns)
+        if row["Ajuan"].lower() == "menunggu":
+            styles = ["background-color: #fff3cd; color: #856404; font-weight:bold;"] * len(df.columns)
+        elif row["Ajuan"].lower() == "disetujui" and row["Status"].lower() == "dipinjam":
+            styles = ["background-color: #d4edda; color: #155724; font-weight:bold;"] * len(df.columns)
+        elif row["Status"].lower() == "sudah dikembalikan":
+            styles = ["background-color: #cce5ff; color: #004085; font-weight:bold;"] * len(df.columns)
+        elif row["Ajuan"].lower() == "ditolak":
+            styles = ["background-color: #f8d7da; color: #721c24; font-weight:bold;"] * len(df.columns)
+        return styles
 
-        st.dataframe(df.style.apply(color_row, axis=1), use_container_width=True)
-    # ------------------------------
-    # Daftar Peminjaman User
-    # ------------------------------
-    st.subheader("📖 Riwayat Peminjaman")
-    try:
-        pinjam_data = supabase.table("peminjaman").select("*, buku(judul, penulis, tahun, genre)").eq("id_user", user["id_user"]).order("created_at", desc=True).execute().data
-    except Exception as e:
-        pinjam_data = []
-        st.error(f"❌ Gagal mengambil data peminjaman: {e}")
-    
-    if not pinjam_data:
-        st.info("ℹ️ Kamu belum pernah mengajukan peminjaman.")
-    else:
-        # Hitung antrean berdasarkan id_peminjaman
-        for p in pinjam_data:
-            if p.get("ajuan","") == "menunggu":
-                antrian_data = supabase.table("peminjaman")\
-                    .select("id_user, id_peminjaman")\
-                    .eq("id_buku", p["id_buku"])\
-                    .eq("ajuan", "menunggu")\
-                    .order("id_peminjaman", asc=True)\
-                    .execute().data
-                posisi = next((i+1 for i, x in enumerate(antrian_data) if x["id_peminjaman"] == p["id_peminjaman"]), None)
-                p["antrian"] = f"{posisi} dari {len(antrian_data)}"
-            else:
-                p["antrian"] = "-"
-
-        # Buat DataFrame untuk ditampilkan
-        table_data = []
-        for p in pinjam_data:
-            buku = p.get("buku", {})
-            table_data.append({
-                "Judul Buku": buku.get("judul","(Tanpa Judul)"),
-                "Penulis": buku.get("penulis","-"),
-                "Tahun": buku.get("tahun","-"),
-                "Genre": buku.get("genre","-"),
-                "Tanggal Pinjam": p.get("tanggal_pinjam","-"),
-                "Tanggal Kembali": p.get("tanggal_kembali","-"),
-                "Ajuan": p.get("ajuan","-"),
-                "Status": p.get("status","-"),
-                "Antrian": p.get("antrian","-"),
-                "Nomor HP": p.get("nomor_hp","-"),
-                "Alamat": p.get("alamat","-")
-            })
-        df = pd.DataFrame(table_data)
-
-        # Fungsi pewarnaan baris
-        def color_row(row):
-            styles = [""] * len(df.columns)
-            if row["Ajuan"].lower() == "menunggu":
-                styles = ["background-color: #fff3cd; color: #856404; font-weight:bold;"] * len(df.columns)
-            elif row["Ajuan"].lower() == "disetujui" and row["Status"].lower() == "dipinjam":
-                styles = ["background-color: #d4edda; color: #155724; font-weight:bold;"] * len(df.columns)
-            elif row["Status"].lower() == "sudah dikembalikan":
-                styles = ["background-color: #cce5ff; color: #004085; font-weight:bold;"] * len(df.columns)
-            elif row["Ajuan"].lower() == "ditolak":
-                styles = ["background-color: #f8d7da; color: #721c24; font-weight:bold;"] * len(df.columns)
-            return styles
-
-        st.dataframe(df.style.apply(color_row, axis=1), use_container_width=True)
-
+    st.dataframe(df.style.apply(color_row, axis=1), use_container_width=True)
 
 # =====================================================
 # Halaman Profil
