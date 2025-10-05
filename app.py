@@ -233,24 +233,23 @@ if st.session_state.page == "daftarbuku":
                                 )
                                 with st.container():
                                     st.button(" ", key=hide_key, on_click=lambda: st.session_state.update({desc_key: False}), help="hide", type="secondary", use_container_width=False)
-
-                                else:
-                                    st.markdown(
-                                        f"""
-                                        <div style="font-size:14px; line-height:1.5; display:inline;">
-                                            {short_desc}
-                                        </div>
-                                        <span style="color:#007bff; cursor:pointer; text-decoration:underline;"
-                                              onClick="document.getElementById('show_{buku['id_buku']}').click()">
-                                              Lihat selengkapnya
-                                        </span>
-                                        """,
-                                        unsafe_allow_html=True,
-                                    )
-                                    with st.container():
-                                        st.markdown("<div class='hidden-btn'>", unsafe_allow_html=True)
-                                        st.button(" ", key=f"show_{buku['id_buku']}", on_click=lambda: st.session_state.update({desc_key: True}), help="show")
-                                        st.markdown("</div>", unsafe_allow_html=True)
+                            else:
+                                st.markdown(
+                                    f"""
+                                    <div style="font-size:14px; line-height:1.5; display:inline;">
+                                        {short_desc}
+                                    </div>
+                                    <span style="color:#007bff; cursor:pointer; text-decoration:underline;"
+                                          onClick="document.getElementById('show_{buku['id_buku']}').click()">
+                                          Lihat selengkapnya
+                                    </span>
+                                    """,
+                                    unsafe_allow_html=True,
+                                )
+                                with st.container():
+                                    st.markdown("<div class='hidden-btn'>", unsafe_allow_html=True)
+                                    st.button(" ", key=f"show_{buku['id_buku']}", on_click=lambda: st.session_state.update({desc_key: True}), help="show")
+                                    st.markdown("</div>", unsafe_allow_html=True)
                         if buku.get("pdf_url") and buku["pdf_url"].strip():
                             try:
                                 signed_pdf = supabase.storage.from_("uploads").create_signed_url(buku["pdf_url"],3600)["signedURL"]
