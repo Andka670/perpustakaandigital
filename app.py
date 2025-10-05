@@ -295,7 +295,6 @@ if st.session_state.page == "peminjamansaya":
     # ----------------------------
     st.subheader("📖 Riwayat Peminjaman")
     try:
-        # URUT ASCENDING berdasarkan created_at
         pinjam_data = supabase.table("peminjaman")\
             .select("*, buku(judul, penulis, tahun, genre)")\
             .eq("id_user", user["id_user"])\
@@ -310,7 +309,7 @@ if st.session_state.page == "peminjamansaya":
     else:
         # Hitung antrean berdasarkan created_at
         for p in pinjam_data:
-            if p.get("ajuan","") == "menunggu":
+            if str(p.get("ajuan","")).lower() == "menunggu":
                 try:
                     antrian_data = supabase.table("peminjaman")\
                         .select("id_user, id_peminjaman")\
@@ -344,20 +343,25 @@ if st.session_state.page == "peminjamansaya":
             })
         df = pd.DataFrame(table_data)
     
-        # Fungsi pewarnaan baris
+        # Fungsi pewarnaan baris yang aman untuk None/NaN
         def color_row(row):
-            styles = [""] * len(df.columns)
-            if row["Ajuan"].lower() == "menunggu":
-                styles = ["background-color: #fff3cd; color: #856404; font-weight:bold;"] * len(df.columns)
-            elif row["Ajuan"].lower() == "disetujui" and row["Status"].lower() == "dipinjam":
-                styles = ["background-color: #d4edda; color: #155724; font-weight:bold;"] * len(df.columns)
-            elif row["Status"].lower() == "sudah dikembalikan":
-                styles = ["background-color: #cce5ff; color: #004085; font-weight:bold;"] * len(df.columns)
-            elif row["Ajuan"].lower() == "ditolak":
-                styles = ["background-color: #f8d7da; color: #721c24; font-weight:bold;"] * len(df.columns)
+            styles = [""] * len(row)
+            ajuan = str(row.get("Ajuan", "")).lower()
+            status = str(row.get("Status", "")).lower()
+            
+            if ajuan == "menunggu":
+                styles = ["background-color: #fff3cd; color: #856404; font-weight:bold;"] * len(row)
+            elif ajuan == "disetujui" and status == "dipinjam":
+                styles = ["background-color: #d4edda; color: #155724; font-weight:bold;"] * len(row)
+            elif status == "sudah dikembalikan":
+                styles = ["background-color: #cce5ff; color: #004085; font-weight:bold;"] * len(row)
+            elif ajuan == "ditolak":
+                styles = ["background-color: #f8d7da; color: #721c24; font-weight:bold;"] * len(row)
+            
             return styles
     
         st.dataframe(df.style.apply(color_row, axis=1), use_container_width=True)
+
 
 
 # =====================================================
