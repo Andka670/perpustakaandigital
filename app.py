@@ -209,11 +209,11 @@ if st.session_state.page == "daftarbuku":
                             # CSS khusus tombol deskripsi (berdasarkan key)
                             st.markdown("""
                                 <style>
-                                /* hanya tombol deskripsi lengkap (🔽 / 🔼) yang kecil */
+                                /* hanya tombol deskripsi lengkap (lihat / tutup) yang kecil */
                                 div[data-testid="stButton"][key^="show_"] > button,
                                 div[data-testid="stButton"][key^="hide_"] > button {
-                                    min-height: 25px !important;
-                                    font-size: 12px !important;
+                                    min-height: 5px !important;
+                                    font-size: 3px !important;
                                     padding: 2px 6px !important;
                                     border-radius: 6px !important;
                                     width: auto !important;
@@ -243,10 +243,10 @@ if st.session_state.page == "daftarbuku":
                             with col_btn:
                                 if len(full_desc) > 40:
                                     if st.session_state[desc_key]:
-                                        if st.button("🔼", key=f"hide_{buku['id_buku']}"):
+                                        if st.button("tutup", key=f"hide_{buku['id_buku']}"):
                                             st.session_state[desc_key] = False
                                     else:
-                                        if st.button("🔽", key=f"show_{buku['id_buku']}"):
+                                        if st.button("lihat", key=f"show_{buku['id_buku']}"):
                                             st.session_state[desc_key] = True
 
 #PDF
