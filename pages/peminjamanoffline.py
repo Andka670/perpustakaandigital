@@ -184,7 +184,7 @@ if submit:
                     "tanggal_pinjam": str(tanggal_pinjam),
                     "tanggal_kembali": str(tanggal_kembali),
                     "status": "dipinjam",
-                    "denda": denda_awal
+                    "denda": denda_awal,
                     "ajuan": "-",
                 }
                 supabase.table("peminjaman").insert(data).execute()
