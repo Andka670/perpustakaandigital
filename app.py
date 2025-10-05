@@ -196,6 +196,7 @@ if st.session_state.page == "daftarbuku":
                         except: pass
                         st.markdown(f"<div class='book-title'>{buku['judul']}</div>", unsafe_allow_html=True)
                         st.markdown(f"<div class='book-meta'>✍️ {buku['penulis']} | 📅 {buku['tahun']} | 🏷️ {buku.get('genre','-')} | 📦 Stok: {buku.get('stok','-')}</div>", unsafe_allow_html=True)
+#deskripsi
                         if buku.get("deskripsi"):
                             full_desc = buku["deskripsi"]
                             short_desc = full_desc[:40] + ("..." if len(full_desc) > 40 else "")
@@ -205,8 +206,26 @@ if st.session_state.page == "daftarbuku":
                             if desc_key not in st.session_state:
                                 st.session_state[desc_key] = False
                         
+                            # CSS tombol kecil
+                            st.markdown("""
+                                <style>
+                                .mini-btn {
+                                    background-color: #f0f0f0;
+                                    border: 1px solid #ccc;
+                                    border-radius: 6px;
+                                    padding: 2px 6px;
+                                    font-size: 12px;
+                                    cursor: pointer;
+                                    transition: 0.2s;
+                                }
+                                .mini-btn:hover {
+                                    background-color: #e0e0e0;
+                                }
+                                </style>
+                            """, unsafe_allow_html=True)
+                        
                             if st.session_state[desc_key]:
-                                # tampilkan deskripsi lengkap dengan tombol di samping
+                                # tampilkan deskripsi lengkap dengan tombol kecil di samping
                                 col_desc, col_btn = st.columns([4, 1])
                                 with col_desc:
                                     st.markdown(
@@ -214,11 +233,13 @@ if st.session_state.page == "daftarbuku":
                                         unsafe_allow_html=True,
                                     )
                                 with col_btn:
-                                    if st.button("🔼", key=f"hide_{buku['id_buku']}"):
+                                    hide_key = f"hide_{buku['id_buku']}"
+                                    if st.button("🔼", key=hide_key):
                                         st.session_state[desc_key] = False
+                                    st.markdown("<button class='mini-btn'>🔼</button>", unsafe_allow_html=True)
                         
                             else:
-                                # tampilkan deskripsi singkat dengan tombol di samping
+                                # tampilkan deskripsi singkat dengan tombol kecil di samping
                                 col_desc, col_btn = st.columns([4, 1])
                                 with col_desc:
                                     st.markdown(
@@ -227,9 +248,12 @@ if st.session_state.page == "daftarbuku":
                                     )
                                 with col_btn:
                                     if len(full_desc) > 40:
-                                        if st.button("🔽", key=f"show_{buku['id_buku']}"):
+                                        show_key = f"show_{buku['id_buku']}"
+                                        if st.button("🔽", key=show_key):
                                             st.session_state[desc_key] = True
+                                        st.markdown("<button class='mini-btn'>🔽</button>", unsafe_allow_html=True)
 
+#PDF
                         if buku.get("pdf_url") and buku["pdf_url"].strip():
                             try:
                                 signed_pdf = supabase.storage.from_("uploads").create_signed_url(buku["pdf_url"],3600)["signedURL"]
