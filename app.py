@@ -225,7 +225,7 @@ if st.session_state.page == "daftarbuku":
                             """, unsafe_allow_html=True)
                         
                             # tampilkan deskripsi
-                            col_desc, col_btn = st.columns([4, -2])
+                            col_desc, col_btn = st.columns([4, 2])
                             with col_desc:
                                 st.markdown(
                                     f"<div style='font-size:14px; line-height:1.5; text-align:justify;'>"
