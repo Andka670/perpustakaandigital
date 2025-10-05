@@ -241,7 +241,8 @@ if st.session_state.page == "daftarbuku":
 # =====================================================
 # Halaman Peminjaman Saya
 # =====================================================
-st.title("📋 Peminjaman Saya")
+if st.session_state.page == "peminjamansaya":
+    st.title("📋 Peminjaman Saya")
 
 # ----------------------------
 # Form Ajukan Peminjaman Baru
