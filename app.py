@@ -200,32 +200,79 @@ if st.session_state.page == "daftarbuku":
                             full_desc = buku["deskripsi"]
                             short_desc = full_desc[:40] + ("..." if len(full_desc) > 40 else "")
                             desc_key = f"show_full_{buku['id_buku']}"
+                        
                             if desc_key not in st.session_state:
                                 st.session_state[desc_key] = False
                         
+                            # Jika sedang ditampilkan penuh
                             if st.session_state[desc_key]:
-                                st.markdown(f"<div class='book-desc'>{full_desc} <span style='color:#007bff;cursor:pointer;text-decoration:underline;' onclick='window.location.reload()'>Sembunyikan</span></div>", unsafe_allow_html=True)
-                                if st.button("", key=f"hide_{buku['id_buku']}", help="Sembunyikan deskripsi", label_visibility="collapsed"):
+                                st.markdown(f"<div class='book-desc'>{full_desc}</div>", unsafe_allow_html=True)
+                        
+                                hide_btn = st.button(
+                                    "Sembunyikan",
+                                    key=f"hide_{buku['id_buku']}",
+                                )
+                                st.markdown(
+                                    """
+                                    <style>
+                                    div[data-testid="stButton"] > button[kind="secondary"] {
+                                        background:none !important;
+                                        color:#007bff !important;
+                                        border:none !important;
+                                        padding:0;
+                                        font-size:13px;
+                                        text-decoration:underline;
+                                        cursor:pointer;
+                                    }
+                                    div[data-testid="stButton"] > button[kind="secondary"]:hover {
+                                        color:#0056b3 !important;
+                                    }
+                                    </style>
+                                    """,
+                                    unsafe_allow_html=True,
+                                )
+                                if hide_btn:
                                     st.session_state[desc_key] = False
                                     st.rerun()
+                        
+                            # Jika deskripsi disingkat
                             else:
                                 if len(full_desc) > 40:
-                                    # tampilkan teks pendek dengan "lihat selengkapnya" di sebelah titik-titik
-                                    see_more_html = f"""
-                                    <div class='book-desc'>
-                                        {full_desc[:40]}<span style='color:#007bff;cursor:pointer;text-decoration:underline;' id='see_more_{buku["id_buku"]}'> ...Lihat selengkapnya</span>
-                                    </div>
-                                    <script>
-                                    const el = window.parent.document.getElementById('see_more_{buku["id_buku"]}');
-                                    if (el) {{
-                                        el.addEventListener('click', () => {{
-                                            window.parent.postMessage({{"type": "streamlit:setComponentValue", "key": "show_full_{buku["id_buku"]}", "value": true}}, "*");
-                                            window.location.reload();
-                                        }});
-                                    }}
-                                    </script>
-                                    """
-                                    st.markdown(see_more_html, unsafe_allow_html=True)
+                                    col1, col2 = st.columns([8, 2])
+                                    with col1:
+                                        st.markdown(
+                                            f"<div class='book-desc'>{short_desc}</div>", unsafe_allow_html=True
+                                        )
+                                    with col2:
+                                        lihat_btn = st.button(
+                                            "Lihat selengkapnya",
+                                            key=f"show_{buku['id_buku']}",
+                                        )
+                        
+                                    # styling tombol agar terlihat seperti teks biru
+                                    st.markdown(
+                                        """
+                                        <style>
+                                        div[data-testid="stButton"] > button[kind="secondary"] {
+                                            background:none !important;
+                                            color:#007bff !important;
+                                            border:none !important;
+                                            padding:0;
+                                            font-size:13px;
+                                            text-decoration:underline;
+                                            cursor:pointer;
+                                        }
+                                        div[data-testid="stButton"] > button[kind="secondary"]:hover {
+                                            color:#0056b3 !important;
+                                        }
+                                        </style>
+                                        """,
+                                        unsafe_allow_html=True,
+                                    )
+                        
+                                    if lihat_btn:
+                                        st.session_state[desc_key] = True
+                                        st.rerun()
                                 else:
                                     st.markdown(f"<div class='book-desc'>{full_desc}</div>", unsafe_allow_html=True)
 
