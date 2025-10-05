@@ -200,56 +200,31 @@ if st.session_state.page == "daftarbuku":
                         if buku.get("deskripsi"):
                             full_desc = buku["deskripsi"]
                             short_desc = full_desc[:40] + ("..." if len(full_desc) > 40 else "")
-                            desc_key = f"desc_expand_{buku['id_buku']}"
+                            desc_id = f"desc_{buku['id_buku']}"  # buat ID unik untuk tiap buku
                         
-                            # inisialisasi state
-                            if desc_key not in st.session_state:
-                                st.session_state[desc_key] = False
-                            st.markdown("""
-                                <style>
-                                /* Tombol mini untuk lihat/tutup deskripsi */
-                                div[data-testid="stButton"][key^="show_"] > button,
-                                div[data-testid="stButton"][key^="hide_"] > button {
-                                    min-height: 16px !important;       /* lebih kecil dari sebelumnya */
-                                    padding: 1px 6px !important;
-                                    font-size: 9px !important;         /* font kecil */
-                                    line-height: 1 !important;
-                                    border-radius: 5px !important;
-                                    width: auto !important;
-                                    background-color: #a52828 !important;
-                                    color: #fff !important;
-                                    border: none !important;
-                                    margin-top: 2px !important;
-                                    margin-bottom: 3px !important;
-                                    transition: all 0.2s ease-in-out;
-                                }
-                                div[data-testid="stButton"][key^="show_"] > button:hover,
-                                div[data-testid="stButton"][key^="hide_"] > button:hover {
-                                    background-color: #d23b3b !important;
-                                    transform: scale(1.05);
-                                }
-                                </style>
+                            st.markdown(f"""
+                                <div class="desc-container">
+                                    <span id="{desc_id}_short">{short_desc}</span>
+                                    <span id="{desc_id}_full" style="display:none;">{full_desc}</span>
+                                    <span class="tiny-link" onclick="toggleDesc('{desc_id}')">lihat</span>
+                                </div>
+                                <script>
+                                function toggleDesc(id) {{
+                                    var shortEl = window.parent.document.getElementById(id + '_short');
+                                    var fullEl = window.parent.document.getElementById(id + '_full');
+                                    var btn = window.parent.document.querySelector('[onclick="toggleDesc(\\'' + id + '\\')"]');
+                                    if (shortEl.style.display === 'none') {{
+                                        shortEl.style.display = 'inline';
+                                        fullEl.style.display = 'none';
+                                        btn.innerText = 'lihat';
+                                    }} else {{
+                                        shortEl.style.display = 'none';
+                                        fullEl.style.display = 'inline';
+                                        btn.innerText = 'tutup';
+                                    }}
+                                }}
+                                </script>
                             """, unsafe_allow_html=True)
-
-                        
-                            # tampilkan deskripsi
-                            col_desc, col_btn = st.columns([4, 2])
-                            with col_desc:
-                                st.markdown(
-                                    f"<div style='font-size:14px; line-height:1.5; text-align:justify;'>"
-                                    f"{full_desc if st.session_state[desc_key] else short_desc}"
-                                    f"</div>",
-                                    unsafe_allow_html=True,
-                                )
-                        
-                            with col_btn:
-                                if len(full_desc) > 40:
-                                    if st.session_state[desc_key]:
-                                        if st.button("tutup", key=f"hide_{buku['id_buku']}"):
-                                            st.session_state[desc_key] = False
-                                    else:
-                                        if st.button("lihat", key=f"show_{buku['id_buku']}"):
-                                            st.session_state[desc_key] = True
 
 #PDF
                         if buku.get("pdf_url") and buku["pdf_url"].strip():
