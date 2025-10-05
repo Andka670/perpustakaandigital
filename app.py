@@ -200,33 +200,57 @@ if st.session_state.page == "daftarbuku":
                             full_desc = buku["deskripsi"]
                             short_desc = full_desc[:40] + ("..." if len(full_desc) > 40 else "")
                             desc_key = f"desc_expand_{buku['id_buku']}"
-                            
+                        
                             # inisialisasi state
                             if desc_key not in st.session_state:
                                 st.session_state[desc_key] = False
                         
+                            # Styling tombol kecil di samping teks
+                            st.markdown("""
+                                <style>
+                                .desc-container {display: flex; align-items: center; gap: 6px;}
+                                .desc-text {font-size: 13px; line-height: 1.4; text-align: justify; color: brown;}
+                                .desc-btn {
+                                    background: none;
+                                    border: none;
+                                    color: #0066cc;
+                                    font-size: 12px;
+                                    cursor: pointer;
+                                    text-decoration: underline;
+                                    padding: 0;
+                                    margin: 0;
+                                }
+                                .desc-btn:hover {color: #004999;}
+                                </style>
+                            """, unsafe_allow_html=True)
+                        
+                            # Konten deskripsi
                             if st.session_state[desc_key]:
-                                # tampilkan deskripsi lengkap
-                                st.markdown(
-                                    f"<div class='book-desc' style='font-size:14px; line-height:1.5; text-align:justify;'>{full_desc}</div>",
-                                    unsafe_allow_html=True,
-                                )
-                                if st.button("🔼 Sembunyikan", key=f"hide_{buku['id_buku']}", use_container_width=True):
-                                    st.session_state[desc_key] = False
-                            else:
-                                # tampilkan deskripsi singkat + tombol selengkapnya
                                 st.markdown(
                                     f"""
-                                    <div class='book-desc' style='font-size:14px; line-height:1.5; text-align:justify; display:inline;'>
-                                        {short_desc}
+                                    <div class='desc-container'>
+                                        <div class='desc-text'>{full_desc}</div>
+                                        <form action='' method='post'>
+                                            <button class='desc-btn' name='toggle_{buku["id_buku"]}' type='submit'>Sembunyikan</button>
+                                        </form>
                                     </div>
                                     """,
                                     unsafe_allow_html=True,
                                 )
-                                if len(full_desc) > 40:
-                                    if st.button("🔽 Lihat selengkapnya", key=f"show_{buku['id_buku']}", use_container_width=True):
-                                        st.session_state[desc_key] = True
-
+                            else:
+                                st.markdown(
+                                    f"""
+                                    <div class='desc-container'>
+                                        <div class='desc-text'>{short_desc}</div>
+                                        {"<form action='' method='post'><button class='desc-btn' name='toggle_{buku["id_buku"]}' type='submit'>Lihat selengkapnya</button></form>" if len(full_desc) > 40 else ""}
+                                    </div>
+                                    """,
+                                    unsafe_allow_html=True,
+                                )
+                        
+                            # Tombol klik versi Streamlit (supaya state tetap tersimpan)
+                            if st.button(" ", key=f"toggle_{buku['id_buku']}", help="Toggle Deskripsi", label_visibility="collapsed"):
+                                st.session_state[desc_key] = not st.session_state[desc_key]
 
                         if buku.get("pdf_url") and buku["pdf_url"].strip():
                             try:
