@@ -121,20 +121,20 @@ if submitted:
         st.warning("⚠️ Mohon lengkapi semua kolom yang wajib.")
     else:
         try:
-            cover_path = None
-            pdf_path = None
+            cover_url = None
+            pdf_url = None
 
             if file_cover:
                 file_bytes = file_cover.read()
                 file_name = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{file_cover.name}"
                 supabase.storage.from_("uploads").upload(f"covers/{file_name}", file_bytes, {"content-type": file_cover.type})
-                cover_path = f"https://bcalrkqeeoaalfpjrwvx.supabase.co/storage/v1/object/public/uploads/covers/{file_name}"
+                cover_url = supabase.storage.from_("uploads").get_public_url(f"covers/{file_name}").public_url
 
             if file_pdf:
                 file_bytes = file_pdf.read()
                 file_name = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{file_pdf.name}"
                 supabase.storage.from_("uploads").upload(f"pdfs/{file_name}", file_bytes, {"content-type": "application/pdf"})
-                pdf_path = f"https://bcalrkqeeoaalfpjrwvx.supabase.co/storage/v1/object/public/uploads/pdfs/{file_name}"
+                pdf_url = supabase.storage.from_("uploads").get_public_url(f"pdfs/{file_name}").public_url
 
             supabase.table("buku").insert({
                 "judul": judul,
@@ -143,8 +143,8 @@ if submitted:
                 "stok": int(stok),
                 "genre": genre,
                 "deskripsi": deskripsi,
-                "cover_url": cover_path,
-                "pdf_url": pdf_path
+                "cover_url": cover_url,
+                "pdf_url": pdf_url
             }).execute()
             st.success("✅ Buku baru berhasil ditambahkan!")
         except Exception as e:
@@ -203,7 +203,8 @@ if "edit" in st.session_state:
     # Preview PDF lama
     if book_edit.get("pdf_url"):
         try:
-            st.markdown(f"[📄 PDF Saat Ini]({book_edit['pdf_url']})", unsafe_allow_html=True)
+            pdf_url = book_edit["pdf_url"]
+            st.markdown(f"[📄 PDF Saat Ini]({pdf_url})", unsafe_allow_html=True)
         except Exception as e:
             st.warning(f"⚠️ Tidak bisa menampilkan PDF: {e}")
 
@@ -238,13 +239,13 @@ if "edit" in st.session_state:
             file_bytes = new_cover.read()
             file_name = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{new_cover.name}"
             supabase.storage.from_("uploads").upload(f"covers/{file_name}", file_bytes, {"content-type": new_cover.type})
-            update_data["cover_url"] = f"https://bcalrkqeeoaalfpjrwvx.supabase.co/storage/v1/object/public/uploads/covers/{file_name}"
+            update_data["cover_url"] = supabase.storage.from_("uploads").get_public_url(f"covers/{file_name}").public_url
 
         if new_pdf:
             file_bytes = new_pdf.read()
             file_name = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{new_pdf.name}"
             supabase.storage.from_("uploads").upload(f"pdfs/{file_name}", file_bytes, {"content-type": "application/pdf"})
-            update_data["pdf_url"] = f"https://bcalrkqeeoaalfpjrwvx.supabase.co/storage/v1/object/public/uploads/pdfs/{file_name}"
+            update_data["pdf_url"] = supabase.storage.from_("uploads").get_public_url(f"pdfs/{file_name}").public_url
 
         supabase.table("buku").update(update_data).eq("id_buku", book_edit.get("id_buku")).execute()
         st.success(f"✅ Buku '{edit_judul}' berhasil diperbarui!")
