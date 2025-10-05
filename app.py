@@ -203,18 +203,32 @@ if st.session_state.page == "daftarbuku":
                             if desc_key not in st.session_state:
                                 st.session_state[desc_key] = False
                         
-                            # Tampilkan deskripsi pendek atau penuh
                             if st.session_state[desc_key]:
-                                st.markdown(f"<div class='book-desc'>{full_desc}</div>", unsafe_allow_html=True)
-                                if st.button("⬅️ Sembunyikan", key=f"hide_{buku['id_buku']}"):
+                                st.markdown(f"<div class='book-desc'>{full_desc} <span style='color:#007bff;cursor:pointer;text-decoration:underline;' onclick='window.location.reload()'>Sembunyikan</span></div>", unsafe_allow_html=True)
+                                if st.button("", key=f"hide_{buku['id_buku']}", help="Sembunyikan deskripsi", label_visibility="collapsed"):
                                     st.session_state[desc_key] = False
                                     st.rerun()
                             else:
-                                st.markdown(f"<div class='book-desc'>{short_desc}</div>", unsafe_allow_html=True)
                                 if len(full_desc) > 40:
-                                    if st.button("📖 Lihat Selengkapnya", key=f"show_{buku['id_buku']}"):
-                                        st.session_state[desc_key] = True
-                                        st.rerun()
+                                    # tampilkan teks pendek dengan "lihat selengkapnya" di sebelah titik-titik
+                                    see_more_html = f"""
+                                    <div class='book-desc'>
+                                        {full_desc[:40]}<span style='color:#007bff;cursor:pointer;text-decoration:underline;' id='see_more_{buku["id_buku"]}'> ...Lihat selengkapnya</span>
+                                    </div>
+                                    <script>
+                                    const el = window.parent.document.getElementById('see_more_{buku["id_buku"]}');
+                                    if (el) {{
+                                        el.addEventListener('click', () => {{
+                                            window.parent.postMessage({{"type": "streamlit:setComponentValue", "key": "show_full_{buku["id_buku"]}", "value": true}}, "*");
+                                            window.location.reload();
+                                        }});
+                                    }}
+                                    </script>
+                                    """
+                                    st.markdown(see_more_html, unsafe_allow_html=True)
+                                else:
+                                    st.markdown(f"<div class='book-desc'>{full_desc}</div>", unsafe_allow_html=True)
+
                         if buku.get("pdf_url") and buku["pdf_url"].strip():
                             try:
                                 signed_pdf = supabase.storage.from_("uploads").create_signed_url(buku["pdf_url"],3600)["signedURL"]
