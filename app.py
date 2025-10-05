@@ -214,9 +214,9 @@ if st.session_state.page == "daftarbuku":
                                 div[data-testid="stButton"][key^="show_"] > button,
                                 div[data-testid="stButton"][key^="hide_"] > button {
                                     min-height: 2px !important;
-                                    padding: 2px 2px !important;
+                                    padding: 0px 0px !important;
                                     font-size: 3px !important;
-                                    border-radius: 3px !important;
+                                    border-radius: 0px !important;
                                     width: auto !important;
                                     background-color: #a52828 !important;  /* warna merah tua */
                                     color: white !important;
