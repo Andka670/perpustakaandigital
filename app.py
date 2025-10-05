@@ -243,9 +243,9 @@ if st.session_state.page == "daftarbuku":
 # =====================================================
 st.title("📋 Peminjaman Saya")
 
-# =====================================================
+# ----------------------------
 # Form Ajukan Peminjaman Baru
-# =====================================================
+# ----------------------------
 st.subheader("📝 Ajukan Peminjaman Buku Baru")
 try:
     buku_data = supabase.table("buku").select("id_buku, judul, stok").gt("stok", 0).execute().data
@@ -279,7 +279,7 @@ if buku_data:
                     "status": "-",  # belum diproses admin
                     "nomor": nomor,
                     "alamat": alamat,
-                    "created_at": datetime.now().isoformat()  # untuk urutan antrean
+                    "created_at": datetime.now().isoformat()
                 }).execute()
                 st.success(f"✅ Permintaan peminjaman buku '{pilih_buku}' berhasil diajukan. Tunggu persetujuan admin.")
             except Exception as e:
@@ -289,9 +289,9 @@ else:
 
 st.markdown("<hr>", unsafe_allow_html=True)
 
-# =====================================================
+# ----------------------------
 # Daftar Peminjaman User
-# =====================================================
+# ----------------------------
 st.subheader("📖 Riwayat Peminjaman")
 try:
     pinjam_data = supabase.table("peminjaman")\
@@ -309,14 +309,17 @@ else:
     # Hitung antrean berdasarkan created_at
     for p in pinjam_data:
         if p.get("ajuan","") == "menunggu":
-            antrian_data = supabase.table("peminjaman")\
-                .select("id_user, id_peminjaman")\
-                .eq("id_buku", p["id_buku"])\
-                .eq("ajuan", "menunggu")\
-                .order("created_at", ascending=True)\
-                .execute().data
-            posisi = next((i+1 for i, x in enumerate(antrian_data) if x["id_peminjaman"] == p["id_peminjaman"]), None)
-            p["antrian"] = f"{posisi} dari {len(antrian_data)}"
+            try:
+                antrian_data = supabase.table("peminjaman")\
+                    .select("id_user, id_peminjaman")\
+                    .eq("id_buku", p["id_buku"])\
+                    .eq("ajuan", "menunggu")\
+                    .order("created_at", ascending=True)\
+                    .execute().data
+                posisi = next((i+1 for i, x in enumerate(antrian_data) if x["id_peminjaman"] == p["id_peminjaman"]), None)
+                p["antrian"] = f"{posisi} dari {len(antrian_data)}"
+            except Exception as e:
+                p["antrian"] = f"Error: {e}"
         else:
             p["antrian"] = "-"
 
