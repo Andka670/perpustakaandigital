@@ -298,7 +298,7 @@ if st.session_state.page == "peminjamansaya":
         pinjam_data = supabase.table("peminjaman")\
             .select("*, buku(judul, penulis, tahun, genre)")\
             .eq("id_user", user["id_user"])\
-            .order("created_at", ascending=False)\
+            .order("created_at", ascending=True)\
             .execute().data
     except Exception as e:
         pinjam_data = []
@@ -315,7 +315,7 @@ if st.session_state.page == "peminjamansaya":
                         .select("id_user, id_peminjaman")\
                         .eq("id_buku", p["id_buku"])\
                         .eq("ajuan", "menunggu")\
-                        .order("created_at", ascending=False)\
+                        .order("created_at", ascending=True)\
                         .execute().data
                     posisi = next((i+1 for i, x in enumerate(antrian_data) if x["id_peminjaman"] == p["id_peminjaman"]), None)
                     p["antrian"] = f"{posisi} dari {len(antrian_data)}"
