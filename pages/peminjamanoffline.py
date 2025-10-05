@@ -206,27 +206,28 @@ if submit:
             except Exception as e:
                 st.error(f"❌ Gagal mencatat peminjaman: {e}")
 # ----------------------------
-# Judul Halaman
-# ----------------------------
+# Judul Halaman Persetujuan
 st.markdown("<h1 style='text-align:center;'>📬 Persetujuan Peminjaman</h1>", unsafe_allow_html=True)
 st.markdown("<hr>", unsafe_allow_html=True)
 
 # ----------------------------
-# Ambil data peminjaman yang status 'ajuan'
-# ----------------------------
-ajuan_data = supabase.table("peminjaman").select("*").eq("ajuan", "-").execute()
+# Ambil data peminjaman yang ajuan menunggu
+ajuan_data = supabase.table("peminjaman").select("*").eq("ajuan", "menunggu").execute()
 ajuan_list = ajuan_data.data if ajuan_data.data else []
 
 if not ajuan_list:
     st.info("Tidak ada ajuan peminjaman yang perlu disetujui.")
 else:
     for ajuan in ajuan_list:
+        # Ambil username user
         user_info = supabase.table("akun").select("username").eq("id_user", ajuan["id_user"]).execute()
         username = user_info.data[0]["username"] if user_info.data else "Unknown User"
 
+        # Ambil judul buku
         book_info = supabase.table("buku").select("judul").eq("id_buku", ajuan["id_buku"]).execute()
         book_title = book_info.data[0]["judul"] if book_info.data else "Unknown Book"
 
+        # Tampilkan info ajuan
         st.markdown(f"### 📌 {book_title} - {username}")
         st.write(f"- Nomor HP: {ajuan['nomor']}")
         st.write(f"- Alamat: {ajuan['alamat']}")
@@ -234,30 +235,41 @@ else:
         st.write(f"- Tanggal Kembali: {ajuan['tanggal_kembali']}")
         st.write(f"- Denda Awal: Rp {ajuan['denda']:,}")
 
+        # Tombol Terima / Tolak
         col1, col2 = st.columns([1,1])
         with col1:
             if st.button(f"✅ Terima Ajuan {ajuan['id_peminjaman']}", key=f"accept_{ajuan['id_peminjaman']}"):
                 try:
-                    # Update status peminjaman & hapus tanda ajuan
-                    supabase.table("peminjaman").update({"ajuan": "diterima", "status": "dipinjam"}).eq("id_peminjaman", ajuan["id_peminjaman"]).execute()
-                    # Update stok buku
+                    # Update status peminjaman menjadi diterima
+                    supabase.table("peminjaman").update({
+                        "ajuan": "diterima",
+                        "status": "dipinjam"
+                    }).eq("id_peminjaman", ajuan["id_peminjaman"]).execute()
+
+                    # Kurangi stok buku
                     buku = supabase.table("buku").select("stok").eq("id_buku", ajuan["id_buku"]).execute()
                     if buku.data:
                         new_stok = buku.data[0]["stok"] - 1
                         supabase.table("buku").update({"stok": new_stok}).eq("id_buku", ajuan["id_buku"]).execute()
-                    st.success(f"Ajuan diterima dan buku {book_title} dikurangi stoknya.")
+
+                    st.success(f"Ajuan diterima ✅ dan stok buku '{book_title}' dikurangi menjadi {new_stok}.")
                 except Exception as e:
                     st.error(f"Gagal menerima ajuan: {e}")
         with col2:
             if st.button(f"❌ Tolak Ajuan {ajuan['id_peminjaman']}", key=f"reject_{ajuan['id_peminjaman']}"):
                 try:
-                    # Update status peminjaman & hapus ajuan
-                    supabase.table("peminjaman").update({"ajuan": "ditolak", "status": "ditolak"}).eq("id_peminjaman", ajuan["id_peminjaman"]).execute()
-                    st.warning(f"Ajuan untuk {book_title} ditolak.")
+                    # Update status peminjaman menjadi ditolak
+                    supabase.table("peminjaman").update({
+                        "ajuan": "ditolak",
+                        "status": "ditolak"
+                    }).eq("id_peminjaman", ajuan["id_peminjaman"]).execute()
+
+                    st.warning(f"Ajuan untuk buku '{book_title}' ditolak ❌.")
                 except Exception as e:
                     st.error(f"Gagal menolak ajuan: {e}")
 
 st.markdown("<hr>", unsafe_allow_html=True)
+
 # =====================================================
 # Footer
 # =====================================================
