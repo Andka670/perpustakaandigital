@@ -237,12 +237,16 @@ except Exception as e:
     st.error(f"❌ Gagal mengambil data peminjaman: {e}")
 
 # ----------------------------
-# Tabel Buku
+# Tabel Buku + Pencarian
 # ----------------------------
 st.subheader("📚 Daftar Buku")
+
 try:
     buku_data = supabase.table("buku").select("*").execute().data
     if buku_data:
+        # Input pencarian
+        search_query = st.text_input("🔍 Cari Buku (berdasarkan judul, penulis, genre, atau tahun):").lower().strip()
+
         buku_table = []
         for b in buku_data:
             buku_table.append({
@@ -254,11 +258,31 @@ try:
                 "Genre": b["genre"],
                 "Deskripsi": b["deskripsi"]
             })
-        st.dataframe(pd.DataFrame(buku_table), use_container_width=True)
+
+        df_buku = pd.DataFrame(buku_table)
+
+        # Filter hasil pencarian
+        if search_query:
+            df_buku = df_buku[
+                df_buku.apply(
+                    lambda row: search_query in str(row["Judul"]).lower()
+                    or search_query in str(row["Penulis"]).lower()
+                    or search_query in str(row["Genre"]).lower()
+                    or search_query in str(row["Tahun"]).lower(),
+                    axis=1
+                )
+            ]
+
+        # Tampilkan hasil
+        if not df_buku.empty:
+            st.dataframe(df_buku, use_container_width=True)
+        else:
+            st.warning("📭 Tidak ditemukan buku yang cocok dengan pencarian.")
     else:
         st.info("📭 Belum ada data buku.")
 except Exception as e:
     st.error(f"❌ Gagal mengambil data buku: {e}")
+
 # =====================================================
 # Footer
 # =====================================================
