@@ -258,7 +258,7 @@ if st.session_state.page == "daftarbuku":
                                             color:#007bff !important;
                                             border:none !important;
                                             padding:0;
-                                            font-size:13px;
+                                            font-size:3px;
                                             text-decoration:underline;
                                             cursor:pointer;
                                         }
