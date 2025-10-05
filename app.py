@@ -324,61 +324,61 @@ if st.session_state.page == "peminjamansaya":
             else:
                 p["antrian"] = "-"
     
-# Buat DataFrame untuk ditampilkan
-table_data = []
-today = datetime.now().date()
-denda_per_hari = 5000  # 5 ribu per hari
-
-for p in pinjam_data:
-    buku = p.get("buku", {})
-    tgl_kembali = p.get("tanggal_kembali")
-    if tgl_kembali:
-        tgl_kembali_dt = pd.to_datetime(tgl_kembali).date()
-        denda = max((today - tgl_kembali_dt).days * denda_per_hari, 0) if p.get("status","").lower() != "sudah dikembalikan" else 0
-    else:
-        denda = 0
-
-    table_data.append({
-        "Judul Buku": buku.get("judul","(Tanpa Judul)"),
-        "Penulis": buku.get("penulis","-"),
-        "Tahun": buku.get("tahun","-"),
-        "Genre": buku.get("genre","-"),
-        "Tanggal Pinjam": p.get("tanggal_pinjam","-"),
-        "Tanggal Kembali": tgl_kembali or "-",
-        "Ajuan": p.get("ajuan","-"),
-        "Status": p.get("status","-"),
-        "Antrian": p.get("antrian","-"),
-        "Nomor HP": p.get("nomor","-"),
-        "Alamat": p.get("alamat","-"),
-        "Denda": f"Rp {denda:,}"  # format dengan ribuan
-    })
-
-    df = pd.DataFrame(table_data)
+    # Buat DataFrame untuk ditampilkan
+    table_data = []
+    today = datetime.now().date()
+    denda_per_hari = 5000  # 5 ribu per hari
     
-    # Fungsi pewarnaan baris dan kolom denda
-    def color_row(row):
-        styles = [""] * len(row)
-        ajuan = str(row.get("Ajuan", "")).lower()
-        status = str(row.get("Status", "")).lower()
-        
-        # warna baris berdasarkan status
-        if ajuan == "menunggu":
-            styles = ["background-color: #fff3cd; color: #856404; font-weight:bold;"] * len(row)
-        elif ajuan == "disetujui" and status == "dipinjam":
-            styles = ["background-color: #d4edda; color: #155724; font-weight:bold;"] * len(row)
-        elif status == "sudah dikembalikan":
-            styles = ["background-color: #cce5ff; color: #004085; font-weight:bold;"] * len(row)
-        elif ajuan == "ditolak":
-            styles = ["background-color: #f8d7da; color: #721c24; font-weight:bold;"] * len(row)
-        
-        # warna kolom Denda merah jika ada denda
-        if int(row.get("Denda","Rp 0").replace("Rp ","").replace(",","")) > 0:
-            col_idx = df.columns.get_loc("Denda")
-            styles[col_idx] = "background-color: #f8d7da; color: #721c24; font-weight:bold;"
-        
-        return styles
+    for p in pinjam_data:
+        buku = p.get("buku", {})
+        tgl_kembali = p.get("tanggal_kembali")
+        if tgl_kembali:
+            tgl_kembali_dt = pd.to_datetime(tgl_kembali).date()
+            denda = max((today - tgl_kembali_dt).days * denda_per_hari, 0) if p.get("status","").lower() != "sudah dikembalikan" else 0
+        else:
+            denda = 0
     
-    st.dataframe(df.style.apply(color_row, axis=1), use_container_width=True)
+        table_data.append({
+            "Judul Buku": buku.get("judul","(Tanpa Judul)"),
+            "Penulis": buku.get("penulis","-"),
+            "Tahun": buku.get("tahun","-"),
+            "Genre": buku.get("genre","-"),
+            "Tanggal Pinjam": p.get("tanggal_pinjam","-"),
+            "Tanggal Kembali": tgl_kembali or "-",
+            "Ajuan": p.get("ajuan","-"),
+            "Status": p.get("status","-"),
+            "Antrian": p.get("antrian","-"),
+            "Nomor HP": p.get("nomor","-"),
+            "Alamat": p.get("alamat","-"),
+            "Denda": f"Rp {denda:,}"  # format dengan ribuan
+        })
+    
+        df = pd.DataFrame(table_data)
+        
+        # Fungsi pewarnaan baris dan kolom denda
+        def color_row(row):
+            styles = [""] * len(row)
+            ajuan = str(row.get("Ajuan", "")).lower()
+            status = str(row.get("Status", "")).lower()
+            
+            # warna baris berdasarkan status
+            if ajuan == "menunggu":
+                styles = ["background-color: #fff3cd; color: #856404; font-weight:bold;"] * len(row)
+            elif ajuan == "disetujui" and status == "dipinjam":
+                styles = ["background-color: #d4edda; color: #155724; font-weight:bold;"] * len(row)
+            elif status == "sudah dikembalikan":
+                styles = ["background-color: #cce5ff; color: #004085; font-weight:bold;"] * len(row)
+            elif ajuan == "ditolak":
+                styles = ["background-color: #f8d7da; color: #721c24; font-weight:bold;"] * len(row)
+            
+            # warna kolom Denda merah jika ada denda
+            if int(row.get("Denda","Rp 0").replace("Rp ","").replace(",","")) > 0:
+                col_idx = df.columns.get_loc("Denda")
+                styles[col_idx] = "background-color: #f8d7da; color: #721c24; font-weight:bold;"
+            
+            return styles
+        
+        st.dataframe(df.style.apply(color_row, axis=1), use_container_width=True)
 
 
 
