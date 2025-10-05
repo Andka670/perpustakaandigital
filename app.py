@@ -211,7 +211,7 @@ if st.session_state.page == "daftarbuku":
                                     st.rerun()
                             else:
                                 st.markdown(f"<div class='book-desc'>{short_desc}</div>", unsafe_allow_html=True)
-                                if len(full_desc) > 150:
+                                if len(full_desc) > 40:
                                     if st.button("📖 Lihat Selengkapnya", key=f"show_{buku['id_buku']}"):
                                         st.session_state[desc_key] = True
                                         st.rerun()
