@@ -122,7 +122,7 @@ section[data-testid="stSidebar"]{display:none !important;}
 }
 
 .desc-summary {
-    font-size: 20px;
+    font-size: 16px;
     color: #a52828;
     cursor: pointer;
     user-select: none;
@@ -143,8 +143,8 @@ section[data-testid="stSidebar"]{display:none !important;}
 .cover-box{width:100%;aspect-ratio:3/4;overflow:hidden;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,0.2);margin-bottom:10px;}
 .cover-box img{width:100%;height:100%;object-fit:cover;}
 .book-title{font-weight:bold;font-size:20px;margin:8px 0;flex-grow:1;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis;min-height:50px;color:brown !important;}
-.book-meta{font-size:18px;color:brown !important;margin-bottom:10px;}
-.book-desc{font-size:18px;color:brown;margin-bottom:8px;}
+.book-meta{font-size:16px;color:brown !important;margin-bottom:10px;}
+.book-desc{font-size:16px;color:brown;margin-bottom:8px;}
 .read-btn{display:inline-block;width:100%;min-height:45px;padding:12px 0;background:linear-gradient(270deg,#2575fc,#6a11cb);background-size:200% 200%;color:white !important;text-decoration:none;border-radius:12px;font-weight:bold;text-align:center;margin-top:auto;transition:all 0.4s ease-in-out;animation:gradientShift 4s ease infinite;}
 .read-btn:hover{background-position:right center;transform:scale(1.05) rotate(-1deg);box-shadow:0 6px 16px rgba(0,0,0,0.25);}
 .read-btn:active{transform:scale(0.95);}
