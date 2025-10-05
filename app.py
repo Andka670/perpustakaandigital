@@ -268,7 +268,7 @@ elif st.session_state.page == "peminjamansaya":
             submit_pinjam = st.form_submit_button("📌 Ajukan Peminjaman")
 
         if submit_pinjam:
-            if not nomor_hp.strip() or not alamat.strip():
+            if not nomor.strip() or not alamat.strip():
                 st.error("⚠️ Nomor HP dan alamat wajib diisi!")
             else:
                 try:
@@ -279,7 +279,7 @@ elif st.session_state.page == "peminjamansaya":
                         "tanggal_kembali": str(tanggal_kembali),
                         "ajuan": "menunggu",
                         "status": "-",  # Belum diproses admin
-                        "nomor": nomor,
+                        "nomor": nomor,  # konsisten dengan nama field
                         "alamat": alamat,
                         "created_at": datetime.now().isoformat()  # untuk urutan antrean
                     }).execute()
