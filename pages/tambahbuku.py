@@ -219,6 +219,44 @@ except Exception as e:
     st.error(f"❌ Gagal mengambil data buku: {e}")
 
 # ----------------------------
+# Form Hapus Buku
+# ----------------------------
+st.markdown('<hr>', unsafe_allow_html=True)
+st.subheader("🗑️ Hapus Buku")
+
+try:
+    # Ambil daftar buku
+    buku_list = supabase.table("buku").select("id_buku, judul").execute().data
+    if buku_list:
+        buku_dict = {b['judul']: b for b in buku_list}
+        selected_buku = st.selectbox("Pilih Buku yang ingin dihapus", list(buku_dict.keys()))
+
+        if st.button("Hapus Buku"):
+            buku = buku_dict[selected_buku]
+
+            # Cek peminjaman terkait buku ini
+            peminjaman = supabase.table("peminjaman").select("id_peminjaman, status").eq("id_buku", buku["id_buku"]).execute().data
+            
+            if peminjaman:
+                masih_dipinjam = any(p["status"] != "dikembalikan" for p in peminjaman)
+                if masih_dipinjam:
+                    st.warning(f"⚠️ Buku '{buku['judul']}' masih dipinjam, tidak bisa dihapus!")
+                else:
+                    # Hapus semua peminjaman terkait
+                    supabase.table("peminjaman").delete().eq("id_buku", buku["id_buku"]).execute()
+                    # Hapus buku
+                    supabase.table("buku").delete().eq("id_buku", buku["id_buku"]).execute()
+                    st.success(f"✅ Buku '{buku['judul']}' beserta riwayat peminjamannya berhasil dihapus.")
+            else:
+                # Tidak ada peminjaman, langsung hapus buku
+                supabase.table("buku").delete().eq("id_buku", buku["id_buku"]).execute()
+                st.success(f"✅ Buku '{buku['judul']}' berhasil dihapus.")
+    else:
+        st.info("Belum ada data buku.")
+except Exception as e:
+    st.error(f"❌ Gagal menghapus buku: {e}")
+
+# ----------------------------
 # Ubah Detail Buku
 # ----------------------------
 st.markdown('<hr>', unsafe_allow_html=True)
