@@ -207,31 +207,29 @@ if st.session_state.page == "daftarbuku":
                                 st.session_state[desc_key] = False
                             st.markdown("""
                                 <style>
-                                /* Tombol kecil elegan untuk deskripsi */
+                                /* Tombol mini untuk lihat/tutup deskripsi */
                                 div[data-testid="stButton"][key^="show_"] > button,
                                 div[data-testid="stButton"][key^="hide_"] > button {
-                                    min-height: 20px !important;
-                                    padding: 1px 8px !important;
-                                    font-size: 10px !important;
+                                    min-height: 16px !important;       /* lebih kecil dari sebelumnya */
+                                    padding: 1px 6px !important;
+                                    font-size: 9px !important;         /* font kecil */
                                     line-height: 1 !important;
-                                    border-radius: 6px !important;
+                                    border-radius: 5px !important;
                                     width: auto !important;
-                                    background-color: #b22a2a !important;
-                                    color: white !important;
+                                    background-color: #a52828 !important;
+                                    color: #fff !important;
                                     border: none !important;
-                                    margin-top: 1px !important;
-                                    margin-bottom: 2px !important;
-                                    transition: 0.2s;
+                                    margin-top: 2px !important;
+                                    margin-bottom: 3px !important;
+                                    transition: all 0.2s ease-in-out;
                                 }
                                 div[data-testid="stButton"][key^="show_"] > button:hover,
                                 div[data-testid="stButton"][key^="hide_"] > button:hover {
-                                    background-color: #d03c3c !important;
-                                    transform: scale(1.03);
+                                    background-color: #d23b3b !important;
+                                    transform: scale(1.05);
                                 }
                                 </style>
                             """, unsafe_allow_html=True)
-
-
 
                         
                             # tampilkan deskripsi
