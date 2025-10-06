@@ -194,6 +194,7 @@ try:
                 "Judul Buku": p["buku"]["judul"] if p.get("buku") else "-",
                 "Tanggal Pinjam": p["tanggal_pinjam"],
                 "Tanggal Kembali": p["tanggal_kembali"],
+                "ajuan": p["ajuan"],
                 "Status": p["status"],
                 "Denda (Rp)": denda
             })
@@ -218,6 +219,7 @@ try:
                 "Judul Buku": p["buku"]["judul"] if p.get("buku") else "-",
                 "Tanggal Pinjam": p["tanggal_pinjam"],
                 "Tanggal Kembali": p["tanggal_kembali"],
+                "ajuan": p["ajuan"],
                 "Status": p["status"],
                 "Denda (Rp)": p.get("denda", 0)
             })
