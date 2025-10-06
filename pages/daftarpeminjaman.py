@@ -114,7 +114,7 @@ menu_options = {
     "ℹ️ Info Akun": "pages/admin.py",
     "📚 Tambah/Ubah Buku": "pages/tambahbuku.py",
     "📋 Data Buku&User": "pages/daftarpeminjaman.py",
-    "🖊️ Peminjaman Offline": "pages/peminjamanoffline.py",
+    "🖊️ Peminjaman": "pages/peminjamanoffline.py",
     "🔄 Pengembalian": "pages/pengembalian.py",
     "⚙️ Settings": "pages/settings.py"
 }
