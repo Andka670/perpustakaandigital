@@ -211,15 +211,20 @@ if submit:
 st.markdown("<hr>", unsafe_allow_html=True)
 st.subheader("✏️ Ubah Detail Peminjaman")
 
-# Ambil semua id_peminjaman untuk pilihan
 try:
-    if peminjaman_data:
-        id_list = [p["id_peminjaman"] for p in peminjaman_data]
+    # --- Ambil ulang data peminjaman (agar variabel pasti ada) ---
+    peminjaman_data_form = supabase.table("peminjaman").select(
+        "id_peminjaman, id_user, id_buku, status, tanggal_pinjam, tanggal_kembali, denda, nomor, alamat, ajuan, "
+        "akun(username), "
+        "buku(judul)"
+    ).execute().data
+
+    if peminjaman_data_form:
+        id_list = [p["id_peminjaman"] for p in peminjaman_data_form]
         selected_id = st.selectbox("Pilih ID Peminjaman", ["Pilih ID"] + id_list)
 
         if selected_id != "Pilih ID":
-            # Ambil data detail berdasarkan ID
-            selected_data = next((p for p in peminjaman_data if p["id_peminjaman"] == selected_id), None)
+            selected_data = next((p for p in peminjaman_data_form if p["id_peminjaman"] == selected_id), None)
 
             if selected_data:
                 with st.form("form_edit_peminjaman", clear_on_submit=False):
