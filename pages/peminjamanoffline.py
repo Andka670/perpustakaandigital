@@ -283,7 +283,7 @@ except Exception as e:
 
 # ----------------------------
 # Halaman Persetujuan
-st.markdown("<h1 style='text-align:center;'>📬 Persetujuan Peminjaman Online</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align:center;'>📬 Pengajuan Peminjaman Online</h1>", unsafe_allow_html=True)
 st.markdown("<hr>", unsafe_allow_html=True)
 
 # ----------------------------
