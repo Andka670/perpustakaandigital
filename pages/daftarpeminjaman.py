@@ -148,7 +148,7 @@ def highlight_denda(row):
 # ----------------------------
 try:
     peminjaman_data = supabase.table("peminjaman").select(
-        "id_peminjaman, id_user, id_buku, status, tanggal_pinjam, tanggal_kembali, denda, nomor, alamat, "
+        "id_peminjaman, id_user, id_buku, status, tanggal_pinjam, tanggal_kembali,ajuan, denda, nomor, alamat, "
         "akun(username), "
         "buku(judul)"
     ).execute().data
@@ -243,6 +243,25 @@ try:
         st.info("📭 Belum ada data peminjaman.")
 except Exception as e:
     st.error(f"❌ Gagal mengambil data peminjaman: {e}")
+# ----------------------------
+# Tabel ajuan menunggu
+# ----------------------------
+st.subheader("🕓 Daftar Ajuan Menunggu Persetujuan")
+ajuan_menunggu = [p for p in peminjaman_data if p.get("ajuan") == "menunggu"]
+
+if ajuan_menunggu:
+    df_ajuan = pd.DataFrame([{
+        "ID Peminjaman": p["id_peminjaman"],
+        "User": p["akun"]["username"] if p.get("akun") else "-",
+        "Judul Buku": p["buku"]["judul"] if p.get("buku") else "-",
+        "Tanggal Pinjam": p["tanggal_pinjam"],
+        "Tanggal Kembali": p["tanggal_kembali"],
+        "Status": p["status"],
+        "Ajuan": p["ajuan"]
+    } for p in ajuan_menunggu])
+    st.dataframe(df_ajuan, use_container_width=True)
+else:
+    st.info("📭 Tidak ada ajuan peminjaman yang menunggu persetujuan.")
 
 # ----------------------------
 # Tabel Buku + Filter Selectbox
