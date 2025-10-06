@@ -370,7 +370,7 @@ if st.session_state.page == "peminjamansaya":
         
             if denda_value > 0:
                 # Seluruh baris merah kalau ada denda
-                return ["background-color: #f8d7da; color: #721c24; font-weight:bold;"] * len(row)
+                return ["background-color: #B22222; color: #721c24; font-weight:bold;"] * len(row)
         
             # Kalau tidak ada denda, beri warna berdasarkan status
             styles = [""] * len(row)
