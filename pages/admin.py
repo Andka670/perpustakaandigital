@@ -165,7 +165,9 @@ if akun_list:
     """)
 else:
     st.warning("⚠️ Tidak ada akun ditemukan di database.")
-
+------------
+#HAPUS AKUN
+----------
 st.subheader("❌ Hapus Akun")
 
 # Ambil daftar user
