@@ -138,6 +138,6 @@ arduino:
 Salin kode
 http://localhost:8501
 🧑‍💻 Pengembang
-Dibuat oleh Andka670 (Ardyela)
+Dibuat oleh Andka670(M. Andika Setiawan)
 📎 GitHub: Andka670
 
