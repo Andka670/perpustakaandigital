@@ -257,6 +257,7 @@ if ajuan_menunggu:
         "Tanggal Pinjam": p["tanggal_pinjam"],
         "Tanggal Kembali": p["tanggal_kembali"],
         "Status": p["status"],
+        "Antrian": p["antrian"],
         "Ajuan": p["ajuan"]
     } for p in ajuan_menunggu])
     st.dataframe(df_ajuan, use_container_width=True)
