@@ -148,7 +148,7 @@ def highlight_denda(row):
 # ----------------------------
 try:
     peminjaman_data = supabase.table("peminjaman").select(
-        "id_peminjaman, id_user, id_buku, status, tanggal_pinjam, tanggal_kembali,ajuan, denda, nomor, alamat,created_at "
+        "id_peminjaman, id_user, id_buku, status, tanggal_pinjam, tanggal_kembali,ajuan, denda, nomor,created_at, alamat, "
         "akun(username), "
         "buku(judul)"
     ).execute().data
