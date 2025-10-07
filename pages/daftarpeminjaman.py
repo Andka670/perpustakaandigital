@@ -251,30 +251,37 @@ st.subheader("🕓 Daftar Ajuan Menunggu Persetujuan")
 # Filter data dengan status ajuan = menunggu
 ajuan_menunggu = [p for p in peminjaman_data if p.get("ajuan") == "menunggu"]
 
-# Urutkan berdasarkan waktu dibuat (created_at) kalau ada, kalau tidak, urutkan dengan tanggal_pinjam
+# Urutkan berdasarkan waktu dibuat (created_at), fallback ke tanggal_pinjam
 ajuan_menunggu = sorted(
     ajuan_menunggu,
     key=lambda x: x.get("created_at") or x.get("tanggal_pinjam") or ""
 )
 
 if ajuan_menunggu:
-    df_ajuan = pd.DataFrame([{
-        "Antrian": i + 1,  # Nomor antrian otomatis
-        "ID Peminjaman": p.get("id_peminjaman", "-"),
-        "User": p.get("akun", {}).get("username", "-"),
-        "Judul Buku": p.get("buku", {}).get("judul", "-"),
-        "Tanggal Pinjam": p.get("tanggal_pinjam", "-"),
-        "Tanggal Kembali": p.get("tanggal_kembali", "-"),
-        "Status": p.get("status", "-"),
-        "Ajuan": p.get("ajuan", "-"),
-        "Dibuat Pada": p.get("created_at", "-")  # Aman, tidak error walau tidak ada
-    } for i, p in enumerate(ajuan_menunggu)])
+    data_list = []
+    for i, p in enumerate(ajuan_menunggu, start=1):  # start=1 biar mulai dari 1
+        data_list.append({
+            "Antrian": int(i),  # pastikan integer
+            "ID Peminjaman": p.get("id_peminjaman", "-"),
+            "User": p.get("akun", {}).get("username", "-"),
+            "Judul Buku": p.get("buku", {}).get("judul", "-"),
+            "Tanggal Pinjam": p.get("tanggal_pinjam", "-"),
+            "Tanggal Kembali": p.get("tanggal_kembali", "-"),
+            "Status": p.get("status", "-"),
+            "Ajuan": p.get("ajuan", "-"),
+            "Dibuat Pada": p.get("created_at", "-")
+        })
 
-    # Tampilkan tabel di Streamlit
+    # Buat DataFrame
+    df_ajuan = pd.DataFrame(data_list)
+
+    # Pastikan kolom Antrian adalah angka, bukan string
+    df_ajuan["Antrian"] = df_ajuan["Antrian"].astype(int)
+
+    # Tampilkan tabel
     st.dataframe(df_ajuan, use_container_width=True)
 else:
     st.info("📭 Tidak ada ajuan peminjaman yang menunggu persetujuan.")
-
 
 # ----------------------------
 # Tabel Buku + Filter Selectbox
