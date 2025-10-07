@@ -88,19 +88,37 @@ hari = st.number_input(
 # Hapus otomatis data sudah dikembalikan
 # ----------------------------
 try:
+    # Hapus data dengan status "sudah dikembalikan" lebih dari {hari} hari
     peminjaman_data = supabase.table("peminjaman").select("*").eq("status", "sudah dikembalikan").execute().data
     if peminjaman_data:
         deleted_count = 0
         threshold_date = datetime.now() - timedelta(days=hari)
         for p in peminjaman_data:
-            tanggal_kembali = datetime.strptime(p["tanggal_kembali"], "%Y-%m-%d")
-            if tanggal_kembali <= threshold_date:
-                supabase.table("peminjaman").delete().eq("id_user", p["id_user"]).eq("id_buku", p["id_buku"]).execute()
-                deleted_count += 1
+            try:
+                tanggal_kembali = datetime.strptime(p["tanggal_kembali"], "%Y-%m-%d")
+                if tanggal_kembali <= threshold_date:
+                    supabase.table("peminjaman").delete().eq("id_user", p["id_user"]).eq("id_buku", p["id_buku"]).execute()
+                    deleted_count += 1
+            except Exception:
+                continue  # Skip jika tanggal tidak valid
         if deleted_count > 0:
             st.success(f"✅ Berhasil menghapus {deleted_count} data peminjaman yang sudah dikembalikan lebih dari {hari} hari.")
         else:
-            st.info("📭 Tidak ada data yang perlu dihapus.")
+            st.info("📭 Tidak ada data peminjaman yang perlu dihapus.")
+    else:
+        st.info("📭 Tidak ada data dengan status 'sudah dikembalikan'.")
+
+    # ----------------------------
+    # Hapus otomatis ajuan yang ditolak
+    # ----------------------------
+    ajuan_ditolak = supabase.table("peminjaman").select("id_user, id_buku").eq("ajuan", "ditolak").execute().data
+    if ajuan_ditolak:
+        for p in ajuan_ditolak:
+            supabase.table("peminjaman").delete().eq("id_user", p["id_user"]).eq("id_buku", p["id_buku"]).execute()
+        st.success(f"🗑️ Berhasil menghapus {len(ajuan_ditolak)} data ajuan yang ditolak.")
+    else:
+        st.info("📭 Tidak ada ajuan yang ditolak untuk dihapus.")
+
 except Exception as e:
     st.error(f"❌ Gagal menghapus data: {e}")
 
