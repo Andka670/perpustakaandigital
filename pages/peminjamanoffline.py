@@ -206,13 +206,13 @@ if submit:
             except Exception as e:
                 st.error(f"❌ Gagal mencatat peminjaman: {e}")
 # =====================================================
-# Form Ubah Detail Peminjaman (status: dipinjam & sudah dikembalikan)
+# Form Ubah Detail Peminjaman
 # =====================================================
 st.markdown("<hr>", unsafe_allow_html=True)
 st.subheader("✏️ Ubah Detail Peminjaman")
 
 try:
-    # --- Ambil data peminjaman dengan status 'dipinjam' atau 'sudah dikembalikan' ---
+    # Ambil semua data peminjaman (status dipinjam & sudah dikembalikan)
     peminjaman_data_form = supabase.table("peminjaman").select(
         "id_peminjaman, id_user, id_buku, status, tanggal_pinjam, tanggal_kembali, denda, nomor, alamat, ajuan, "
         "akun(username), "
@@ -220,32 +220,35 @@ try:
     ).in_("status", ["dipinjam", "sudah dikembalikan"]).execute().data
 
     if peminjaman_data_form:
-        # Buat label gabungan ID + Username
+        # Urutkan agar status 'dipinjam' muncul di atas
+        peminjaman_data_form.sort(key=lambda x: 0 if x["status"] == "dipinjam" else 1)
+
+        # Tampilkan label dengan ID, Username, dan Status
         options = [
-            f"{p['id_peminjaman']} - {p['akun']['username'] if p.get('akun') else 'Tanpa Nama'}"
+            f"{p['id_peminjaman']} - {p['akun']['username'] if p.get('akun') else 'Tanpa Nama'} | {p['status']}"
             for p in peminjaman_data_form
         ]
-        selected_label = st.selectbox("Pilih Peminjaman", ["Pilih Peminjaman"] + options)
+
+        selected_label = st.selectbox("Pilih Peminjaman (status dipinjam diutamakan)", ["Pilih Peminjaman"] + options)
 
         if selected_label != "Pilih Peminjaman":
-            # Ambil id_peminjaman dari label
             selected_id = int(selected_label.split(" - ")[0])
             selected_data = next((p for p in peminjaman_data_form if p["id_peminjaman"] == selected_id), None)
 
             if selected_data:
                 with st.form("form_edit_peminjaman", clear_on_submit=False):
-                    # Informasi tetap (tidak bisa diubah)
+                    # Informasi tetap
                     st.write(f"**ID Peminjaman:** {selected_data['id_peminjaman']}")
                     st.write(f"**Username:** {selected_data['akun']['username'] if selected_data.get('akun') else '-'}")
                     st.write(f"**Judul Buku:** {selected_data['buku']['judul'] if selected_data.get('buku') else '-'}")
                     st.write(f"**Status Ajuan:** {selected_data.get('ajuan', 'menunggu')}")
 
-                    # Ambil nilai saat ini
+                    # Nilai default
                     current_status = selected_data.get("status") or "dipinjam"
                     tanggal_pinjam_str = selected_data.get("tanggal_pinjam") or str(datetime.today().date())
                     tanggal_kembali_str = selected_data.get("tanggal_kembali") or str(datetime.today().date())
 
-                    # Input yang bisa diubah
+                    # Input ubahan
                     status_baru = st.selectbox(
                         "Status Peminjaman",
                         ["dipinjam", "sudah dikembalikan"],
@@ -288,7 +291,9 @@ try:
                             }
 
                             supabase.table("peminjaman").update(update_data).eq("id_peminjaman", selected_id).execute()
-                            st.success(f"✅ Data peminjaman ID {selected_id} ({selected_data['akun']['username']}) berhasil diperbarui!")
+                            st.success(
+                                f"✅ Data peminjaman ID {selected_id} ({selected_data['akun']['username']}) berhasil diperbarui!"
+                            )
                             st.rerun()
                         except Exception as e:
                             st.error(f"❌ Gagal memperbarui data: {e}")
@@ -296,7 +301,6 @@ try:
         st.info("📭 Tidak ada data peminjaman yang bisa diubah.")
 except Exception as e:
     st.error(f"❌ Gagal menampilkan form ubah: {e}")
-
 # ----------------------------
 # Halaman Persetujuan
 st.markdown("<h1 style='text-align:center;'>📬 Pengajuan Peminjaman Online</h1>", unsafe_allow_html=True)
