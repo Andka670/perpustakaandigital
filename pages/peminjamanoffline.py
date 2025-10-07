@@ -206,18 +206,18 @@ if submit:
             except Exception as e:
                 st.error(f"❌ Gagal mencatat peminjaman: {e}")
 # =====================================================
-# Form Ubah Detail Peminjaman (hanya buku berstatus "dipinjam")
+# Form Ubah Detail Peminjaman (status: dipinjam & sudah dikembalikan)
 # =====================================================
 st.markdown("<hr>", unsafe_allow_html=True)
 st.subheader("✏️ Ubah Detail Peminjaman")
 
 try:
-    # --- Ambil data peminjaman dengan status 'dipinjam' ---
+    # --- Ambil data peminjaman dengan status 'dipinjam' atau 'sudah dikembalikan' ---
     peminjaman_data_form = supabase.table("peminjaman").select(
         "id_peminjaman, id_user, id_buku, status, tanggal_pinjam, tanggal_kembali, denda, nomor, alamat, ajuan, "
         "akun(username), "
         "buku(judul)"
-    ).eq("status", "dipinjam").execute().data
+    ).in_("status", ["dipinjam", "sudah dikembalikan"]).execute().data
 
     if peminjaman_data_form:
         # Buat label gabungan ID + Username
@@ -225,7 +225,7 @@ try:
             f"{p['id_peminjaman']} - {p['akun']['username'] if p.get('akun') else 'Tanpa Nama'}"
             for p in peminjaman_data_form
         ]
-        selected_label = st.selectbox("Pilih Peminjaman (status = dipinjam)", ["Pilih Peminjaman"] + options)
+        selected_label = st.selectbox("Pilih Peminjaman", ["Pilih Peminjaman"] + options)
 
         if selected_label != "Pilih Peminjaman":
             # Ambil id_peminjaman dari label
@@ -234,14 +234,18 @@ try:
 
             if selected_data:
                 with st.form("form_edit_peminjaman", clear_on_submit=False):
+                    # Informasi tetap (tidak bisa diubah)
+                    st.write(f"**ID Peminjaman:** {selected_data['id_peminjaman']}")
                     st.write(f"**Username:** {selected_data['akun']['username'] if selected_data.get('akun') else '-'}")
                     st.write(f"**Judul Buku:** {selected_data['buku']['judul'] if selected_data.get('buku') else '-'}")
+                    st.write(f"**Status Ajuan:** {selected_data.get('ajuan', 'menunggu')}")
 
-                    # Cegah error jika status atau ajuan None
+                    # Ambil nilai saat ini
                     current_status = selected_data.get("status") or "dipinjam"
-                    current_ajuan = selected_data.get("ajuan") or "menunggu"
+                    tanggal_pinjam_str = selected_data.get("tanggal_pinjam") or str(datetime.today().date())
+                    tanggal_kembali_str = selected_data.get("tanggal_kembali") or str(datetime.today().date())
 
-                    # Input form
+                    # Input yang bisa diubah
                     status_baru = st.selectbox(
                         "Status Peminjaman",
                         ["dipinjam", "sudah dikembalikan"],
@@ -249,38 +253,33 @@ try:
                         if current_status in ["dipinjam", "sudah dikembalikan"] else 0
                     )
 
-                    ajuan_baru = st.selectbox(
-                        "Status Ajuan",
-                        ["menunggu", "diterima", "ditolak"],
-                        index=["menunggu", "diterima", "ditolak"].index(current_ajuan)
-                        if current_ajuan in ["menunggu", "diterima", "ditolak"] else 0
-                    )
-
-                    # Pastikan tanggal valid
-                    tanggal_pinjam_str = selected_data.get("tanggal_pinjam") or str(datetime.today().date())
-                    tanggal_kembali_str = selected_data.get("tanggal_kembali") or str(datetime.today().date())
-
                     tanggal_pinjam_baru = st.date_input(
                         "Tanggal Pinjam",
                         datetime.strptime(tanggal_pinjam_str, "%Y-%m-%d").date()
                     )
+
                     tanggal_kembali_baru = st.date_input(
                         "Tanggal Kembali",
                         datetime.strptime(tanggal_kembali_str, "%Y-%m-%d").date()
                     )
 
-                    denda_baru = st.number_input("Denda (Rp)", min_value=0, value=selected_data.get("denda", 0), step=1000)
+                    denda_baru = st.number_input(
+                        "Denda (Rp)",
+                        min_value=0,
+                        value=selected_data.get("denda", 0),
+                        step=1000
+                    )
+
                     nomor_baru = st.text_input("Nomor", selected_data.get("nomor", ""))
                     alamat_baru = st.text_area("Alamat", selected_data.get("alamat", ""))
 
-                    # Tombol submit wajib
+                    # Tombol submit
                     submitted = st.form_submit_button("💾 Simpan Perubahan")
 
                     if submitted:
                         try:
                             update_data = {
                                 "status": status_baru,
-                                "ajuan": ajuan_baru,
                                 "tanggal_pinjam": str(tanggal_pinjam_baru),
                                 "tanggal_kembali": str(tanggal_kembali_baru),
                                 "denda": denda_baru,
@@ -294,7 +293,7 @@ try:
                         except Exception as e:
                             st.error(f"❌ Gagal memperbarui data: {e}")
     else:
-        st.info("📭 Tidak ada data peminjaman dengan status 'dipinjam' yang bisa diubah.")
+        st.info("📭 Tidak ada data peminjaman yang bisa diubah.")
 except Exception as e:
     st.error(f"❌ Gagal menampilkan form ubah: {e}")
 
