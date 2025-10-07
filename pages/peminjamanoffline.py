@@ -206,22 +206,22 @@ if submit:
             except Exception as e:
                 st.error(f"❌ Gagal mencatat peminjaman: {e}")
 # =====================================================
-# Form Ubah Detail Peminjaman
+# Form Ubah Detail Peminjaman (hanya buku berstatus "dipinjam")
 # =====================================================
 st.markdown("<hr>", unsafe_allow_html=True)
 st.subheader("✏️ Ubah Detail Peminjaman")
 
 try:
-    # --- Ambil ulang data peminjaman (agar variabel pasti ada) ---
+    # --- Ambil data peminjaman yang statusnya hanya "dipinjam" ---
     peminjaman_data_form = supabase.table("peminjaman").select(
         "id_peminjaman, id_user, id_buku, status, tanggal_pinjam, tanggal_kembali, denda, nomor, alamat, ajuan, "
         "akun(username), "
         "buku(judul)"
-    ).execute().data
+    ).eq("status", "dipinjam").execute().data
 
     if peminjaman_data_form:
         id_list = [p["id_peminjaman"] for p in peminjaman_data_form]
-        selected_id = st.selectbox("Pilih ID Peminjaman", ["Pilih ID"] + id_list)
+        selected_id = st.selectbox("Pilih ID Peminjaman (status = dipinjam)", ["Pilih ID"] + id_list)
 
         if selected_id != "Pilih ID":
             selected_data = next((p for p in peminjaman_data_form if p["id_peminjaman"] == selected_id), None)
@@ -235,13 +235,15 @@ try:
                     status_baru = st.selectbox(
                         "Status Peminjaman",
                         ["dipinjam", "sudah dikembalikan"],
-                        index=["dipinjam", "sudah dikembalikan"].index(selected_data["status"]) if selected_data["status"] in ["dipinjam", "sudah dikembalikan"] else 0
+                        index=["dipinjam", "sudah dikembalikan"].index(selected_data["status"])
+                        if selected_data["status"] in ["dipinjam", "sudah dikembalikan"] else 0
                     )
 
                     ajuan_baru = st.selectbox(
                         "Status Ajuan",
                         ["menunggu", "diterima", "ditolak"],
-                        index=["menunggu", "diterima", "ditolak"].index(selected_data["ajuan"]) if selected_data.get("ajuan") else 0
+                        index=["menunggu", "diterima", "ditolak"].index(selected_data["ajuan"])
+                        if selected_data.get("ajuan") else 0
                     )
 
                     tanggal_pinjam_baru = st.date_input(
@@ -277,9 +279,10 @@ try:
                         except Exception as e:
                             st.error(f"❌ Gagal memperbarui data: {e}")
     else:
-        st.info("📭 Tidak ada data peminjaman yang bisa diubah.")
+        st.info("📭 Tidak ada data peminjaman dengan status 'dipinjam' yang bisa diubah.")
 except Exception as e:
     st.error(f"❌ Gagal menampilkan form ubah: {e}")
+
 
 # ----------------------------
 # Halaman Persetujuan
