@@ -85,39 +85,56 @@ hari = st.number_input(
 )
 
 # ----------------------------
-# Hapus otomatis data sudah dikembalikan
+# Hapus otomatis data sudah dikembalikan dan ditolak
 # ----------------------------
 try:
-    # Hapus data dengan status "sudah dikembalikan" lebih dari {hari} hari
-    peminjaman_data = supabase.table("peminjaman").select("*").eq("status", "sudah dikembalikan").execute().data
-    if peminjaman_data:
-        deleted_count = 0
-        threshold_date = datetime.now() - timedelta(days=hari)
-        for p in peminjaman_data:
+    deleted_count = 0
+    threshold_date = datetime.now() - timedelta(days=hari)
+
+    # ----------------------------
+    # Hapus data dengan status "sudah dikembalikan"
+    # ----------------------------
+    peminjaman_kembali = supabase.table("peminjaman").select("*").eq("status", "sudah dikembalikan").execute().data
+    if peminjaman_kembali:
+        for p in peminjaman_kembali:
             try:
                 tanggal_kembali = datetime.strptime(p["tanggal_kembali"], "%Y-%m-%d")
                 if tanggal_kembali <= threshold_date:
-                    supabase.table("peminjaman").delete().eq("id_user", p["id_user"]).eq("id_buku", p["id_buku"]).execute()
+                    supabase.table("peminjaman").delete()\
+                        .eq("id_user", p["id_user"])\
+                        .eq("id_buku", p["id_buku"])\
+                        .execute()
                     deleted_count += 1
             except Exception:
-                continue  # Skip jika tanggal tidak valid
-        if deleted_count > 0:
-            st.success(f"✅ Berhasil menghapus {deleted_count} data peminjaman yang sudah dikembalikan lebih dari {hari} hari.")
-        else:
-            st.info("📭 Tidak ada data peminjaman yang perlu dihapus.")
-    else:
-        st.info("📭 Tidak ada data dengan status 'sudah dikembalikan'.")
+                continue  # Lewati jika tanggal tidak valid
 
     # ----------------------------
-    # Hapus otomatis ajuan yang ditolak
+    # Hapus data ajuan yang "ditolak" lebih dari X hari
     # ----------------------------
-    ajuan_ditolak = supabase.table("peminjaman").select("id_user, id_buku").eq("ajuan", "ditolak").execute().data
+    ajuan_ditolak = supabase.table("peminjaman").select("*").eq("ajuan", "ditolak").execute().data
     if ajuan_ditolak:
         for p in ajuan_ditolak:
-            supabase.table("peminjaman").delete().eq("id_user", p["id_user"]).eq("id_buku", p["id_buku"]).execute()
-        st.success(f"🗑️ Berhasil menghapus {len(ajuan_ditolak)} data ajuan yang ditolak.")
+            try:
+                # Gunakan created_at sebagai acuan umur ajuan
+                created_at_str = p.get("created_at")
+                if created_at_str:
+                    created_at = datetime.strptime(created_at_str.split("T")[0], "%Y-%m-%d")
+                    if created_at <= threshold_date:
+                        supabase.table("peminjaman").delete()\
+                            .eq("id_user", p["id_user"])\
+                            .eq("id_buku", p["id_buku"])\
+                            .execute()
+                        deleted_count += 1
+            except Exception:
+                continue
+
+    # ----------------------------
+    # Pesan hasil
+    # ----------------------------
+    if deleted_count > 0:
+        st.success(f"🗑️ Berhasil menghapus {deleted_count} data peminjaman/ajuan yang sudah melewati {hari} hari.")
     else:
-        st.info("📭 Tidak ada ajuan yang ditolak untuk dihapus.")
+        st.info("📭 Tidak ada data yang perlu dihapus saat ini.")
 
 except Exception as e:
     st.error(f"❌ Gagal menghapus data: {e}")
