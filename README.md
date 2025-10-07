@@ -30,7 +30,7 @@ Proyek ini bertujuan untuk mempermudah proses peminjaman, pengembalian, serta pe
 
 Berikut tabel dan relasi antar tabel pada database:
 
-![Database Schema](supabase-schema-bcalrkqeeoaalfpjrwvx.png)
+![Database Schema](supabase-schema-bcalrkqeeoaalfpjrwvx.svg)
 
 ### 1. Tabel `akun`
 | Kolom | Tipe Data | Deskripsi |
@@ -123,18 +123,18 @@ Buka file .py utama.
 
 Isi variabel berikut sesuai dengan kredensial Supabase kamu:
 
-python
+python:
 Salin kode
 SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co"
 SUPABASE_KEY = "YOUR_SUPABASE_ANON_KEY"
 Jalankan Aplikasi
 
-bash
+bash:
 Salin kode
 streamlit run app.py
 Buka di Browser
 
-arduino
+arduino:
 Salin kode
 http://localhost:8501
 🧑‍💻 Pengembang
