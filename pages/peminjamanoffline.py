@@ -212,7 +212,7 @@ st.markdown("<hr>", unsafe_allow_html=True)
 st.subheader("✏️ Ubah Detail Peminjaman")
 
 try:
-    # --- Ambil data peminjaman yang statusnya hanya "dipinjam" ---
+    # --- Ambil data peminjaman dengan status 'dipinjam' ---
     peminjaman_data_form = supabase.table("peminjaman").select(
         "id_peminjaman, id_user, id_buku, status, tanggal_pinjam, tanggal_kembali, denda, nomor, alamat, ajuan, "
         "akun(username), "
@@ -220,15 +220,21 @@ try:
     ).eq("status", "dipinjam").execute().data
 
     if peminjaman_data_form:
-        id_list = [p["id_peminjaman"] for p in peminjaman_data_form]
-        selected_id = st.selectbox("Pilih ID Peminjaman (status = dipinjam)", ["Pilih ID"] + id_list)
+        # Buat label gabungan ID + Username
+        options = [
+            f"{p['id_peminjaman']} - {p['akun']['username'] if p.get('akun') else 'Tanpa Nama'}"
+            for p in peminjaman_data_form
+        ]
+        selected_label = st.selectbox("Pilih Peminjaman (status = dipinjam)", ["Pilih Peminjaman"] + options)
 
-        if selected_id != "Pilih ID":
+        if selected_label != "Pilih Peminjaman":
+            # Ambil id_peminjaman dari label
+            selected_id = int(selected_label.split(" - ")[0])
             selected_data = next((p for p in peminjaman_data_form if p["id_peminjaman"] == selected_id), None)
 
             if selected_data:
                 with st.form("form_edit_peminjaman", clear_on_submit=False):
-                    st.write(f"**ID User:** {selected_data['id_user']}")
+                    st.write(f"**Username:** {selected_data['akun']['username'] if selected_data.get('akun') else '-'}")
                     st.write(f"**Judul Buku:** {selected_data['buku']['judul'] if selected_data.get('buku') else '-'}")
 
                     # Input form
@@ -274,7 +280,7 @@ try:
                             }
 
                             supabase.table("peminjaman").update(update_data).eq("id_peminjaman", selected_id).execute()
-                            st.success(f"✅ Data peminjaman dengan ID {selected_id} berhasil diperbarui!")
+                            st.success(f"✅ Data peminjaman ID {selected_id} ({selected_data['akun']['username']}) berhasil diperbarui!")
                             st.rerun()
                         except Exception as e:
                             st.error(f"❌ Gagal memperbarui data: {e}")
