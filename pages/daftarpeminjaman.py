@@ -247,22 +247,31 @@ except Exception as e:
 # Tabel ajuan menunggu
 # ----------------------------
 st.subheader("🕓 Daftar Ajuan Menunggu Persetujuan")
+
+# Filter data dengan status ajuan = menunggu
 ajuan_menunggu = [p for p in peminjaman_data if p.get("ajuan") == "menunggu"]
+
+# Urutkan berdasarkan waktu dibuat (created_at)
+ajuan_menunggu = sorted(ajuan_menunggu, key=lambda x: x.get("created_at", ""))
 
 if ajuan_menunggu:
     df_ajuan = pd.DataFrame([{
+        "Antrian": i + 1,  # Nomor antrian otomatis berdasarkan urutan created_at
         "ID Peminjaman": p["id_peminjaman"],
         "User": p["akun"]["username"] if p.get("akun") else "-",
         "Judul Buku": p["buku"]["judul"] if p.get("buku") else "-",
         "Tanggal Pinjam": p["tanggal_pinjam"],
         "Tanggal Kembali": p["tanggal_kembali"],
         "Status": p["status"],
-        "Antrian": p["antrian"],
-        "Ajuan": p["ajuan"]
-    } for p in ajuan_menunggu])
+        "Ajuan": p["ajuan"],
+        "Dibuat Pada": p["created_at"]
+    } for i, p in enumerate(ajuan_menunggu)])
+
+    # Tampilkan tabel
     st.dataframe(df_ajuan, use_container_width=True)
 else:
     st.info("📭 Tidak ada ajuan peminjaman yang menunggu persetujuan.")
+
 
 # ----------------------------
 # Tabel Buku + Filter Selectbox
