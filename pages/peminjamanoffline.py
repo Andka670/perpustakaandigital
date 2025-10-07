@@ -237,34 +237,43 @@ try:
                     st.write(f"**Username:** {selected_data['akun']['username'] if selected_data.get('akun') else '-'}")
                     st.write(f"**Judul Buku:** {selected_data['buku']['judul'] if selected_data.get('buku') else '-'}")
 
+                    # Cegah error jika status atau ajuan None
+                    current_status = selected_data.get("status") or "dipinjam"
+                    current_ajuan = selected_data.get("ajuan") or "menunggu"
+
                     # Input form
                     status_baru = st.selectbox(
                         "Status Peminjaman",
                         ["dipinjam", "sudah dikembalikan"],
-                        index=["dipinjam", "sudah dikembalikan"].index(selected_data["status"])
-                        if selected_data["status"] in ["dipinjam", "sudah dikembalikan"] else 0
+                        index=["dipinjam", "sudah dikembalikan"].index(current_status)
+                        if current_status in ["dipinjam", "sudah dikembalikan"] else 0
                     )
 
                     ajuan_baru = st.selectbox(
                         "Status Ajuan",
                         ["menunggu", "diterima", "ditolak"],
-                        index=["menunggu", "diterima", "ditolak"].index(selected_data["ajuan"])
-                        if selected_data.get("ajuan") else 0
+                        index=["menunggu", "diterima", "ditolak"].index(current_ajuan)
+                        if current_ajuan in ["menunggu", "diterima", "ditolak"] else 0
                     )
+
+                    # Pastikan tanggal valid
+                    tanggal_pinjam_str = selected_data.get("tanggal_pinjam") or str(datetime.today().date())
+                    tanggal_kembali_str = selected_data.get("tanggal_kembali") or str(datetime.today().date())
 
                     tanggal_pinjam_baru = st.date_input(
                         "Tanggal Pinjam",
-                        datetime.strptime(selected_data["tanggal_pinjam"], "%Y-%m-%d").date()
+                        datetime.strptime(tanggal_pinjam_str, "%Y-%m-%d").date()
                     )
                     tanggal_kembali_baru = st.date_input(
                         "Tanggal Kembali",
-                        datetime.strptime(selected_data["tanggal_kembali"], "%Y-%m-%d").date()
+                        datetime.strptime(tanggal_kembali_str, "%Y-%m-%d").date()
                     )
 
                     denda_baru = st.number_input("Denda (Rp)", min_value=0, value=selected_data.get("denda", 0), step=1000)
                     nomor_baru = st.text_input("Nomor", selected_data.get("nomor", ""))
                     alamat_baru = st.text_area("Alamat", selected_data.get("alamat", ""))
 
+                    # Tombol submit wajib
                     submitted = st.form_submit_button("💾 Simpan Perubahan")
 
                     if submitted:
@@ -288,7 +297,6 @@ try:
         st.info("📭 Tidak ada data peminjaman dengan status 'dipinjam' yang bisa diubah.")
 except Exception as e:
     st.error(f"❌ Gagal menampilkan form ubah: {e}")
-
 
 # ----------------------------
 # Halaman Persetujuan
