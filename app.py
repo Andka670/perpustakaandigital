@@ -314,34 +314,38 @@ if st.session_state.page == "peminjamansaya":
     if not pinjam_data:
         st.info("ℹ️ Kamu belum pernah mengajukan peminjaman.")
     else:
-        # Hitung antrean berdasarkan waktu pengajuan (created_at)
+        # Hitung antrean berdasarkan semua pengajuan "menunggu" (global, bukan per buku)
         for p in pinjam_data:
             if str(p.get("ajuan", "")).lower() == "menunggu":
                 try:
-                    # Ambil semua pengajuan 'menunggu' untuk buku yang sama
+                    # Ambil semua ajuan menunggu secara global
                     antrian_data = supabase.table("peminjaman")\
                         .select("id_user, id_peminjaman, created_at")\
-                        .eq("id_buku", p["id_buku"])\
                         .eq("ajuan", "menunggu")\
                         .order("created_at", desc=False)\
                         .execute().data
-    
+        
+                    # Urutkan agar yang paling lama (created_at paling kecil) jadi antrean awal
+                    if antrian_data:
+                        antrian_data.sort(key=lambda x: x.get("created_at") or "", reverse=False)
+        
                     # Fallback jika ada yang tidak punya created_at
                     if antrian_data and any(x.get("created_at") is None for x in antrian_data):
                         antrian_data.sort(key=lambda x: x.get("id_peminjaman", 0))
-    
-                    # Cari posisi user dalam antrean
+        
+                    # Cari posisi user dalam antrean global
                     posisi = next(
                         (i + 1 for i, x in enumerate(antrian_data)
                          if x["id_peminjaman"] == p["id_peminjaman"]),
                         None
                     )
-    
+        
                     p["antrian"] = f"Antrian ke-{posisi} dari {len(antrian_data)}" if posisi else "-"
                 except Exception as e:
                     p["antrian"] = f"Error: {e}"
             else:
                 p["antrian"] = "-"
+
     
         # ----------------------------
         # Tampilkan DataFrame
